@@ -3,6 +3,7 @@
 #include "Setup\Game.h"
 #include "Setup\Player.h"
 #include "Setup\Asteroid.h"
+#include "Setup\PlayerShoot.h"
 
 namespace Juego
 {
@@ -21,8 +22,8 @@ namespace Juego
 			}
 			// Player Input
 			if (collisionCircle.active)
-			{
-				playerInput();
+			{		
+				playerInput();			
 			}
 		}
 
@@ -33,6 +34,7 @@ namespace Juego
 			//Execute Functions & Extern variables 
 			//createAsteroid();
 			createPlayer();
+			createShoot();
 			createCollisionCircle();
 		}
 
@@ -43,7 +45,9 @@ namespace Juego
 			{
 				playerUpdate();
 				collisionCircleUpdate();
+				ShootUpdate();
 				AsteroidUpdate();
+				
 
 				// Collision logic: player vs walls
 				if (player.position.x > screenWidth + shipHeight) player.position.x = -(shipHeight);
@@ -54,38 +58,38 @@ namespace Juego
 				for (int i = 0; i < asteroidsLimit; i++)
 				{
 					// Collision logic: ball vs vertical walls FOR BOTH PLAYERS
-					if ((asteroids[i].position.x + asteroids[i].radio) >= screenWidth + asteroids[i].radio * 6)
+					if ((asteroids[i].position.x + asteroids[i].radius) >= screenWidth + asteroids[i].radius * 6)
 					{
-						asteroids[i].position.x = screenWidth - asteroids[i].radio;
+						asteroids[i].position.x = screenWidth - asteroids[i].radius;
 						asteroids[i].speed.x *= -1;
-						asteroids[i].radio = asteroids[i].radio - 5;
+						asteroids[i].radius = asteroids[i].radius - 5;
 					}
-					else if ((asteroids[i].position.x + asteroids[i].radio) <= 0 - asteroids[i].radio * 6)
+					else if ((asteroids[i].position.x + asteroids[i].radius) <= 0 - asteroids[i].radius * 6)
 					{
 
-						asteroids[i].position.x = 0 + asteroids[i].radio;
+						asteroids[i].position.x = 0 + asteroids[i].radius;
 						asteroids[i].speed.x *= -1;
-						asteroids[i].radio = asteroids[i].radio - 5;
+						asteroids[i].radius = asteroids[i].radius - 5;
 					}
 
 					// Collision logic: ball vs horizontal walls
-					if ((asteroids[i].position.y - asteroids[i].radio) <= 0 - asteroids[i].radio * 6)
+					if ((asteroids[i].position.y - asteroids[i].radius) <= 0 - asteroids[i].radius * 6)
 					{
 
-						asteroids[i].position.y = 0 + asteroids[i].radio;
+						asteroids[i].position.y = 0 + asteroids[i].radius;
 						asteroids[i].speed.y *= -1;
-						asteroids[i].radio = asteroids[i].radio - 5;
+						asteroids[i].radius = asteroids[i].radius - 5;
 					}
-					if ((asteroids[i].position.y + asteroids[i].radio) >= screenHeight + asteroids[i].radio * 6)
+					if ((asteroids[i].position.y + asteroids[i].radius) >= screenHeight + asteroids[i].radius * 6)
 					{
-						asteroids[i].position.y = screenHeight - asteroids[i].radio;
+						asteroids[i].position.y = screenHeight - asteroids[i].radius;
 						asteroids[i].speed.y *= -1;
-						asteroids[i].radio = asteroids[i].radio - 5;
+						asteroids[i].radius = asteroids[i].radius - 5;
 					}
 
 					for (int i = 0; i < asteroidsLimit; i++)
 					{
-						if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radio, asteroids[i].position, asteroids[i].radio))
+						if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroids[i].position, asteroids[i].radius))
 						{
 							collisionCircle.active = false;				
 						}
@@ -94,9 +98,9 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsLimit; i++)
 				{
-					if (asteroids[i].radio <= 0)
+					if (asteroids[i].radius <= 0)
 					{
-						asteroids[i].radio = 50;
+						asteroids[i].radius = 50;
 						asteroids[i].position.x = GetRandomValue(0, screenWidth);
 						asteroids[i].position.y = GetRandomValue(0, screenHeight);
 						player.score++;
@@ -128,9 +132,11 @@ namespace Juego
 		void DrawGameplay()
 		{
 			DrawText(FormatText("Your score: %i", player.score), screenWidth / 2, screenHeight / 10, 40, YELLOW);
+			ShootDraw();
 			playerDraw();
 			collisionCircleDraw();
 			AsteroidDraw();
+			
 
 			if (!(collisionCircle.active))
 			{

@@ -15,7 +15,7 @@ namespace Juego
 			{
 				asteroids[i].position.x = GetRandomValue(0, screenWidth);
 				asteroids[i].position.y = GetRandomValue(0, screenHeight);
-				asteroids[i].radio = 50;
+				asteroids[i].radius = 50;
 				asteroids[i].speed = {300,300};
 				asteroids[i].active = true;
 			}
@@ -37,7 +37,7 @@ namespace Juego
 		{
 			for (int i = 0; i < asteroidsLimit; i++)
 			{
-				DrawCircleV(asteroids[i].position, asteroids[i].radio, WHITE);
+				DrawCircleV(asteroids[i].position, asteroids[i].radius, WHITE);
 			}
 		}
 	}

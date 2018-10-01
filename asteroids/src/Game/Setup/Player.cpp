@@ -3,6 +3,7 @@
 #include <cmath>
 #include "Setup\Game.h"
 #include "Setup\Asteroid.h"
+#include "Setup\PlayerShoot.h"
 
 namespace Juego
 {
@@ -27,13 +28,15 @@ namespace Juego
 		{
 			collisionCircle.position.x = player.position.x;
 			collisionCircle.position.y = player.position.y - 10;
-			collisionCircle.radio = 15;
+			collisionCircle.radius = 15;
 			collisionCircle.speed = { 0,0 };
 			collisionCircle.active = true;
 		}
 		
 		void playerInput()
 		{
+			ShootInput();
+
 			// Player logic: rotation
 			if (IsKeyDown(KEY_LEFT)) player.rotation -= 280 * GetFrameTime();
 			if (IsKeyDown(KEY_RIGHT)) player.rotation += 280 * GetFrameTime();
@@ -86,7 +89,7 @@ namespace Juego
 		#ifdef TESTING
 				void collisionCircleDraw() // only in DEBUG mode
 				{
-					DrawCircleV({ player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeightv2) }, collisionCircle.radio, { 100, 0, 0, 200 });
+					DrawCircleV({ player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 });
 				}
 		#endif
 

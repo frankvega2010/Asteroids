@@ -10,7 +10,7 @@ namespace Juego
 	struct Asteroid {
 		Vector2 position;
 		Vector2 speed;
-		int radio;
+		int radius;
 		bool active;
 	};
 
