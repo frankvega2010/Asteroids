@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "Player.h"
 #include "Game.h"
+#include "Asteroid.h"
 
 namespace Juego
 {
@@ -19,6 +20,7 @@ namespace Juego
 
 	const int maxShoots = 10;
 	extern Shoot shoots[maxShoots];
+	extern int destroyedAsteroidsCount;
 
 	namespace Gameplay_Section
 	{
