@@ -8,13 +8,24 @@ namespace Juego
 	struct rocketShip
 	{
 		Vector2 position;
-		Vector2 pointA;
-		Vector2 pointB;
-		Vector2 pointC;
+		Vector2 speed;
+		float acceleration;
+		float rotation;
+		float defaultSpeed;
 		int score;
 	};
 
+	struct Circle {
+		Vector2 position;
+		Vector2 speed;
+		int radio;
+		bool active;
+	};
+
 	extern rocketShip player;
+	extern Circle collisionCircle;
+	extern float shipHeight;
+	extern float shipHeightv2;
 
 	namespace Gameplay_Section
 	{

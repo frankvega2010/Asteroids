@@ -1,11 +1,11 @@
 #include "Asteroid.h"
+#include <cmath>
 #include "Game.h"
 #include "Player.h"
 
 namespace Juego
 {
 	Asteroid asteroids[asteroidsLimit];
-	Asteroid collisionCircle;
 
 	namespace Gameplay_Section
 	{
@@ -21,15 +21,6 @@ namespace Juego
 			}
 		}
 
-		void createCollisionCircle()
-		{		
-			collisionCircle.position.x = player.position.x;
-			collisionCircle.position.y = player.position.y + 30;
-			collisionCircle.radio = 30;
-			collisionCircle.speed = { 0,0 };
-			collisionCircle.active = true;
-		}
-
 		void AsteroidUpdate()
 		{
 			for (int i = 0; i < asteroidsLimit; i++)
@@ -41,26 +32,6 @@ namespace Juego
 				}
 			}
 		}
-
-		void collisionCircleUpdate()
-		{
-			collisionCircle.position.x = player.position.x;
-			collisionCircle.position.y = player.position.y + 30;
-		}
-
-		#ifdef TESTING
-		void collisionCircleDraw() // only in DEBUG mode
-		{
-			DrawCircleV(collisionCircle.position, collisionCircle.radio, { 100, 0, 0, 200 });
-		}
-		#endif
-
-		#ifdef RELEASE
-		void collisionCircleDraw() // only in RELEASE mode
-		{
-			DrawCircleV(collisionCircle.position, collisionCircle.radio, { 0, 0, 0, 0 });
-		}
-		#endif
 
 		void AsteroidDraw()
 		{

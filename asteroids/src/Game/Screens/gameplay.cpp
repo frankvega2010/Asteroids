@@ -31,7 +31,7 @@ namespace Juego
 			// Round Variables
 
 			//Execute Functions & Extern variables 
-			createAsteroid();
+			//createAsteroid();
 			createPlayer();
 			createCollisionCircle();
 		}
@@ -44,6 +44,12 @@ namespace Juego
 				playerUpdate();
 				collisionCircleUpdate();
 				AsteroidUpdate();
+
+				// Collision logic: player vs walls
+				if (player.position.x > screenWidth + shipHeight) player.position.x = -(shipHeight);
+				else if (player.position.x < -(shipHeight)) player.position.x = screenWidth + shipHeight;
+				if (player.position.y >(screenHeight + shipHeight)) player.position.y = -(shipHeight);
+				else if (player.position.y < -(shipHeight)) player.position.y = screenHeight + shipHeight;
 
 				for (int i = 0; i < asteroidsLimit; i++)
 				{

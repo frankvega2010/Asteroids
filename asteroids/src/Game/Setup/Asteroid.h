@@ -5,7 +5,6 @@
 
 namespace Juego
 {
-
 	const int asteroidsLimit = 5;
 
 	struct Asteroid {
@@ -15,9 +14,7 @@ namespace Juego
 		bool active;
 	};
 
-	
 	extern Asteroid asteroids[asteroidsLimit];
-	extern Asteroid collisionCircle;
 
 	namespace Gameplay_Section
 	{
