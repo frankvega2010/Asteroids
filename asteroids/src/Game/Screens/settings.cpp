@@ -4,7 +4,6 @@
 #include "Setup/Game.h"
 #include "Screens/gameplay.h"
 #include "Setup\Player.h"
-#include "Setup\Ball.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
