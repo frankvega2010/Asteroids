@@ -16,7 +16,7 @@ namespace Juego
 	{
 		void createPlayer()
 		{
-			player.position = { screenWidth / 2, screenHeight / 2};
+			player.position = { (float)screenWidth / 2, (float)screenHeight / 2};
 			player.score = 0;
 			player.acceleration = 0;
 			player.rotation = 0;

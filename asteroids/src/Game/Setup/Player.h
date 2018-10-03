@@ -30,9 +30,12 @@ namespace Juego
 	namespace Gameplay_Section
 	{
 		void createPlayer();
+		void createCollisionCircle();
 		void playerInput();
 		void playerUpdate();
+		void collisionCircleUpdate();
 		void playerDraw();
+		void collisionCircleDraw();
 	}
 }
 #endif // PLAYER_H

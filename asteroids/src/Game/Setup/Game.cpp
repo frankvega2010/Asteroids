@@ -17,15 +17,14 @@ using namespace Howtoplay_Section;
 
 namespace Juego
 {
-	enum Screens
-	{
-		Gameplay = 1,
-	};
+	int gameScreen = Menu;
 
-	static int gameScreen = Gameplay;
+	int screenWidth;
+	int screenHeight;
+	Buttons mouse;
+	int buttonOption = 0;
 
-	float screenWidth;
-	float screenHeight;
+	int defaultFontSize = 60;
 
 	bool isScreenFinished;
 
@@ -35,6 +34,15 @@ namespace Juego
 
 	#endif
 
+	static void createMouse()
+	{
+		mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
+		mouse.width = 0;
+		mouse.height = 0;
+		mouse.selected = false;
+		mouse.defaultColor = BLANK;
+	}
+
 	static void Init()
 	{
 		SetExitKey(0);
@@ -42,34 +50,13 @@ namespace Juego
 		screenWidth = 1300;
 		screenHeight = 800;
 
-		InitGameplayVariables();
+		createMouse();	
 
-		InitWindow(screenWidth, screenHeight, "Asteroids Alpha 0.0.1");
+		//InitGameplayVariables();
 
-		InitGameplayScreen();
-	}
+		InitWindow(screenWidth, screenHeight, "Asteroids Ver 0.1");
 
-	static void DeInit()
-	{
-	#ifdef AUDIO
-		// Audio Code
-		CloseAudioDevice();
-	#endif
-		CloseWindow();
-	}
-
-	static void Draw()
-	{
-		// Basic Drawing Code - Template
-		BeginDrawing();
-		ClearBackground(BLACK);
-
-		switch (gameScreen)
-		{
-		case Gameplay: Gameplay_Section::DrawGameplay(); break;
-		}
-
-		EndDrawing();
+		InitMenuScreen();
 	}
 
 	static void Update()
@@ -77,7 +64,7 @@ namespace Juego
 		// Update Template
 		switch (gameScreen)
 		{
-		case Gameplay:
+		case Play:
 		{
 			UpdateGameplayScreen();
 
@@ -88,7 +75,97 @@ namespace Juego
 			}
 		}
 		break;
+		case Menu:
+		{
+			UpdateMenuScreen();
+
+			if (FinishMenuScreen())
+			{
+				switch (gameScreen)// CHANGE THIS? maybe it works
+				{
+				case Play:
+				{
+					#ifdef AUDIO
+										StopMusicStream(pong_menu_song);
+					#endif
+					RestartPhase();
+					//gamePhase = Gameplay;
+					InitGameplayScreen();
+					break;
+				}
+				break;
+				case Menu:
+				{
+					UpdateMenuScreen();
+
+					if (FinishMenuScreen())
+					{
+
+						switch (buttonOption)
+						{
+						case buttonPlay:
+						{
+							#ifdef AUDIO
+														StopMusicStream(pong_menu_song);
+							#endif
+							RestartPhase();
+							gameScreen = Play;
+							InitGameplayScreen();
+							break;
+						}
+						case buttonQuit:
+						{
+						#ifdef AUDIO
+													StopMusicStream(pong_menu_song);
+						#endif
+
+							gameScreen = 0;
+							return;
+							break;
+						}
+						}
+					}
+				}
+				break;
+				case Quit:
+				{
+					#ifdef AUDIO
+										StopMusicStream(pong_menu_song);
+					#endif
+
+					gameScreen = 0;
+					return;
+					break;
+				}
+				}
+			}
 		}
+		break;
+		}
+	}
+
+	static void Draw()
+	{
+		// Basic Drawing Code - Template
+		BeginDrawing();
+		ClearBackground(BLACK);
+
+		switch (gameScreen)
+		{
+		case Play: Gameplay_Section::DrawGameplay(); break;
+		case Menu: Menu_Section::DrawMenu(); break;
+		}
+
+		EndDrawing();
+	}
+
+	static void DeInit()
+	{
+		#ifdef AUDIO
+				// Audio Code
+				CloseAudioDevice();
+		#endif
+		CloseWindow();
 	}
 
 	void Execute()

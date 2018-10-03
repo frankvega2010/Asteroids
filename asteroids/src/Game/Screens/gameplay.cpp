@@ -16,7 +16,6 @@ namespace Juego
 			{
 				if (IsKeyPressed(KEY_SPACE))
 				{
-					collisionCircle.active = true;
 					RestartPhase();
 				}
 			}
@@ -32,10 +31,12 @@ namespace Juego
 			// Round Variables
 
 			//Execute Functions & Extern variables 
+			HideCursor();
 			createAsteroid();
 			createPlayer();
 			createShoot();
 			createCollisionCircle();
+			//collisionCircle.active = true;
 		}
 
 		void UpdateGameplayScreen()
@@ -99,15 +100,17 @@ namespace Juego
 		void RestartPhase()
 		{
 			InitGameplayVariables();
+			collisionCircle.active = true;
 		}
 
 		void DrawGameplay()
 		{
-			DrawText(FormatText("Your score: %i", destroyedAsteroidsCount), screenWidth / 2, screenHeight / 10, 40, YELLOW);
-			ShootDraw();
-			playerDraw();
 			collisionCircleDraw();
 			AsteroidDraw();
+			ShootDraw();
+			playerDraw();
+			DrawText(FormatText("Your score: %i", destroyedAsteroidsCount), screenWidth / 2, screenHeight / 10, 40, YELLOW);
+			//DrawRectangle(mouse.position.x, mouse.position.y, mouse.width + 5, mouse.height + 5, WHITE);
 			
 
 			if (!(collisionCircle.active))//

@@ -7,5 +7,5 @@
 #vs folder
 **/.vs
 
-#except .suo?
+#except .suo
 .vs\asteroids\v15\!.suo
