@@ -86,9 +86,13 @@ namespace Juego
 					InitMenuScreen();
 					break;
 				}
+				case buttonGameOver:
+				{
+					gameScreen = GameOver;
+					InitGameOverScreen();
+					break;
 				}
-				//gameScreen = GameOver;
-				//InitGameOverScreen();
+				}
 			}
 		}
 		break;
@@ -142,6 +146,31 @@ namespace Juego
 			}
 		}
 		break;
+		case GameOver:
+		{
+			UpdateGameOverScreen();
+
+			if (FinishGameOverScreen())
+			{
+				switch (buttonOption)
+				{
+				case buttonRestart:
+				{
+					RestartPhase();
+					gameScreen = Play;
+					InitGameplayScreen();
+					break;
+				}
+				case buttonQuitToMenu:
+				{
+					gameScreen = Menu;
+					InitMenuScreen();
+					break;
+				}
+				}
+			}
+		}
+		break;
 		}
 	}
 
@@ -154,6 +183,7 @@ namespace Juego
 		switch (gameScreen)
 		{
 		case Play: Gameplay_Section::DrawGameplay(); break;
+		case GameOver: GameOver_Section::DrawGameOver(); break;
 		case Menu: Menu_Section::DrawMenu(); break;
 		case Controls: Controls_Section::DrawControls(); break;
 		}

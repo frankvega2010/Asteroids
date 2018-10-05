@@ -150,6 +150,9 @@ namespace Juego
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active)
 					{
 						gameON = false;
+						buttonOption = buttonGameOver;
+						isScreenFinished = true;
+						break;
 					}
 				}
 
@@ -158,6 +161,9 @@ namespace Juego
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active)
 					{
 						gameON = false;
+						buttonOption = buttonGameOver;
+						isScreenFinished = true;
+						break;
 					}
 				}
 
@@ -166,10 +172,13 @@ namespace Juego
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active)
 					{
 						gameON = false;
+						buttonOption = buttonGameOver;
+						isScreenFinished = true;
+						break;
 					}
 				}
 			}
-			else
+			else if (gamePaused)
 			{
 				for (int i = 0; i < maxButtons; i++)
 				{
@@ -190,6 +199,11 @@ namespace Juego
 			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
 			{
 				gameON = false;
+				buttonOption = buttonGameOver;
+				isScreenFinished = true;
+
+				//buttons[i].selected = false;
+				//isScreenFinished = true;
 			}
 		}
 
@@ -200,6 +214,7 @@ namespace Juego
 
 		bool FinishGameplayScreen()
 		{
+			buttonDistance = 0;
 			return isScreenFinished;
 		}
 
@@ -233,17 +248,6 @@ namespace Juego
 					DrawText(FormatText("CONTINUE"), buttons[0].position.x + 10, buttons[0].position.y + 5, defaultFontSize / 1.3, buttons[0].defaultColor);
 					DrawText(FormatText("RESTART"), buttons[1].position.x + 8, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
 					DrawText(FormatText("MENU"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);
-				}
-				else
-				{
-					if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
-					{
-						DrawText("You won!", screenWidth / 2, screenHeight / 2, 40, YELLOW);
-					}
-					else
-					{
-						DrawText("You lost", screenWidth / 2, screenHeight / 2, 40, RED);
-					}
 				}
 			}
 		}

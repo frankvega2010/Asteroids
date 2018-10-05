@@ -2,12 +2,13 @@
 #define GAMEOVER_H
 namespace Juego
 {
+
 	namespace GameOver_Section
 	{
-		void UpdateGameOverScreen();
 		void InitGameOverScreen();
-		bool FinishGameOverScreen();
+		void UpdateGameOverScreen();
 		void DrawGameOver();
+		bool FinishGameOverScreen();
 	}
 }
 #endif // GAMEOVER_H

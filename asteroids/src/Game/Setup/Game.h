@@ -11,6 +11,7 @@ namespace Juego
 		Play = 1,
 		Menu,
 		Controls,
+		GameOver,
 		Quit
 	};
 
