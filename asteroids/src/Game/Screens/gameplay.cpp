@@ -7,22 +7,109 @@
 
 namespace Juego
 {
+	static const int maxButtons = 3;
+
+	static Buttons buttons[maxButtons];
+	static int buttonDistance = 0;
+	static int buttonSelect = 0;
+	static Color optionColor = RED;
+
+	static bool gameON = true;
+	static bool gamePaused = false;
+
 	namespace Gameplay_Section
 	{
+		static void createPauseButtons()
+		{
+			for (int i = 0; i < maxButtons; i++)
+			{
+				buttons[i].position.x = (float)screenWidth / 2.4f;
+				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance;
+				buttons[i].width = (float)screenWidth / 5.0f;
+				buttons[i].height = (float)screenHeight / 12.0f;
+				buttons[i].selected = false;
+				buttons[i].defaultColor = GOLD;
+				buttons[i].messageColor = BLANK;
+
+				buttonDistance = buttonDistance + 100;
+			}
+		}
+
 		static void GameplayInput()
 		{
 			// Gameplay Input
-			if (!(collisionCircle.active))
+			if (!(gameON))
 			{
+				ShowCursor();
 				if (IsKeyPressed(KEY_SPACE))
 				{
 					RestartPhase();
 				}
 			}
 			// Player Input
-			if (collisionCircle.active)
-			{		
+			if (gameON)
+			{
+				HideCursor();
 				playerInput();			
+			}
+			
+			if (!gamePaused)
+			{
+				if (IsKeyPressed(KEY_P))
+				{
+					gamePaused = true;
+					gameON = false;
+				}
+			}
+			else
+			{
+				if (IsKeyPressed(KEY_DOWN))
+				{
+					mouse.selected = false;
+					buttonSelect++;
+					if (buttonSelect > maxButtons - 1)
+					{
+						buttonSelect--;
+					}
+				}
+
+				if (IsKeyPressed(KEY_UP))
+				{
+					mouse.selected = false;
+					buttonSelect--;
+					if (buttonSelect < 0)
+					{
+						buttonSelect++;
+					}
+				}
+
+				for (int i = 0; i < maxButtons; i++)
+				{
+					if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttons[i].selected || IsKeyPressed(KEY_ENTER) && buttons[i].selected)
+					{
+						switch (i)
+						{
+						case 0:
+							gamePaused = false;
+							gameON = true;
+							break;
+						case 1:
+							RestartPhase();
+							break;
+						case 2:
+							buttonOption = buttonQuitToMenu;
+							break;
+						}
+						buttons[i].selected = false;
+						isScreenFinished = true;
+					}
+				}
+
+				if (IsKeyPressed(KEY_P))
+				{
+					gamePaused = false;
+					gameON = true;
+				}
 			}
 		}
 
@@ -31,6 +118,7 @@ namespace Juego
 			// Round Variables
 
 			//Execute Functions & Extern variables 
+			createPauseButtons();
 			HideCursor();
 			createAsteroid();
 			createPlayer();
@@ -41,8 +129,9 @@ namespace Juego
 
 		void UpdateGameplayScreen()
 		{
+			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 			GameplayInput();
-			if (collisionCircle.active)
+			if (gameON)
 			{
 				playerUpdate();
 				collisionCircleUpdate();
@@ -60,7 +149,7 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active)
 					{
-						collisionCircle.active = false;
+						gameON = false;
 					}
 				}
 
@@ -68,7 +157,7 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active)
 					{
-						collisionCircle.active = false;
+						gameON = false;
 					}
 				}
 
@@ -76,14 +165,31 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active)
 					{
-						collisionCircle.active = false;
+						gameON = false;
+					}
+				}
+			}
+			else
+			{
+				for (int i = 0; i < maxButtons; i++)
+				{
+					if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height }) || buttonSelect == i)
+					{
+						buttonSelect = i;
+						buttons[i].defaultColor = WHITE;
+						buttons[i].selected = true;
+					}
+					else
+					{
+						buttons[i].defaultColor = GOLD;
+						buttons[i].selected = false;
 					}
 				}
 			}
 
 			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
 			{
-				collisionCircle.active = false;
+				gameON = false;
 			}
 		}
 
@@ -100,7 +206,8 @@ namespace Juego
 		void RestartPhase()
 		{
 			InitGameplayVariables();
-			collisionCircle.active = true;
+			buttonDistance = 0;
+			gameON = true;
 		}
 
 		void DrawGameplay()
@@ -109,21 +216,35 @@ namespace Juego
 			AsteroidDraw();
 			ShootDraw();
 			playerDraw();
-			DrawText(FormatText("Your score: %i", destroyedAsteroidsCount), screenWidth / 2, screenHeight / 10, 40, YELLOW);
+			DrawText(FormatText("Score: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);
 			//DrawRectangle(mouse.position.x, mouse.position.y, mouse.width + 5, mouse.height + 5, WHITE);
 			
 
-			if (!(collisionCircle.active))//
+			if (!(gameON))//
 			{
-				if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
+				if (gamePaused)
 				{
-					DrawText("You won!", screenWidth / 2, screenHeight / 2, 40, YELLOW);
+					DrawRectangle(buttons[0].position.x - 25, buttons[0].position.y - 25, (float)screenWidth / 4.2f, (float)screenHeight / 2.5f, DARKPURPLE);
+					for (int i = 0; i < maxButtons; i++)
+					{
+						DrawRectangleLines(buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height, buttons[i].defaultColor);
+					}
+					DrawText("PAUSED", buttons[0].position.x + 50, buttons[0].position.y - 100, 40, GOLD);
+					DrawText(FormatText("CONTINUE"), buttons[0].position.x + 10, buttons[0].position.y + 5, defaultFontSize / 1.3, buttons[0].defaultColor);
+					DrawText(FormatText("RESTART"), buttons[1].position.x + 8, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
+					DrawText(FormatText("MENU"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);
 				}
 				else
 				{
-					DrawText("You lost", screenWidth / 2, screenHeight / 2, 40, RED);
+					if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
+					{
+						DrawText("You won!", screenWidth / 2, screenHeight / 2, 40, YELLOW);
+					}
+					else
+					{
+						DrawText("You lost", screenWidth / 2, screenHeight / 2, 40, RED);
+					}
 				}
-
 			}
 		}
 	}

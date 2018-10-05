@@ -96,7 +96,7 @@ namespace Juego
 		#ifdef RELEASE
 				void collisionCircleDraw() // only in RELEASE mode
 				{
-					DrawCircleV({ player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeightv2) }, collisionCircle.radio, { 0, 0, 0, 0 });
+					DrawCircleV({ player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeightv2) }, collisionCircle.radius, { 0, 0, 0, 0 });
 				}
 		#endif
 	}

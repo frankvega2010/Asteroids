@@ -1,7 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
-
+#include <string>
 #include "raylib.h"
+using namespace std;
 
 namespace Juego
 {
@@ -9,6 +10,7 @@ namespace Juego
 	{
 		Play = 1,
 		Menu,
+		Controls,
 		Quit
 	};
 
@@ -17,8 +19,12 @@ namespace Juego
 		float width;
 		float height;
 		bool selected;
+		Color messageColor;
 		Color defaultColor;
 	};
+
+	extern Texture2D scheme_arrows01;
+	extern Texture2D scheme_sign01;
 
 	extern Buttons mouse;
 	extern int buttonOption;
@@ -30,6 +36,7 @@ namespace Juego
 
 	extern bool isScreenFinished;
 
+	
 	void Execute();
 }
 #endif // GAME_H

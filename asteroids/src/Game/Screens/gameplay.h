@@ -5,6 +5,12 @@
 
 namespace Juego
 {
+	enum gameplayOptions {
+		buttonContinue = 20,
+		buttonRestart,
+		buttonQuitToMenu
+	};
+
 	namespace Gameplay_Section
 	{
 		void UpdateGameplayScreen();

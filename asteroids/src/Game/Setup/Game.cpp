@@ -5,7 +5,8 @@
 #include "Screens/gameover.h"
 #include "Screens/settings.h"
 #include "Screens/credits.h"
-#include "Screens/howtoplay.h"
+#include "Screens/controls.h"
+#include "Setup\Asteroid.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -13,7 +14,7 @@ using namespace GameOver_Section;
 using namespace Menu_Section;
 using namespace Settings_Section;
 using namespace Credits_Section;
-using namespace Howtoplay_Section;
+using namespace Controls_Section;
 
 namespace Juego
 {
@@ -27,6 +28,9 @@ namespace Juego
 	int defaultFontSize = 60;
 
 	bool isScreenFinished;
+
+	Texture2D scheme_arrows01;
+	Texture2D scheme_sign01;
 
 	#ifdef AUDIO
 
@@ -45,23 +49,27 @@ namespace Juego
 
 	static void Init()
 	{
+
 		SetExitKey(0);
 
 		screenWidth = 1300;
 		screenHeight = 800;
 
-		createMouse();	
+		createMouse();
 
 		//InitGameplayVariables();
 
 		InitWindow(screenWidth, screenHeight, "Asteroids Ver 0.1");
+		
+		scheme_arrows01 = LoadTexture("res/textures/controls01.png");	
+		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
 
 		InitMenuScreen();
+		createAsteroid(); //PONER EN GAMEOVER YENDO AL MENU.
 	}
 
 	static void Update()
 	{
-		// Update Template
 		switch (gameScreen)
 		{
 		case Play:
@@ -70,8 +78,17 @@ namespace Juego
 
 			if (FinishGameplayScreen())
 			{
+				switch (buttonOption)
+				{
+				case buttonQuitToMenu:
+				{
+					gameScreen = Menu;
+					InitMenuScreen();
+					break;
+				}
+				}
 				//gameScreen = GameOver;
-				InitGameOverScreen();
+				//InitGameOverScreen();
 			}
 		}
 		break;
@@ -81,53 +98,26 @@ namespace Juego
 
 			if (FinishMenuScreen())
 			{
-				switch (gameScreen)// CHANGE THIS? maybe it works
+
+				switch (buttonOption)
 				{
-				case Play:
+				case buttonPlay:
 				{
 					#ifdef AUDIO
 										StopMusicStream(pong_menu_song);
 					#endif
 					RestartPhase();
-					//gamePhase = Gameplay;
+					gameScreen = Play;
 					InitGameplayScreen();
 					break;
 				}
-				break;
-				case Menu:
+				case buttonControls:
 				{
-					UpdateMenuScreen();
-
-					if (FinishMenuScreen())
-					{
-
-						switch (buttonOption)
-						{
-						case buttonPlay:
-						{
-							#ifdef AUDIO
-														StopMusicStream(pong_menu_song);
-							#endif
-							RestartPhase();
-							gameScreen = Play;
-							InitGameplayScreen();
-							break;
-						}
-						case buttonQuit:
-						{
-						#ifdef AUDIO
-													StopMusicStream(pong_menu_song);
-						#endif
-
-							gameScreen = 0;
-							return;
-							break;
-						}
-						}
-					}
+					gameScreen = Controls;
+					InitControlsScreen();
+					break;
 				}
-				break;
-				case Quit:
+				case buttonQuit:
 				{
 					#ifdef AUDIO
 										StopMusicStream(pong_menu_song);
@@ -138,6 +128,17 @@ namespace Juego
 					break;
 				}
 				}
+			}
+		}
+		break;
+		case Controls:
+		{
+			UpdateControlsScreen();
+
+			if (FinishControlsScreen())
+			{
+				gameScreen = Menu;
+				InitMenuScreen();
 			}
 		}
 		break;
@@ -154,6 +155,7 @@ namespace Juego
 		{
 		case Play: Gameplay_Section::DrawGameplay(); break;
 		case Menu: Menu_Section::DrawMenu(); break;
+		case Controls: Controls_Section::DrawControls(); break;
 		}
 
 		EndDrawing();
@@ -165,6 +167,7 @@ namespace Juego
 				// Audio Code
 				CloseAudioDevice();
 		#endif
+		UnloadTexture(scheme_arrows01);
 		CloseWindow();
 	}
 

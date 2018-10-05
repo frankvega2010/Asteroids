@@ -4,6 +4,9 @@ namespace Juego
 {
 	enum menuOptions {
 		buttonPlay = 10,
+		buttonControls,
+		buttonSettings,
+		buttonCredits,
 		buttonQuit
 	};
 
