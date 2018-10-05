@@ -8,11 +8,14 @@
 namespace Juego
 {
 	rocketShip player;
-	rocketShip playerTexture;
 	Circle collisionCircle;
 	static const int playerBaseSize = 20;
 	float shipHeight = (playerBaseSize / 2) / tanf(20 * DEG2RAD);
 	float shipHeightv2 = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
+
+	static Vector2 RotationPoint1 = { player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeight) };
+	static Vector2 RotationPoint2 = { (float)GetMouseX(), (float)GetMouseY() };
+	static Vector2 RotationPoint3 = { player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeight) + (screenWidth - GetMouseX()), player.position.y };
 	
 	namespace Gameplay_Section
 	{
@@ -24,6 +27,7 @@ namespace Juego
 			player.rotation = 0;
 			player.speed = { 0.0f, 0.0f };
 			player.defaultSpeed = 300.0f;
+
 		}
 
 		void createCollisionCircle()
@@ -40,6 +44,30 @@ namespace Juego
 			ShootInput();
 
 			// Player logic: rotation
+
+			/*if (GetMouseX() > player.position.x && GetMouseY() < player.position.y)// player rotation entre 0 y 90.
+			{
+				player.rotation = GetMouseY() * 0.25;
+				//player.rotation = GetMouseY() * 0.0625 + GetMouseX() * 0.0625;
+				//player.rotation = -180; // mirando hacia abajo
+				//player.rotation = 180; //mmirando hacia abajo
+				//player.rotation = -90; // inclinacion izquierda mirando izquierda
+				//player.rotation = 90; inclinacion derecha mirando derecha
+				//player.rotation = player.position.y - cosf(80*DEG2RAD)*(shipHeightv2);
+				//player.rotation = player.position.x + sinf(150*DEG2RAD)*(shipHeightv2);
+
+			}*/
+
+
+			
+
+			//player.rotation = player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2);
+			//player.rotation = GetMouseY() + player.position.y + cosf(GetMouseY()*DEG2RAD)*(shipHeightv2);
+
+			//player.rotation = GetMouseY() + player.position.y + sinf(player.rotation*DEG2RAD)*(shipHeightv2);
+			//collisionCircle.position.x = player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2);
+			//collisionCircle.position.y = player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeightv2);
+
 			if (IsKeyDown(KEY_LEFT)) player.rotation -= 280 * GetFrameTime();
 			if (IsKeyDown(KEY_RIGHT)) player.rotation += 280 * GetFrameTime();
 
