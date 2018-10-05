@@ -8,10 +8,12 @@
 namespace Juego
 {
 	rocketShip player;
+	rocketShip playerTexture;
 	Circle collisionCircle;
 	static const int playerBaseSize = 20;
 	float shipHeight = (playerBaseSize / 2) / tanf(20 * DEG2RAD);
 	float shipHeightv2 = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
+	
 	namespace Gameplay_Section
 	{
 		void createPlayer()
@@ -27,13 +29,13 @@ namespace Juego
 		void createCollisionCircle()
 		{
 			collisionCircle.position.x = player.position.x;
-			collisionCircle.position.y = player.position.y - 10;
+			collisionCircle.position.y = player.position.y;
 			collisionCircle.radius = 15;
 			collisionCircle.speed = { 0,0 };
 			collisionCircle.active = true;
 		}
 		
-		void playerInput()
+		void playerInput() //rotar nave con posicion de mouse getmouseY - asteroid position x calcular con cos y sin. 
 		{
 			ShootInput();
 
@@ -83,7 +85,9 @@ namespace Juego
 			Vector2 v1 = { player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeight) };
 			Vector2 v2 = { player.position.x - cosf(player.rotation*DEG2RAD)*(playerBaseSize / 2), player.position.y - sinf(player.rotation*DEG2RAD)*(playerBaseSize / 2) };
 			Vector2 v3 = { player.position.x + cosf(player.rotation*DEG2RAD)*(playerBaseSize / 2), player.position.y + sinf(player.rotation*DEG2RAD)*(playerBaseSize / 2) };
+			
 			DrawTriangle(v1, v2, v3, MAROON);
+			DrawTexturePro(ship, {0.0f,0.0f, 50,50}, { player.position.x,player.position.y, 50,50 }, {25,30}, player.rotation, WHITE);
 		}
 
 		#ifdef TESTING
@@ -92,7 +96,6 @@ namespace Juego
 					DrawCircleV({ player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 });
 				}
 		#endif
-
 		#ifdef RELEASE
 				void collisionCircleDraw() // only in RELEASE mode
 				{

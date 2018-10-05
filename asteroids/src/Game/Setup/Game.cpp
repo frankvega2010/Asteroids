@@ -31,6 +31,8 @@ namespace Juego
 
 	Texture2D scheme_arrows01;
 	Texture2D scheme_sign01;
+	Image shipImage;
+	Texture2D ship;
 
 	#ifdef AUDIO
 
@@ -59,13 +61,18 @@ namespace Juego
 
 		//InitGameplayVariables();
 
-		InitWindow(screenWidth, screenHeight, "Asteroids Ver 0.1");
+		InitWindow(screenWidth, screenHeight, "Simple! Asteroids");
 		
 		scheme_arrows01 = LoadTexture("res/textures/controls01.png");	
 		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
 
+		shipImage = LoadImage("res/textures/test01.png");
+		ImageResize(&shipImage, 50, 50);
+		ship = LoadTextureFromImage(shipImage);
+		UnloadImage(shipImage);
+
 		InitMenuScreen();
-		createAsteroid(); //PONER EN GAMEOVER YENDO AL MENU.
+		createAsteroid();
 	}
 
 	static void Update()
@@ -198,6 +205,8 @@ namespace Juego
 				CloseAudioDevice();
 		#endif
 		UnloadTexture(scheme_arrows01);
+		UnloadTexture(scheme_sign01);
+		UnloadTexture(ship);
 		CloseWindow();
 	}
 

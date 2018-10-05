@@ -228,6 +228,7 @@ namespace Juego
 		void DrawGameplay()
 		{
 			collisionCircleDraw();
+			
 			AsteroidDraw();
 			ShootDraw();
 			playerDraw();

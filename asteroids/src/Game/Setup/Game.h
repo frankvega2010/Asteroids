@@ -26,6 +26,7 @@ namespace Juego
 
 	extern Texture2D scheme_arrows01;
 	extern Texture2D scheme_sign01;
+	extern Texture2D ship;
 
 	extern Buttons mouse;
 	extern int buttonOption;
