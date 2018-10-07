@@ -32,6 +32,7 @@ namespace Juego
 	extern Texture2D asteroid;
 	extern Texture2D asteroidMedium;
 	extern Texture2D asteroidSmall;
+	extern Texture2D backgroundGame;
 
 	extern Buttons mouse;
 	extern int buttonOption;
@@ -43,7 +44,7 @@ namespace Juego
 
 	extern bool isScreenFinished;
 
-	
+	void DrawBackground();
 	void Execute();
 }
 #endif // GAME_H

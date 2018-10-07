@@ -106,6 +106,7 @@ namespace Juego
 
 		void DrawControls()
 		{
+			DrawBackground();
 			AsteroidDraw();
 
 			for (int i = 0; i < maxButtonsControls; i++)

@@ -101,6 +101,7 @@ namespace Juego
 
 		void DrawSettings()
 		{
+			DrawBackground();
 			AsteroidDraw();
 
 			for (int i = 0; i < maxButtons; i++)

@@ -109,6 +109,7 @@ namespace Juego
 
 		void DrawGameOver()
 		{
+			DrawBackground();
 			AsteroidDraw();
 
 			for (int i = 0; i < maxButtons; i++)

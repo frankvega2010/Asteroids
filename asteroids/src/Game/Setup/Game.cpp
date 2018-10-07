@@ -35,16 +35,23 @@ namespace Juego
 	Image asteroidImage;
 	Image asteroidSmallImage;
 	Image asteroidMediumImage;
+	Image backgroundGameImage;
 	Texture2D ship;
 	Texture2D asteroid;
 	Texture2D asteroidMedium;
 	Texture2D asteroidSmall;
+	Texture2D backgroundGame;
 
 	#ifdef AUDIO
 
 	// Audio Code
 
 	#endif
+
+	void DrawBackground()
+	{
+		DrawTexturePro(backgroundGame, { 0.0f,0.0f, (float)screenWidth,(float)screenHeight }, { 0,0, (float)screenWidth,(float)screenHeight }, { 0,0 }, 0, WHITE);
+	}
 
 	static void createMouse()
 	{
@@ -74,11 +81,12 @@ namespace Juego
 
 		shipImage = LoadImage("res/textures/test01.png");
 		asteroidImage = LoadImage("res/textures/asteroid.png");
+		backgroundGameImage = LoadImage("res/textures/backgroundgame.png");
 
-		ImageResize(&shipImage, 50, 50);
+		
+		ImageResize(&backgroundGameImage, screenWidth, screenHeight);
+
 		ImageResize(&asteroidImage, 90, 90);
-
-		ship = LoadTextureFromImage(shipImage);
 		asteroid = LoadTextureFromImage(asteroidImage);
 
 		ImageResize(&asteroidImage, 45, 45);
@@ -87,8 +95,14 @@ namespace Juego
 		ImageResize(&asteroidImage, 22.5, 22.5);
 		asteroidSmall = LoadTextureFromImage(asteroidImage);
 
+		ImageResize(&shipImage, 50, 50);
+		ship = LoadTextureFromImage(shipImage);
+		
+		backgroundGame = LoadTextureFromImage(backgroundGameImage);
+
 		UnloadImage(shipImage);
 		UnloadImage(asteroidImage);
+		UnloadImage(backgroundGameImage);
 
 		InitMenuScreen();
 		createAsteroid();

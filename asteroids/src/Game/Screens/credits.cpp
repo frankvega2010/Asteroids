@@ -112,6 +112,7 @@ namespace Juego
 		
 		void DrawCredits()
 		{
+			DrawBackground();
 			AsteroidDraw();
 
 			for (int i = 0; i < maxButtons; i++)

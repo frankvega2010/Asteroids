@@ -125,6 +125,7 @@ namespace Juego
 
 		void DrawMenu()
 		{
+			DrawBackground();
 			AsteroidDraw();
 
 			for (int i = 0; i < maxButtons; i++)
