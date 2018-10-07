@@ -57,7 +57,7 @@ namespace Juego
 						}
 					}		
 				}
-			} //else if (IsKeyPressed(KEY_SPACE))
+			}
 		}
 		void ShootUpdate()
 		{
@@ -124,7 +124,6 @@ namespace Juego
 								asteroidsMedium[midAsteroidsCount].active = true;
 								midAsteroidsCount++;
 							}
-							//asteroidsBig[a].position = (Vector2){-100, -100};
 							a = asteroidsBigLimit;
 						}
 					}
@@ -154,7 +153,6 @@ namespace Juego
 								asteroidsSmall[smallAsteroidsCount].active = true;
 								smallAsteroidsCount++;
 							}
-							//asteroidsMedium[b].position = (Vector2){-100, -100};
 							b = asteroidsMediumLimit;
 						}
 					}
@@ -167,7 +165,6 @@ namespace Juego
 							shoots[i].lifespan = 0;
 							asteroidsSmall[c].active = false;
 							destroyedAsteroidsCount++;
-							// asteroidsSmall[c].position = (Vector2){-100, -100};
 							c = asteroidsSmallLimit;
 						}
 					}

@@ -13,7 +13,6 @@ namespace Juego
 	static const int maxButtonsControls = 1;
 
 	static Buttons buttonsControls[maxButtonsControls];
-	//static int buttonDistance_Controls = 0;
 	static int buttonSelect = 0;
 
 	namespace Controls_Section
@@ -29,8 +28,6 @@ namespace Juego
 				buttonsControls[i].selected = false;
 				buttonsControls[i].defaultColor = RED;
 				buttonsControls[i].messageColor = BLANK;
-
-				//buttonDistance_Controls = buttonDistance_Controls + 100;
 			}
 		}
 

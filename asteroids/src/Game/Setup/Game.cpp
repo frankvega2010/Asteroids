@@ -72,8 +72,6 @@ namespace Juego
 
 		createMouse();
 
-		//InitGameplayVariables();
-
 		InitWindow(screenWidth, screenHeight, "Simple! Asteroids");
 		
 		scheme_arrows01 = LoadTexture("res/textures/controls01.png");	

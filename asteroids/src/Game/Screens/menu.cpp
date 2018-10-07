@@ -15,8 +15,6 @@ namespace Juego
 	static Buttons buttons[maxButtons];
 	static int buttonDistance = 0;
 	static int buttonSelect = 0;
-
-	//static float buttonOption = 0;
 	static Color optionColor = RED;
 
 	namespace Menu_Section

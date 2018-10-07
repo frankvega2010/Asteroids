@@ -235,8 +235,6 @@ namespace Juego
 			ShootDraw();
 			playerDraw();
 			DrawText(FormatText("Score: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);
-			//DrawText(FormatText("Time: %f", rapidfiretimer), screenWidth / 70, screenHeight / 10, 40, YELLOW);
-			//DrawRectangle(mouse.position.x, mouse.position.y, mouse.width + 5, mouse.height + 5, WHITE);
 			
 
 			if (!(gameON))//

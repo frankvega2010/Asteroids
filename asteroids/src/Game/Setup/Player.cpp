@@ -43,35 +43,8 @@ namespace Juego
 		{
 			ShootInput();
 
-			// Player logic: rotation
-
-			/*if (GetMouseX() > player.position.x && GetMouseY() < player.position.y)// player rotation entre 0 y 90.
-			{
-				player.rotation = GetMouseY() * 0.25;
-				//player.rotation = GetMouseY() * 0.0625 + GetMouseX() * 0.0625;
-				//player.rotation = -180; // mirando hacia abajo
-				//player.rotation = 180; //mmirando hacia abajo
-				//player.rotation = -90; // inclinacion izquierda mirando izquierda
-				//player.rotation = 90; inclinacion derecha mirando derecha
-				//player.rotation = player.position.y - cosf(80*DEG2RAD)*(shipHeightv2);
-				//player.rotation = player.position.x + sinf(150*DEG2RAD)*(shipHeightv2);
-
-			}*/
-
-
-			
-
-			//player.rotation = player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2);
-			//player.rotation = GetMouseY() + player.position.y + cosf(GetMouseY()*DEG2RAD)*(shipHeightv2);
-
-			//player.rotation = GetMouseY() + player.position.y + sinf(player.rotation*DEG2RAD)*(shipHeightv2);
-			//collisionCircle.position.x = player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeightv2);
-			//collisionCircle.position.y = player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeightv2);
-
 			if (IsKeyDown(KEY_LEFT)) player.rotation -= 280 * GetFrameTime();
 			if (IsKeyDown(KEY_RIGHT)) player.rotation += 280 * GetFrameTime();
-
-			
 
 			// Player logic: acceleration
 			if (IsKeyDown(KEY_UP))
@@ -97,7 +70,6 @@ namespace Juego
 			player.position.y -= (player.speed.y*player.acceleration);
 
 			// Player logic: speed
-			//player.speed = { 100 * GetFrameTime()  , 100 * GetFrameTime() };
 
 			player.speed.x = sin(player.rotation*DEG2RAD)*player.defaultSpeed * GetFrameTime();
 			player.speed.y = cos(player.rotation*DEG2RAD)*player.defaultSpeed * GetFrameTime();
