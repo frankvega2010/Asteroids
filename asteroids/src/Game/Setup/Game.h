@@ -12,7 +12,9 @@ namespace Juego
 		Menu,
 		Controls,
 		GameOver,
-		Quit
+		Quit,
+		Credits,
+		Settings
 	};
 
 	struct Buttons { //array de botones

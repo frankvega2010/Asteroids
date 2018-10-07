@@ -128,6 +128,12 @@ namespace Juego
 					InitControlsScreen();
 					break;
 				}
+				case buttonCredits:
+				{
+					gameScreen = Credits;
+					InitCreditsScreen();
+					break;
+				}
 				case buttonQuit:
 				{
 					#ifdef AUDIO
@@ -147,6 +153,17 @@ namespace Juego
 			UpdateControlsScreen();
 
 			if (FinishControlsScreen())
+			{
+				gameScreen = Menu;
+				InitMenuScreen();
+			}
+		}
+		break;
+		case Credits:
+		{
+			UpdateCreditsScreen();
+
+			if (FinishCreditsScreen())
 			{
 				gameScreen = Menu;
 				InitMenuScreen();
@@ -193,6 +210,7 @@ namespace Juego
 		case GameOver: GameOver_Section::DrawGameOver(); break;
 		case Menu: Menu_Section::DrawMenu(); break;
 		case Controls: Controls_Section::DrawControls(); break;
+		case Credits: Credits_Section::DrawCredits(); break;
 		}
 
 		EndDrawing();

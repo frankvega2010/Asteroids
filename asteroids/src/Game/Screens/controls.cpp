@@ -108,7 +108,6 @@ namespace Juego
 		{
 			AsteroidDraw();
 
-
 			for (int i = 0; i < maxButtonsControls; i++)
 			{
 				DrawRectangleLines(buttonsControls[i].position.x, buttonsControls[i].position.y, buttonsControls[i].width, buttonsControls[i].height, buttonsControls[i].defaultColor);
@@ -120,7 +119,7 @@ namespace Juego
 					switch (i)
 					{
 					case 0:
-						DrawText("Go back to menu!", buttonsControls[i].position.x + 300, buttonsControls[i].position.y, defaultFontSize / 2, buttonsControls[i].messageColor);
+						DrawText("Click or Enter to go back!", buttonsControls[i].position.x + 300, buttonsControls[i].position.y, defaultFontSize / 2, buttonsControls[i].messageColor);
 						DrawText("", buttonsControls[i].position.x + 300, buttonsControls[i].position.y + 50, defaultFontSize / 2, buttonsControls[i].messageColor);
 						break;
 					}
@@ -130,6 +129,8 @@ namespace Juego
 					buttonsControls[i].messageColor = BLANK;
 				}
 			}
+
+			DrawText(FormatText("MENU"), buttonsControls[0].position.x + 50, buttonsControls[0].position.y + 5, defaultFontSize, buttonsControls[0].defaultColor);
 
 			// Testing Images
 			DrawTexture(scheme_arrows01, 0, 0, WHITE);

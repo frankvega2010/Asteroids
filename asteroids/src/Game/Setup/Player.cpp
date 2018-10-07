@@ -76,12 +76,12 @@ namespace Juego
 			// Player logic: acceleration
 			if (IsKeyDown(KEY_UP))
 			{
-				if (player.acceleration < 1) player.acceleration += 40.0f * GetFrameTime();
+				if (player.acceleration < 1) player.acceleration += 1.0f * GetFrameTime();
 			}
 			else
 			{
-				if (player.acceleration > 0) player.acceleration -= 2.0f * GetFrameTime();
-				else if (player.acceleration < 0) player.acceleration = 0;
+				if (player.acceleration > 0.01f) player.acceleration -= 0.1f * GetFrameTime();
+				else if (player.acceleration < 0.01f) player.acceleration = 0.01f;
 			}
 			if (IsKeyDown(KEY_DOWN))
 			{
@@ -97,6 +97,8 @@ namespace Juego
 			player.position.y -= (player.speed.y*player.acceleration);
 
 			// Player logic: speed
+			//player.speed = { 100 * GetFrameTime()  , 100 * GetFrameTime() };
+
 			player.speed.x = sin(player.rotation*DEG2RAD)*player.defaultSpeed * GetFrameTime();
 			player.speed.y = cos(player.rotation*DEG2RAD)*player.defaultSpeed * GetFrameTime();
 		}

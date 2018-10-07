@@ -25,7 +25,7 @@ namespace Juego
 		{
 			for (int i = 0; i < maxButtons; i++)
 			{
-				buttons[i].position.x = (float)screenWidth / 2.4f;
+				buttons[i].position.x = (float)screenWidth / 2.5f; //3.8f
 				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance;
 				buttons[i].width = (float)screenWidth / 5.0f;
 				buttons[i].height = (float)screenHeight / 12.0f;
@@ -166,15 +166,15 @@ namespace Juego
 			}
 
 			DrawText(FormatText("Welcome to.."), buttons[0].position.x + 10, screenHeight / 20, defaultFontSize / 2, WHITE);
-			DrawText(FormatText("Simple! Asteroids"), buttons[0].position.x - 150, screenHeight / 10, defaultFontSize + 20, WHITE);
-			DrawText(FormatText("By frankvega"), buttons[0].position.x + 300, screenHeight / 5, defaultFontSize / 2, WHITE);
-			DrawText(FormatText("Beta Build 0.1.3"), buttons[0].position.x - 150, screenHeight / 5, defaultFontSize / 2, WHITE);
+			DrawText(FormatText("Simple! Asteroids"), buttons[0].position.x * 0.63f, screenHeight / 10, defaultFontSize + 20, WHITE);
+			DrawText(FormatText("By frankvega"), buttons[0].position.x * 1.4f, screenHeight / 5, defaultFontSize / 2, WHITE);
+			DrawText(FormatText("Beta Build 0.1.5"), buttons[0].position.x * 0.63f, screenHeight / 5, defaultFontSize / 2, WHITE);
 			DrawText(FormatText("PLAY"), buttons[0].position.x + 50, buttons[0].position.y + 5, defaultFontSize, buttons[0].defaultColor);
 			DrawText(FormatText("CONTROLS"), buttons[1].position.x + 8, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
 			DrawText(FormatText("SETTINGS"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);
 			DrawText(FormatText("CREDITS"), buttons[3].position.x + 10, buttons[3].position.y + 5, defaultFontSize / 1.1, buttons[3].defaultColor);
 			DrawText(FormatText("QUIT"), buttons[4].position.x + 55, buttons[4].position.y + 5, defaultFontSize, buttons[4].defaultColor);
-			//DrawRectangle(mouse.position.x + 50, mouse.position.y, mouse.width, mouse.height, mouse.defaultColor); // placeholder if you want to use a custom Mouse Icon instead of the windows default one. If you use this remember to put Enbale and Disable Cursor.
+			//DrawRectangle(mouse.position.x + 50, mouse.position.y, mouse.width, mouse.height, mouse.defaultColor); // placeholder if you want to use a custom Mouse Icon instead of the windows default one. If you use this remember to put Enbale and Disable Cursor.?
 		}
 
 		bool FinishMenuScreen()
