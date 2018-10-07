@@ -128,6 +128,12 @@ namespace Juego
 					InitControlsScreen();
 					break;
 				}
+				case buttonSettings:
+				{
+					gameScreen = Settings;
+					InitSettingsScreen();
+					break;
+				}
 				case buttonCredits:
 				{
 					gameScreen = Credits;
@@ -164,6 +170,17 @@ namespace Juego
 			UpdateCreditsScreen();
 
 			if (FinishCreditsScreen())
+			{
+				gameScreen = Menu;
+				InitMenuScreen();
+			}
+		}
+		break;
+		case Settings:
+		{
+			UpdateSettingsScreen();
+
+			if (FinishSettingsScreen())
 			{
 				gameScreen = Menu;
 				InitMenuScreen();
@@ -211,6 +228,7 @@ namespace Juego
 		case Menu: Menu_Section::DrawMenu(); break;
 		case Controls: Controls_Section::DrawControls(); break;
 		case Credits: Credits_Section::DrawCredits(); break;
+		case Settings: Settings_Section::DrawSettings(); break;
 		}
 
 		EndDrawing();

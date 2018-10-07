@@ -11,24 +11,24 @@ using namespace Gameplay_Section;
 
 namespace Juego
 {
-	static const int maxButtonsControls = 1;
+	static const int maxButtons = 1;
 
-	static Buttons buttonsControls[maxButtonsControls];
+	static Buttons buttons[maxButtons];
 	static int buttonSelect = 0;
 
 	namespace Credits_Section
 	{
 		static void createCreditsButtons()
 		{
-			for (int i = 0; i < maxButtonsControls; i++)
+			for (int i = 0; i < maxButtons; i++)
 			{
-				buttonsControls[i].position.x = (float)screenWidth / 90.0f;
-				buttonsControls[i].position.y = (float)screenHeight / 1.1f; //+ buttonDistance_Controls;
-				buttonsControls[i].width = (float)screenWidth / 5.0f;
-				buttonsControls[i].height = (float)screenHeight / 12.0f;
-				buttonsControls[i].selected = false;
-				buttonsControls[i].defaultColor = RED;
-				buttonsControls[i].messageColor = BLANK;
+				buttons[i].position.x = (float)screenWidth / 90.0f;
+				buttons[i].position.y = (float)screenHeight / 1.1f; //+ buttonDistance_Controls;
+				buttons[i].width = (float)screenWidth / 5.0f;
+				buttons[i].height = (float)screenHeight / 12.0f;
+				buttons[i].selected = false;
+				buttons[i].defaultColor = RED;
+				buttons[i].messageColor = BLANK;
 			}
 		}
 
@@ -44,7 +44,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect++;
-				if (buttonSelect > maxButtonsControls - 1)
+				if (buttonSelect > maxButtons - 1)
 				{
 					buttonSelect--;
 				}
@@ -60,9 +60,9 @@ namespace Juego
 				}
 			}
 
-			for (int i = 0; i < maxButtonsControls; i++)
+			for (int i = 0; i < maxButtons; i++)
 			{
-				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttonsControls[i].selected || IsKeyPressed(KEY_ENTER) && buttonsControls[i].selected)
+				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttons[i].selected || IsKeyPressed(KEY_ENTER) && buttons[i].selected)
 				{
 					switch (i)
 					{
@@ -70,7 +70,7 @@ namespace Juego
 						buttonOption = buttonGoMenu;
 						break;
 					}
-					buttonsControls[i].selected = false;
+					buttons[i].selected = false;
 					isScreenFinished = true;
 				}
 			}
@@ -94,18 +94,18 @@ namespace Juego
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 
 			CreditosInput();
-			for (int i = 0; i < maxButtonsControls; i++)
+			for (int i = 0; i < maxButtons; i++)
 			{
-				if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttonsControls[i].position.x, buttonsControls[i].position.y, buttonsControls[i].width, buttonsControls[i].height }) || buttonSelect == i)
+				if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height }) || buttonSelect == i)
 				{
 					buttonSelect = i;
-					buttonsControls[i].defaultColor = WHITE;
-					buttonsControls[i].selected = true;
+					buttons[i].defaultColor = WHITE;
+					buttons[i].selected = true;
 				}
 				else
 				{
-					buttonsControls[i].defaultColor = RED;
-					buttonsControls[i].selected = false;
+					buttons[i].defaultColor = RED;
+					buttons[i].selected = false;
 				}
 			}
 		}
@@ -114,25 +114,25 @@ namespace Juego
 		{
 			AsteroidDraw();
 
-			for (int i = 0; i < maxButtonsControls; i++)
+			for (int i = 0; i < maxButtons; i++)
 			{
-				DrawRectangleLines(buttonsControls[i].position.x, buttonsControls[i].position.y, buttonsControls[i].width, buttonsControls[i].height, buttonsControls[i].defaultColor);
+				DrawRectangleLines(buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height, buttons[i].defaultColor);
 
-				if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttonsControls[i].position.x, buttonsControls[i].position.y, buttonsControls[i].width, buttonsControls[i].height }) || buttonSelect == i)
+				if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height }) || buttonSelect == i)
 				{
-					buttonsControls[i].messageColor = WHITE;
+					buttons[i].messageColor = WHITE;
 
 					switch (i)
 					{
 					case 0:
-						DrawText("Click or Enter to go back!", buttonsControls[i].position.x + 300, buttonsControls[i].position.y, defaultFontSize / 2, buttonsControls[i].messageColor);
-						DrawText("", buttonsControls[i].position.x + 300, buttonsControls[i].position.y + 50, defaultFontSize / 2, buttonsControls[i].messageColor);
+						DrawText("Click or Enter to go back!", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					}
 				}
 				else
 				{
-					buttonsControls[i].messageColor = BLANK;
+					buttons[i].messageColor = BLANK;
 				}
 			}
 			DrawText(FormatText("Simple! Asteroids"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 10, defaultFontSize + 20, WHITE);
@@ -144,7 +144,7 @@ namespace Juego
 			DrawText(FormatText("Tools Used"), (float)screenWidth / 2.5f, screenHeight / 2.2, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Raylib"), (float)screenWidth / 2.2f, screenHeight / 2.0, defaultFontSize / 1.5, WHITE);
 
-			DrawText(FormatText("MENU"), buttonsControls[0].position.x + 50, buttonsControls[0].position.y + 5, defaultFontSize, buttonsControls[0].defaultColor);
+			DrawText(FormatText("MENU"), buttons[0].position.x + 50, buttons[0].position.y + 5, defaultFontSize, buttons[0].defaultColor);
 		}
 
 		bool FinishCreditsScreen()
