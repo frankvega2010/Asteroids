@@ -5,6 +5,7 @@
 
 namespace Juego
 {
+
 	enum gameplayOptions {
 		buttonContinue = 20,
 		buttonRestart,

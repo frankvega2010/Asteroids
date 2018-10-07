@@ -1,4 +1,8 @@
 #include "PlayerShoot.h"
+#include "Screens\gameplay.h"
+
+using namespace Juego;
+using namespace Gameplay_Section;
 
 namespace Juego
 {
@@ -7,6 +11,7 @@ namespace Juego
 	static int midAsteroidsCount = 0;
 	static int smallAsteroidsCount = 0;
 	int destroyedAsteroidsCount = 0;
+	static float rapidfiretimer = 0;
 
 	namespace Gameplay_Section
 	{
@@ -32,21 +37,27 @@ namespace Juego
 		void ShootInput()
 		{
 			// Player shoot logic
-			if (IsKeyPressed(KEY_SPACE))
+			if (IsKeyDown(KEY_SPACE))
 			{
+				rapidfiretimer += 1 * GetFrameTime();
 				for (int i = 0; i < maxShoots; i++)
 				{
-					if (!shoots[i].active)
+					
+					if (rapidfiretimer > 0.15) // default 1.0 1.5
 					{
-						shoots[i].position = { player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight) };
-						shoots[i].active = true;
-						shoots[i].speed.x = 2.0*sin(player.rotation*DEG2RAD)*player.defaultSpeed;
-						shoots[i].speed.y = 2.0*cos(player.rotation*DEG2RAD)*player.defaultSpeed;
-						shoots[i].rotation = player.rotation;
-						break;
-					}
+						if (!shoots[i].active)
+						{
+							shoots[i].position = { player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight) };
+							shoots[i].active = true;
+							shoots[i].speed.x = 2.0*sin(player.rotation*DEG2RAD)*player.defaultSpeed;
+							shoots[i].speed.y = 2.0*cos(player.rotation*DEG2RAD)*player.defaultSpeed;
+							shoots[i].rotation = player.rotation;
+							rapidfiretimer = 0;
+							break;
+						}
+					}		
 				}
-			}
+			} //else if (IsKeyPressed(KEY_SPACE))
 		}
 		void ShootUpdate()
 		{
