@@ -138,20 +138,45 @@ namespace Juego
 			// Draw meteors
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
-				if (asteroidsBig[i].active) DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, DARKGRAY);
-				else DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, Fade(LIGHTGRAY, 0.3f));
+				
+				if (asteroidsBig[i].active)
+				{
+					DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, DARKGRAY);
+					DrawTexturePro(asteroid, { 0.0f,0.0f, 90,90 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 }, { 45,45 }, 0, BLUE);
+				}
+				else 
+				{
+					DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, Fade(LIGHTGRAY, 0.3f));
+					DrawTexturePro(asteroid, { 0.0f,0.0f, 90,90 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 }, { 45,45 }, 0, DARKGRAY);
+				} 
 			}
 
 			for (int i = 0; i < asteroidsMediumLimit; i++)
 			{
-				if (asteroidsMedium[i].active) DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, GRAY);
-				else DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, Fade(LIGHTGRAY, 0.3f));
+				if (asteroidsMedium[i].active)
+				{
+					DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, GRAY);
+					DrawTexturePro(asteroidMedium, { 0.0f,0.0f, 45,45 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 }, { 22.5,22.5 }, 0, BLUE);
+				}
+				else
+				{
+					DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, Fade(LIGHTGRAY, 0.3f));
+					DrawTexturePro(asteroidMedium, { 0.0f,0.0f, 45,45 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 }, { 22.5,22.5 }, 0, DARKGRAY);
+				}
 			}
 
 			for (int i = 0; i < asteroidsSmallLimit; i++)
 			{
-				if (asteroidsSmall[i].active) DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, GRAY);
-				else DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, Fade(LIGHTGRAY, 0.3f));
+				if (asteroidsSmall[i].active)
+				{
+					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, GRAY);
+					DrawTexturePro(asteroidSmall, { 0.0f,0.0f, 22.5,22.5 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5,22.5 }, { 11.25f,11.25f }, 0, BLUE);
+				}
+				else
+				{
+					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, Fade(LIGHTGRAY, 0.3f));
+					DrawTexturePro(asteroidSmall, { 0.0f,0.0f, 22.5,22.5 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5,22.5 }, { 11.25f,11.25f }, 0, DARKGRAY);
+				}
 			}
 		}
 	}

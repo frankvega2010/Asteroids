@@ -32,7 +32,13 @@ namespace Juego
 	Texture2D scheme_arrows01;
 	Texture2D scheme_sign01;
 	Image shipImage;
+	Image asteroidImage;
+	Image asteroidSmallImage;
+	Image asteroidMediumImage;
 	Texture2D ship;
+	Texture2D asteroid;
+	Texture2D asteroidMedium;
+	Texture2D asteroidSmall;
 
 	#ifdef AUDIO
 
@@ -67,9 +73,22 @@ namespace Juego
 		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
 
 		shipImage = LoadImage("res/textures/test01.png");
+		asteroidImage = LoadImage("res/textures/asteroid.png");
+
 		ImageResize(&shipImage, 50, 50);
+		ImageResize(&asteroidImage, 90, 90);
+
 		ship = LoadTextureFromImage(shipImage);
+		asteroid = LoadTextureFromImage(asteroidImage);
+
+		ImageResize(&asteroidImage, 45, 45);
+		asteroidMedium = LoadTextureFromImage(asteroidImage);
+
+		ImageResize(&asteroidImage, 22.5, 22.5);
+		asteroidSmall = LoadTextureFromImage(asteroidImage);
+
 		UnloadImage(shipImage);
+		UnloadImage(asteroidImage);
 
 		InitMenuScreen();
 		createAsteroid();
