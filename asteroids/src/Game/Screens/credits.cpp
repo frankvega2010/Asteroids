@@ -143,6 +143,7 @@ namespace Juego
 
 			DrawText(FormatText("Tools Used"), (float)screenWidth / 2.5f, screenHeight / 2.2, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Raylib"), (float)screenWidth / 2.2f, screenHeight / 2.0, defaultFontSize / 1.5, WHITE);
+			DrawText(FormatText("Adobe Illustrator"), (float)screenWidth / 2.6f, screenHeight / 1.8, defaultFontSize / 1.5, WHITE);
 
 			DrawText(FormatText("MENU"), buttons[0].position.x + 50, buttons[0].position.y + 5, defaultFontSize, buttons[0].defaultColor);
 		}
