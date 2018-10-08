@@ -9,13 +9,9 @@ namespace Juego
 {
 	rocketShip player;
 	Circle collisionCircle;
-	static const int playerBaseSize = 20;
+	static const int playerBaseSize = 25;
 	float shipHeight = (playerBaseSize / 2) / tanf(20 * DEG2RAD);
 	float shipHeightv2 = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
-
-	static Vector2 RotationPoint1 = { player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeight) };
-	static Vector2 RotationPoint2 = { (float)GetMouseX(), (float)GetMouseY() };
-	static Vector2 RotationPoint3 = { player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeight) + (screenWidth - GetMouseX()), player.position.y };
 	
 	namespace Gameplay_Section
 	{
@@ -89,7 +85,8 @@ namespace Juego
 			Vector2 v3 = { player.position.x + cosf(player.rotation*DEG2RAD)*(playerBaseSize / 2), player.position.y + sinf(player.rotation*DEG2RAD)*(playerBaseSize / 2) };
 			
 			DrawTriangle(v1, v2, v3, MAROON);
-			DrawTexturePro(ship, {0.0f,0.0f, 50,50}, { player.position.x,player.position.y, 50,50 }, {25,30}, player.rotation, WHITE);
+			DrawTexturePro(ship, { 0.0f,0.0f, 50,50 }, { player.position.x,player.position.y, 50,50 }, { 25,40 }, player.rotation, WHITE);
+			
 		}
 
 		#ifdef TESTING
