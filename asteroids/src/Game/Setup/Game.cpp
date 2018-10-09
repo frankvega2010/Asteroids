@@ -29,6 +29,10 @@ namespace Juego
 
 	bool isScreenFinished;
 
+	static Rectangle backgroundGameSource = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
+	static Rectangle backgroundGameDestination;
+	static Vector2 backgroundGameOrigin = { 0,0 };
+
 	Texture2D scheme_arrows01;
 	Texture2D scheme_sign01;
 	Image shipImage;
@@ -50,7 +54,8 @@ namespace Juego
 
 	void DrawBackground()
 	{
-		DrawTexturePro(backgroundGame, { 0.0f,0.0f, (float)screenWidth,(float)screenHeight }, { 0,0, (float)screenWidth,(float)screenHeight }, { 0,0 }, 0, WHITE);
+		backgroundGameDestination = { 0,0, (float)screenWidth,(float)screenHeight };
+		DrawTexturePro(backgroundGame, backgroundGameSource, backgroundGameDestination, backgroundGameOrigin, 0, WHITE);
 	}
 
 	static void createMouse()

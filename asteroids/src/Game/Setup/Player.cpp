@@ -7,11 +7,19 @@
 
 namespace Juego
 {
+	static int defaultRotationSpeed = 280;
+	static int defaultAcceleration = 1.0f;
+	static int defaultDeacceleration = 0.01f;
+	static int defaultBreakSpeed = 2.0f;
 	rocketShip player;
 	Circle collisionCircle;
 	static const int playerBaseSize = 25;
 	float shipHeight = (playerBaseSize / 2) / tanf(20 * DEG2RAD);
 	float shipHeightv2 = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
+
+	static Rectangle shipSource = { 0.0f,0.0f, 50,50 };
+	static Rectangle shipDestination;
+	static Vector2 shipOrigin = { 25,40 };
 	
 	namespace Gameplay_Section
 	{
@@ -39,22 +47,22 @@ namespace Juego
 		{
 			ShootInput();
 
-			if (IsKeyDown(KEY_LEFT)) player.rotation -= 280 * GetFrameTime();
-			if (IsKeyDown(KEY_RIGHT)) player.rotation += 280 * GetFrameTime();
+			if (IsKeyDown(KEY_LEFT)) player.rotation -= defaultRotationSpeed * GetFrameTime();
+			if (IsKeyDown(KEY_RIGHT)) player.rotation += defaultRotationSpeed * GetFrameTime();
 
 			// Player logic: acceleration
 			if (IsKeyDown(KEY_UP))
 			{
-				if (player.acceleration < 1) player.acceleration += 1.0f * GetFrameTime();
+				if (player.acceleration < 1) player.acceleration += defaultAcceleration * GetFrameTime();
 			}
 			else
 			{
-				if (player.acceleration > 0.01f) player.acceleration -= 0.1f * GetFrameTime();
-				else if (player.acceleration < 0.01f) player.acceleration = 0.01f;
+				if (player.acceleration > defaultDeacceleration) player.acceleration -= defaultDeacceleration * GetFrameTime();
+				else if (player.acceleration < defaultDeacceleration) player.acceleration = defaultDeacceleration;
 			}
 			if (IsKeyDown(KEY_DOWN))
 			{
-				if (player.acceleration > 0) player.acceleration -= 2.0f * GetFrameTime();
+				if (player.acceleration > 0) player.acceleration -= defaultBreakSpeed * GetFrameTime();
 				else if (player.acceleration < 0) player.acceleration = 0;
 			}
 		}
@@ -80,12 +88,14 @@ namespace Juego
 
 		void playerDraw()
 		{
+			shipDestination = { player.position.x,player.position.y, 50,50 };
+
 			Vector2 v1 = { player.position.x + sinf(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cosf(player.rotation*DEG2RAD)*(shipHeight) };
 			Vector2 v2 = { player.position.x - cosf(player.rotation*DEG2RAD)*(playerBaseSize / 2), player.position.y - sinf(player.rotation*DEG2RAD)*(playerBaseSize / 2) };
 			Vector2 v3 = { player.position.x + cosf(player.rotation*DEG2RAD)*(playerBaseSize / 2), player.position.y + sinf(player.rotation*DEG2RAD)*(playerBaseSize / 2) };
 			
 			DrawTriangle(v1, v2, v3, MAROON);
-			DrawTexturePro(ship, { 0.0f,0.0f, 50,50 }, { player.position.x,player.position.y, 50,50 }, { 25,40 }, player.rotation, WHITE);
+			DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, player.rotation, WHITE);
 			
 		}
 

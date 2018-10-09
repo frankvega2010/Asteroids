@@ -13,6 +13,19 @@ namespace Juego
 	static float rotationTimerBigAsteroids = 0;
 	static float rotationTimerMediumAsteroids = 0;
 	static float rotationTimerSmallAsteroids = 0;
+	static const int maxTimer = 1000;
+	
+	static Rectangle bigAsteroidSource = { 0.0f,0.0f, 90,90 };
+	static Rectangle mediumAsteroidSource = { 0.0f,0.0f, 45,45 };
+	static Rectangle smallAsteroidSource = { 0.0f,0.0f, 22.5f,22.5f };
+
+	static Rectangle bigAsteroidDestination;
+	static Rectangle mediumAsteroidDestination;
+	static Rectangle smallAsteroidDestination;
+
+	static Vector2 bigAsteroidOrigin = { 45,45 };
+	static Vector2 mediumAsteroidOrigin = { 22.5f,22.5f };
+	static Vector2 smallAsteroidOrigin = { 11.25f,11.25f };
 
 	Asteroid asteroidsSmall[asteroidsSmallLimit];
 	Asteroid asteroidsMedium[asteroidsMediumLimit];
@@ -88,18 +101,20 @@ namespace Juego
 
 		void AsteroidUpdate()
 		{
-			if (rotationTimerBigAsteroids < 1000) rotationTimerBigAsteroids += 40 * GetFrameTime();
+			if (rotationTimerBigAsteroids < maxTimer) rotationTimerBigAsteroids += 40 * GetFrameTime();
 			else rotationTimerBigAsteroids = 0;
 
-			if (rotationTimerMediumAsteroids < 1000) rotationTimerMediumAsteroids += 60 * GetFrameTime();
+			if (rotationTimerMediumAsteroids < maxTimer) rotationTimerMediumAsteroids += 60 * GetFrameTime();
 			else rotationTimerMediumAsteroids = 0;
 
-			if (rotationTimerSmallAsteroids < 1000) rotationTimerSmallAsteroids += 80 * GetFrameTime();
+			if (rotationTimerSmallAsteroids < maxTimer) rotationTimerSmallAsteroids += 80 * GetFrameTime();
 			else rotationTimerSmallAsteroids = 0;
 			
 			// Meteors logic: big meteors
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
+				
+
 				if (asteroidsBig[i].active)
 				{
 					// Movement
@@ -111,14 +126,13 @@ namespace Juego
 					else if (asteroidsBig[i].position.x < 0 - asteroidsBig[i].radius) asteroidsBig[i].position.x = screenWidth + asteroidsBig[i].radius;
 					if (asteroidsBig[i].position.y > screenHeight + asteroidsBig[i].radius) asteroidsBig[i].position.y = -(asteroidsBig[i].radius);
 					else if (asteroidsBig[i].position.y < 0 - asteroidsBig[i].radius) asteroidsBig[i].position.y = screenHeight + asteroidsBig[i].radius;
-
-					//asteroidsBig[i].rotation += 280 * GetFrameTime();
 				}
 			}
 
 			// Meteors logic: medium meteors
 			for (int i = 0; i < asteroidsMediumLimit; i++)
 			{
+
 				if (asteroidsMedium[i].active)
 				{
 					// Movement
@@ -136,6 +150,7 @@ namespace Juego
 			// Meteors logic: small meteors
 			for (int i = 0; i < asteroidsSmallLimit; i++)
 			{
+
 				if (asteroidsSmall[i].active)
 				{
 					// Movement
@@ -156,44 +171,49 @@ namespace Juego
 			// Draw meteors
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
-				
+				bigAsteroidDestination = { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 };
+
 				if (asteroidsBig[i].active)
 				{
 					DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, DARKGRAY);
-					DrawTexturePro(asteroid, { 0.0f,0.0f, 90,90 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 }, { 45,45 }, rotationTimerBigAsteroids, BLUE);
+					DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, rotationTimerBigAsteroids, BLUE);
 				}
 				else 
 				{
 					DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, Fade(LIGHTGRAY, 0.3f));
-					DrawTexturePro(asteroid, { 0.0f,0.0f, 90,90 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 }, { 45,45 }, 0, DARKGRAY);
+					DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, 0, DARKGRAY);
 				} 
 			}
 
 			for (int i = 0; i < asteroidsMediumLimit; i++)
 			{
+				mediumAsteroidDestination = { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 };
+
 				if (asteroidsMedium[i].active)
 				{
 					DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, GRAY);
-					DrawTexturePro(asteroidMedium, { 0.0f,0.0f, 45,45 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 }, { 22.5,22.5 }, rotationTimerMediumAsteroids, BLUE);
+					DrawTexturePro(asteroidMedium, mediumAsteroidSource, mediumAsteroidDestination, mediumAsteroidOrigin, rotationTimerMediumAsteroids, BLUE);
 				}
 				else
 				{
 					DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, Fade(LIGHTGRAY, 0.3f));
-					DrawTexturePro(asteroidMedium, { 0.0f,0.0f, 45,45 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 }, { 22.5,22.5 }, 0, DARKGRAY);
+					DrawTexturePro(asteroidMedium, mediumAsteroidSource, mediumAsteroidDestination, mediumAsteroidOrigin, 0, DARKGRAY);
 				}
 			}
 
 			for (int i = 0; i < asteroidsSmallLimit; i++)
 			{
+				smallAsteroidDestination = { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5f,22.5f };
+
 				if (asteroidsSmall[i].active)
 				{
 					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, GRAY);
-					DrawTexturePro(asteroidSmall, { 0.0f,0.0f, 22.5,22.5 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5,22.5 }, { 11.25f,11.25f }, rotationTimerSmallAsteroids, BLUE);
+					DrawTexturePro(asteroidSmall, smallAsteroidSource, smallAsteroidDestination, smallAsteroidOrigin, rotationTimerSmallAsteroids, BLUE);
 				}
 				else
 				{
 					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, Fade(LIGHTGRAY, 0.3f));
-					DrawTexturePro(asteroidSmall, { 0.0f,0.0f, 22.5,22.5 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5,22.5 }, { 11.25f,11.25f }, 0, DARKGRAY);
+					DrawTexturePro(asteroidSmall, smallAsteroidSource, smallAsteroidDestination, smallAsteroidOrigin, 0, DARKGRAY);
 				}
 			}
 		}

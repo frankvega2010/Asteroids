@@ -12,6 +12,7 @@ namespace Juego
 	static int smallAsteroidsCount = 0;
 	int destroyedAsteroidsCount = 0;
 	static float rapidfiretimer = 0;
+	static float rapidFireRate = 0.15;
 
 	namespace Gameplay_Section
 	{
@@ -43,7 +44,7 @@ namespace Juego
 				for (int i = 0; i < maxShoots; i++)
 				{
 					
-					if (rapidfiretimer > 0.15) // default 1.0 1.5
+					if (rapidfiretimer > rapidFireRate)
 					{
 						if (!shoots[i].active)
 						{
