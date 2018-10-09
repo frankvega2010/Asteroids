@@ -17,6 +17,10 @@ namespace Juego
 	static bool gameON = true;
 	static bool gamePaused = false;
 	
+	static float matchTimer = 0.0f;
+	static int matchHours = 0;
+	static int matchMinutes = 0;
+	static int matchSeconds = 0;
 
 	namespace Gameplay_Section
 	{
@@ -130,10 +134,35 @@ namespace Juego
 
 		void UpdateGameplayScreen()
 		{
+			
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 			GameplayInput();
 			if (gameON)
 			{
+				matchTimer += 1 * GetFrameTime();
+				if (matchTimer > 1)
+				{
+					matchTimer = 0;
+					if (matchSeconds <= 60)
+					{
+						matchSeconds++;
+					}
+					else
+					{
+						matchSeconds = 0;
+						if (matchMinutes < 59)
+						{
+							matchMinutes = 0;
+						}
+						else
+						{
+
+						}
+						
+
+					}
+					
+				}
 				playerUpdate();
 				collisionCircleUpdate();
 				ShootUpdate();
@@ -224,6 +253,7 @@ namespace Juego
 			InitGameplayVariables();
 			buttonDistance = 0;
 			gameON = true;
+			matchSeconds = 0;
 		}
 
 		void DrawGameplay()
@@ -235,6 +265,7 @@ namespace Juego
 			ShootDraw();
 			playerDraw();
 			DrawText(FormatText("Score: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);
+			DrawText(FormatText("Time: %i", matchSeconds), screenWidth / 2, screenHeight / 14, 40, YELLOW);
 			
 
 			if (!(gameON))//
