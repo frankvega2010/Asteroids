@@ -10,6 +10,9 @@ namespace Juego
 	static float speedX = 0;
 	static float speedY = 0;
 	static bool correctRange = false;
+	static float rotationTimerBigAsteroids = 0;
+	static float rotationTimerMediumAsteroids = 0;
+	static float rotationTimerSmallAsteroids = 0;
 
 	Asteroid asteroidsSmall[asteroidsSmallLimit];
 	Asteroid asteroidsMedium[asteroidsMediumLimit];
@@ -19,6 +22,10 @@ namespace Juego
 	{
 		void createAsteroid()
 		{
+			rotationTimerBigAsteroids = 0;
+			rotationTimerMediumAsteroids = 0;
+			rotationTimerSmallAsteroids = 0;
+
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
 				posX = GetRandomValue(0, screenWidth);
@@ -81,6 +88,15 @@ namespace Juego
 
 		void AsteroidUpdate()
 		{
+			if (rotationTimerBigAsteroids < 1000) rotationTimerBigAsteroids += 40 * GetFrameTime();
+			else rotationTimerBigAsteroids = 0;
+
+			if (rotationTimerMediumAsteroids < 1000) rotationTimerMediumAsteroids += 60 * GetFrameTime();
+			else rotationTimerMediumAsteroids = 0;
+
+			if (rotationTimerSmallAsteroids < 1000) rotationTimerSmallAsteroids += 80 * GetFrameTime();
+			else rotationTimerSmallAsteroids = 0;
+			
 			// Meteors logic: big meteors
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
@@ -95,6 +111,8 @@ namespace Juego
 					else if (asteroidsBig[i].position.x < 0 - asteroidsBig[i].radius) asteroidsBig[i].position.x = screenWidth + asteroidsBig[i].radius;
 					if (asteroidsBig[i].position.y > screenHeight + asteroidsBig[i].radius) asteroidsBig[i].position.y = -(asteroidsBig[i].radius);
 					else if (asteroidsBig[i].position.y < 0 - asteroidsBig[i].radius) asteroidsBig[i].position.y = screenHeight + asteroidsBig[i].radius;
+
+					//asteroidsBig[i].rotation += 280 * GetFrameTime();
 				}
 			}
 
@@ -142,7 +160,7 @@ namespace Juego
 				if (asteroidsBig[i].active)
 				{
 					DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, DARKGRAY);
-					DrawTexturePro(asteroid, { 0.0f,0.0f, 90,90 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 }, { 45,45 }, 0, BLUE);
+					DrawTexturePro(asteroid, { 0.0f,0.0f, 90,90 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 }, { 45,45 }, rotationTimerBigAsteroids, BLUE);
 				}
 				else 
 				{
@@ -156,7 +174,7 @@ namespace Juego
 				if (asteroidsMedium[i].active)
 				{
 					DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, GRAY);
-					DrawTexturePro(asteroidMedium, { 0.0f,0.0f, 45,45 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 }, { 22.5,22.5 }, 0, BLUE);
+					DrawTexturePro(asteroidMedium, { 0.0f,0.0f, 45,45 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 }, { 22.5,22.5 }, rotationTimerMediumAsteroids, BLUE);
 				}
 				else
 				{
@@ -170,7 +188,7 @@ namespace Juego
 				if (asteroidsSmall[i].active)
 				{
 					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, GRAY);
-					DrawTexturePro(asteroidSmall, { 0.0f,0.0f, 22.5,22.5 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5,22.5 }, { 11.25f,11.25f }, 0, BLUE);
+					DrawTexturePro(asteroidSmall, { 0.0f,0.0f, 22.5,22.5 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5,22.5 }, { 11.25f,11.25f }, rotationTimerSmallAsteroids, BLUE);
 				}
 				else
 				{
