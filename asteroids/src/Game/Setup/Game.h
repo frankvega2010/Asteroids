@@ -33,6 +33,7 @@ namespace Juego
 	extern Texture2D asteroidMedium;
 	extern Texture2D asteroidSmall;
 	extern Texture2D backgroundGame;
+	extern Texture2D crosshair;
 
 	extern Rectangle backgroundGameSource;
 	extern Rectangle backgroundGameDestination;

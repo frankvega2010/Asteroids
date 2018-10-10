@@ -44,11 +44,13 @@ namespace Juego
 	Image asteroidSmallImage;
 	Image asteroidMediumImage;
 	Image backgroundGameImage;
+	Image crosshairImage;
 	Texture2D ship;
 	Texture2D asteroid;
 	Texture2D asteroidMedium;
 	Texture2D asteroidSmall;
 	Texture2D backgroundGame;
+	Texture2D crosshair;
 
 	#ifdef AUDIO
 
@@ -89,12 +91,16 @@ namespace Juego
 		scheme_arrows01 = LoadTexture("res/textures/controls01.png");	
 		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
 
+		crosshairImage = LoadImage("res/textures/crosshair01.png");
 		shipImage = LoadImage("res/textures/test01.png");
 		asteroidImage = LoadImage("res/textures/asteroid.png");
 		backgroundGameImage = LoadImage("res/textures/backgroundgame.png");
 
 		
 		ImageResize(&backgroundGameImage, screenWidth, screenHeight);
+
+		ImageResize(&crosshairImage, 30, 30);
+		crosshair = LoadTextureFromImage(crosshairImage);
 
 		ImageResize(&asteroidImage, 90, 90);
 		asteroid = LoadTextureFromImage(asteroidImage);
@@ -113,6 +119,7 @@ namespace Juego
 		UnloadImage(shipImage);
 		UnloadImage(asteroidImage);
 		UnloadImage(backgroundGameImage);
+		UnloadImage(crosshairImage);
 
 		InitMenuScreen();
 		createAsteroid();
