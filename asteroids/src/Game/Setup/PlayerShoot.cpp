@@ -114,12 +114,12 @@ namespace Juego
 								if (midAsteroidsCount % 2 == 0)
 								{
 									asteroidsMedium[midAsteroidsCount].position = { asteroidsBig[a].position.x, asteroidsBig[a].position.y };
-									asteroidsMedium[midAsteroidsCount].speed = { cos(shoots[i].rotation*DEG2RAD)*asteroidsSpeed*-1, sin(shoots[i].rotation*DEG2RAD)*asteroidsSpeed*-1 };
+									asteroidsMedium[midAsteroidsCount].speed = { cos(shoots[i].rotation)*asteroidsSpeed*-1, sin(shoots[i].rotation)*asteroidsSpeed*-1 };
 								}
 								else
 								{
 									asteroidsMedium[midAsteroidsCount].position = { asteroidsBig[a].position.x, asteroidsBig[a].position.y };
-									asteroidsMedium[midAsteroidsCount].speed = { cos(shoots[i].rotation*DEG2RAD)*asteroidsSpeed, sin(shoots[i].rotation*DEG2RAD)*asteroidsSpeed };
+									asteroidsMedium[midAsteroidsCount].speed = { cos(shoots[i].rotation)*asteroidsSpeed, sin(shoots[i].rotation)*asteroidsSpeed };
 								}
 
 								asteroidsMedium[midAsteroidsCount].active = true;
@@ -143,12 +143,12 @@ namespace Juego
 								if (smallAsteroidsCount % 2 == 0)
 								{
 									asteroidsSmall[smallAsteroidsCount].position = { asteroidsMedium[b].position.x, asteroidsMedium[b].position.y };
-									asteroidsSmall[smallAsteroidsCount].speed = { cos(shoots[i].rotation*DEG2RAD)*asteroidsSpeed*-1, sin(shoots[i].rotation*DEG2RAD)*asteroidsSpeed*-1 };
+									asteroidsSmall[smallAsteroidsCount].speed = { cos(shoots[i].rotation)*asteroidsSpeed*-1, sin(shoots[i].rotation)*asteroidsSpeed*-1 };
 								}
 								else
 								{
 									asteroidsSmall[smallAsteroidsCount].position = { asteroidsMedium[b].position.x, asteroidsMedium[b].position.y };
-									asteroidsSmall[smallAsteroidsCount].speed = { cos(shoots[i].rotation*DEG2RAD)*asteroidsSpeed, sin(shoots[i].rotation*DEG2RAD)*asteroidsSpeed };
+									asteroidsSmall[smallAsteroidsCount].speed = { cos(shoots[i].rotation)*asteroidsSpeed, sin(shoots[i].rotation)*asteroidsSpeed };
 								}
 
 								asteroidsSmall[smallAsteroidsCount].active = true;
