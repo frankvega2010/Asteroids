@@ -22,6 +22,7 @@ namespace Juego
 	static int matchHours = 0;
 	static int matchMinutes = 0;
 	static int matchSeconds = 0;
+	static Color crosshairColor = WHITE;
 	int scoreMultiplier = 5;
 
 	namespace Gameplay_Section
@@ -56,7 +57,9 @@ namespace Juego
 			// Player Input
 			if (gameON)
 			{
-				//HideCursor();
+				timerON = true;
+				crosshairColor = WHITE;
+				HideCursor();
 				playerInput();			
 			}
 			
@@ -64,6 +67,7 @@ namespace Juego
 			{
 				if (IsKeyPressed(KEY_P))
 				{
+					crosshairColor = BLANK;
 					gamePaused = true;
 					gameON = false;
 				}
@@ -127,7 +131,7 @@ namespace Juego
 
 			//Execute Functions & Extern variables 
 			createPauseButtons();
-			//HideCursor();
+			HideCursor();
 			createAsteroid();
 			createPlayer();
 			createShoot();
@@ -338,6 +342,7 @@ namespace Juego
 			DrawText(FormatText("Eliminations: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);
 			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, 40, YELLOW);
 			DrawTimer(2.5f, 2.2f,14.0f);
+			DrawTexturePro(crosshair, { 0,0,30,30 }, { mouse.position.x,mouse.position.y,30,30 }, {15,15}, 0, crosshairColor);
 
 			if (!(gameON))//
 			{
