@@ -54,7 +54,7 @@ namespace Juego
 			// Player Input
 			if (gameON)
 			{
-				HideCursor();
+				//HideCursor();
 				playerInput();			
 			}
 			
@@ -124,7 +124,7 @@ namespace Juego
 
 			//Execute Functions & Extern variables 
 			createPauseButtons();
-			HideCursor();
+			//HideCursor();
 			createAsteroid();
 			createPlayer();
 			createShoot();
@@ -139,7 +139,7 @@ namespace Juego
 			GameplayInput();
 			if (gameON)
 			{
-				matchTimer += 1 * GetFrameTime();
+				matchTimer += 1 * GetFrameTime(); //FINISH THIS
 				if (matchTimer > 1)
 				{
 					matchTimer = 0;

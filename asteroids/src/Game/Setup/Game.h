@@ -34,6 +34,10 @@ namespace Juego
 	extern Texture2D asteroidSmall;
 	extern Texture2D backgroundGame;
 
+	extern Rectangle backgroundGameSource;
+	extern Rectangle backgroundGameDestination;
+	extern Vector2 backgroundGameOrigin;
+
 	extern Buttons mouse;
 	extern int buttonOption;
 

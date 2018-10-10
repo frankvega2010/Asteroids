@@ -9,7 +9,7 @@ namespace Juego
 	{
 		Vector2 position;
 		Vector2 speed;
-		float acceleration;
+		Vector2 acceleration;
 		float rotation;
 		float defaultSpeed;
 		int score;

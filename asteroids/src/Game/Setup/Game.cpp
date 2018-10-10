@@ -29,9 +29,13 @@ namespace Juego
 
 	bool isScreenFinished;
 
-	static Rectangle backgroundGameSource = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
-	static Rectangle backgroundGameDestination;
-	static Vector2 backgroundGameOrigin = { 0,0 };
+	//source = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
+	//dest = { 0,0, (float)screenWidth,(float)screenHeight };
+	// origin = { 0,0 };
+
+	Rectangle backgroundGameSource;
+	Rectangle backgroundGameDestination;
+	Vector2 backgroundGameOrigin;
 
 	Texture2D scheme_arrows01;
 	Texture2D scheme_sign01;
@@ -54,7 +58,10 @@ namespace Juego
 
 	void DrawBackground()
 	{
+		backgroundGameSource = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
 		backgroundGameDestination = { 0,0, (float)screenWidth,(float)screenHeight };
+		backgroundGameOrigin = { 0,0 };
+		
 		DrawTexturePro(backgroundGame, backgroundGameSource, backgroundGameDestination, backgroundGameOrigin, 0, WHITE);
 	}
 
