@@ -38,7 +38,7 @@ namespace Juego
 		void ShootInput()
 		{
 			// Player shoot logic
-			if (IsKeyDown(KEY_SPACE))
+			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
 			{
 				rapidfiretimer += 1 * GetFrameTime();
 				for (int i = 0; i < maxShoots; i++)
@@ -47,11 +47,11 @@ namespace Juego
 					if (rapidfiretimer > rapidFireRate)
 					{
 						if (!shoots[i].active)
-						{
-							shoots[i].position = { player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight) };
+						{					//player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 }
+							shoots[i].position = { player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) };
 							shoots[i].active = true;
-							shoots[i].speed.x = 2.0*sin(player.rotation*DEG2RAD)*player.defaultSpeed;
-							shoots[i].speed.y = 2.0*cos(player.rotation*DEG2RAD)*player.defaultSpeed;
+							shoots[i].speed.x = 2.0*sin(player.rotation)*player.defaultSpeed;
+							shoots[i].speed.y = 2.0*cos(player.rotation)*player.defaultSpeed;
 							shoots[i].rotation = player.rotation;
 							rapidfiretimer = 0;
 							break;
