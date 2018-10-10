@@ -20,6 +20,7 @@ namespace Juego
 
 	const int maxShoots = 10;
 	extern Shoot shoots[maxShoots];
+	extern int gameScore;
 	extern int destroyedAsteroidsCount;
 
 	namespace Gameplay_Section

@@ -17,10 +17,12 @@ namespace Juego
 	static bool gameON = true;
 	static bool gamePaused = false;
 	
+	static bool timerON = true;
 	static float matchTimer = 0.0f;
 	static int matchHours = 0;
 	static int matchMinutes = 0;
 	static int matchSeconds = 0;
+	int scoreMultiplier = 5;
 
 	namespace Gameplay_Section
 	{
@@ -96,6 +98,7 @@ namespace Juego
 						{
 						case 0:
 							gamePaused = false;
+							timerON = true;
 							gameON = true;
 							break;
 						case 1:
@@ -139,29 +142,42 @@ namespace Juego
 			GameplayInput();
 			if (gameON)
 			{
-				matchTimer += 1 * GetFrameTime(); //FINISH THIS
+				if (timerON)
+				{
+					matchTimer += 1 * GetFrameTime(); //FINISH THIS
+				}
+
 				if (matchTimer > 1)
 				{
 					matchTimer = 0;
-					if (matchSeconds <= 60)
+					if (matchSeconds < 58) // 58
 					{
+						if (matchSeconds == 29)
+						{
+							if (scoreMultiplier > 1)
+							{
+								scoreMultiplier--;
+							}
+							else
+							{
+								scoreMultiplier = 1;
+							}	
+						}
 						matchSeconds++;
 					}
 					else
 					{
 						matchSeconds = 0;
-						if (matchMinutes < 59)
+						if (matchMinutes < 58) // 58
 						{
-							matchMinutes = 0;
+							matchMinutes++;
 						}
 						else
 						{
-
+							matchMinutes = 0;
+							matchHours++;
 						}
-						
-
 					}
-					
 				}
 				playerUpdate();
 				collisionCircleUpdate();
@@ -182,6 +198,7 @@ namespace Juego
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
+						scoreMultiplier = 1;
 						break;
 					}
 				}
@@ -193,6 +210,7 @@ namespace Juego
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
+						scoreMultiplier = 1;
 						break;
 					}
 				}
@@ -204,12 +222,16 @@ namespace Juego
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
+						scoreMultiplier = 1;
 						break;
 					}
 				}
 			}
 			else if (gamePaused)
 			{
+				timerON = false;
+				matchTimer = 0;
+
 				for (int i = 0; i < maxButtons; i++)
 				{
 					if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height }) || buttonSelect == i)
@@ -226,9 +248,12 @@ namespace Juego
 				}
 			}
 
+
 			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
 			{
 				gameON = false;
+				timerON = false;
+				matchTimer = 0;
 				buttonOption = buttonGameOver;
 				isScreenFinished = true;
 
@@ -253,7 +278,53 @@ namespace Juego
 			InitGameplayVariables();
 			buttonDistance = 0;
 			gameON = true;
+			timerON = true;
 			matchSeconds = 0;
+			matchMinutes = 0;
+			matchHours = 0;
+			scoreMultiplier = 5;
+		}
+
+		void DrawTimer(float widthvalue1,float widthvalue2,float heightvalue1)
+		{
+			if (matchHours > 0) // DrawTimer?
+			{
+				DrawText(FormatText("%i:", matchHours), screenWidth / (widthvalue1 + 0.25), screenHeight / heightvalue1, 40, YELLOW);
+			}
+
+			if (matchMinutes > 0)
+			{
+				if (matchMinutes > 9)
+				{
+					DrawText(FormatText("%i:", matchMinutes), screenWidth / widthvalue1, screenHeight / heightvalue1, 40, YELLOW);
+				}
+				else
+				{
+					DrawText(FormatText("0"), screenWidth / widthvalue1, screenHeight / 14, 40, YELLOW);
+					DrawText(FormatText("%i:", matchMinutes), screenWidth / (widthvalue2 + 0.15), screenHeight / heightvalue1, 40, YELLOW);
+				}
+			}
+			else
+			{
+				DrawText(FormatText("00:"), screenWidth / widthvalue1, screenHeight / heightvalue1, 40, YELLOW);
+			}
+
+			if (matchSeconds > 0)
+			{
+				if (matchSeconds > 9)
+				{
+					DrawText(FormatText("%i", matchSeconds), screenWidth / widthvalue2, screenHeight / heightvalue1, 40, YELLOW);
+				}
+				else
+				{
+					DrawText(FormatText("0"), screenWidth / widthvalue2, screenHeight / heightvalue1, 40, YELLOW);
+					DrawText(FormatText("%i", matchSeconds), screenWidth / (widthvalue2 - 0.10), screenHeight / heightvalue1, 40, YELLOW);
+				}
+			}
+			else
+			{
+				DrawText(FormatText("00"), screenWidth / widthvalue2, screenHeight / heightvalue1, 40, YELLOW);
+			}
 		}
 
 		void DrawGameplay()
@@ -264,9 +335,9 @@ namespace Juego
 			AsteroidDraw();
 			ShootDraw();
 			playerDraw();
-			DrawText(FormatText("Score: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);
-			DrawText(FormatText("Time: %i", matchSeconds), screenWidth / 2, screenHeight / 14, 40, YELLOW);
-			
+			DrawText(FormatText("Eliminations: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);
+			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, 40, YELLOW);
+			DrawTimer(2.5f, 2.2f,14.0f);
 
 			if (!(gameON))//
 			{

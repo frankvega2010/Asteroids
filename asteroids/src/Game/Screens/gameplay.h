@@ -5,13 +5,14 @@
 
 namespace Juego
 {
-
 	enum gameplayOptions {
 		buttonContinue = 20,
 		buttonRestart,
 		buttonGameOver,
 		buttonQuitToMenu
 	};
+
+	extern int scoreMultiplier;
 
 	namespace Gameplay_Section
 	{
@@ -21,6 +22,7 @@ namespace Juego
 		void RestartPhase();
 		bool FinishGameplayScreen();
 		void DrawGameplay();
+		void DrawTimer(float widthvalue1, float widthvalue2, float heightvalue1);
 	}
 }
 #endif // GAMEPLAY_H

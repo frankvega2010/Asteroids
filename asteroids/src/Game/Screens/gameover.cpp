@@ -18,6 +18,10 @@ namespace Juego
 	static int buttonSelect = 0;
 
 	static Color optionColor = RED;
+	static int finalScore;
+	static float finalScoreTimer = 0;
+	static int increasingFinalScore = 0;
+	static bool timerON = true;
 
 	namespace GameOver_Section
 	{
@@ -90,6 +94,7 @@ namespace Juego
 			GameOverInput(); 
 			AsteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
+			finalScore = (gameScore * scoreMultiplier);
 
 			for (int i = 0; i < maxButtons; i++)
 			{
@@ -104,6 +109,24 @@ namespace Juego
 					buttons[i].defaultColor = RED;
 					buttons[i].selected = false;
 				}
+			}
+
+			if (timerON)
+			{
+				finalScoreTimer += 1 * GetFrameTime();
+			}
+			
+			if (finalScoreTimer > 0.0001)
+			{
+				finalScoreTimer = 0;
+				increasingFinalScore++;
+			}
+
+			if (increasingFinalScore >= finalScore)
+			{
+				timerON = false;
+				finalScoreTimer = 0;
+				increasingFinalScore = finalScore;
 			}
 		}
 
@@ -129,7 +152,10 @@ namespace Juego
 				DrawText("YOU LOST!", buttons[0].position.x + 20, buttons[0].position.y - 60, 40, RED);
 			}
 
-			DrawText(FormatText("Final Score: %i", destroyedAsteroidsCount), buttons[0].position.x - 10, buttons[1].position.y + 90, 40, YELLOW);
+			DrawText(FormatText("Final Score: %i", increasingFinalScore), buttons[0].position.x - 10, buttons[1].position.y + 90, 40, YELLOW);
+			DrawText(FormatText("Final Time:"), buttons[0].position.x + 20, buttons[1].position.y + 135, 40, YELLOW);
+			DrawTimer(2.2f, 1.9f, 1.45);
+			
 		}
 
 		bool FinishGameOverScreen()

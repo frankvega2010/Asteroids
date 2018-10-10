@@ -13,6 +13,7 @@ namespace Juego
 	int destroyedAsteroidsCount = 0;
 	static float rapidfiretimer = 0;
 	static float rapidFireRate = 0.15;
+	int gameScore = 0; // llevar a gameplay?
 
 	namespace Gameplay_Section
 	{
@@ -108,6 +109,7 @@ namespace Juego
 							shoots[i].lifespan = 0;
 							asteroidsBig[a].active = false;
 							destroyedAsteroidsCount++;
+							gameScore = gameScore + 25;
 
 							for (int j = 0; j < 2; j++)
 							{
@@ -137,6 +139,7 @@ namespace Juego
 							shoots[i].lifespan = 0;
 							asteroidsMedium[b].active = false;
 							destroyedAsteroidsCount++;
+							gameScore = gameScore + 50;
 
 							for (int j = 0; j < 2; j++)
 							{
@@ -166,6 +169,7 @@ namespace Juego
 							shoots[i].lifespan = 0;
 							asteroidsSmall[c].active = false;
 							destroyedAsteroidsCount++;
+							gameScore = gameScore + 100;
 							c = asteroidsSmallLimit;
 						}
 					}

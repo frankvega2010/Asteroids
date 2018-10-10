@@ -70,8 +70,8 @@ namespace Juego
 
 		void playerUpdate()
 		{
-			rotationDirection.x = (float)mouse.position.x - player.position.x;
-			rotationDirection.y = (float)mouse.position.y - player.position.y;
+			rotationDirection.x = (float)mouse.position.x - (float)player.position.x;
+			rotationDirection.y = (float)mouse.position.y - (float)player.position.y;
 
 			rotationAngle = atan2(rotationDirection.y, rotationDirection.x) + 1.57f;
 
