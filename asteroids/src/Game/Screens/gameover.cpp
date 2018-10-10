@@ -20,8 +20,12 @@ namespace Juego
 	static Color optionColor = RED;
 	static int finalScore;
 	static float finalScoreTimer = 0;
+	static float explosionTimer = 0;
+	static float increasingExplosionSize = 0;
+	static float increasingExplosionFade = 1;
 	static int increasingFinalScore = 0;
 	static bool timerON = true;
+	static bool timerExplosionON = true;
 
 	namespace GameOver_Section
 	{
@@ -43,6 +47,9 @@ namespace Juego
 
 		void InitGameOverScreen()
 		{
+			increasingExplosionSize = 0;
+			increasingExplosionFade = 1;
+			timerExplosionON = true;
 			ShowCursor();
 			createGameOverButtons();
 			isScreenFinished = false;
@@ -115,7 +122,41 @@ namespace Juego
 			{
 				finalScoreTimer += 1 * GetFrameTime();
 			}
-			
+
+			if (timerExplosionON)
+			{
+				explosionTimer += 1 * GetFrameTime();
+			}
+
+			if (explosionTimer > 0.01)
+			{
+				explosionTimer = 0;
+				increasingExplosionSize++;
+				increasingExplosionFade = increasingExplosionFade - 0.005;
+				/*if (increasingExplosionFade >= 1.0f)
+				{
+					increasingExplosionFade = increasingExplosionFade - 0.1;
+				}
+				else
+				{
+					increasingExplosionFade = increasingExplosionFade + 0.1;
+				}*/
+			}
+
+			//if (explosionTimer > 0.1)
+			//{
+			//	explosionTimer = 0;
+			//	increasingExplosionFade = increasingExplosionFade - 0.1;
+			//	/*if (increasingExplosionFade >= 1.0f)
+			//	{
+			//	increasingExplosionFade = increasingExplosionFade - 0.1;
+			//	}
+			//	else
+			//	{
+			//	increasingExplosionFade = increasingExplosionFade + 0.1;
+			//	}*/
+			//}
+
 			if (finalScoreTimer > 0.0001)
 			{
 				finalScoreTimer = 0;
@@ -127,6 +168,12 @@ namespace Juego
 				timerON = false;
 				finalScoreTimer = 0;
 				increasingFinalScore = finalScore;
+			}
+
+			if (increasingExplosionSize >= 200)
+			{
+				timerExplosionON = false;
+				explosionTimer = 0;
 			}
 		}
 
@@ -155,6 +202,11 @@ namespace Juego
 			DrawText(FormatText("Final Score: %i", increasingFinalScore), buttons[0].position.x - 10, buttons[1].position.y + 90, 40, YELLOW);
 			DrawText(FormatText("Final Time:"), buttons[0].position.x + 20, buttons[1].position.y + 135, 40, YELLOW);
 			DrawTimer(2.2f, 1.9f, 1.45);
+
+			if (isExplosionActive)
+			{
+				DrawTexturePro(shipExplosion, { 0.0f,0.0f, 60,60 }, { player.position.x,player.position.y, increasingExplosionSize,increasingExplosionSize }, { 0,0 }, 0, Fade(WHITE, increasingExplosionFade));
+			}
 			
 		}
 

@@ -13,6 +13,7 @@ namespace Juego
 	};
 
 	extern int scoreMultiplier;
+	extern bool isExplosionActive;
 
 	namespace Gameplay_Section
 	{

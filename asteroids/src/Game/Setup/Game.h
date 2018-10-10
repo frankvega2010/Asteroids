@@ -34,6 +34,7 @@ namespace Juego
 	extern Texture2D asteroidSmall;
 	extern Texture2D backgroundGame;
 	extern Texture2D crosshair;
+	extern Texture2D shipExplosion;
 
 	extern Rectangle backgroundGameSource;
 	extern Rectangle backgroundGameDestination;

@@ -23,6 +23,7 @@ namespace Juego
 	static int matchMinutes = 0;
 	static int matchSeconds = 0;
 	static Color crosshairColor = WHITE;
+	bool isExplosionActive = false;
 	int scoreMultiplier = 5;
 
 	namespace Gameplay_Section
@@ -203,6 +204,7 @@ namespace Juego
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
 						scoreMultiplier = 1;
+						isExplosionActive = true;
 						break;
 					}
 				}
@@ -215,6 +217,7 @@ namespace Juego
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
 						scoreMultiplier = 1;
+						isExplosionActive = true;
 						break;
 					}
 				}
@@ -227,6 +230,7 @@ namespace Juego
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
 						scoreMultiplier = 1;
+						isExplosionActive = true;
 						break;
 					}
 				}
@@ -333,6 +337,7 @@ namespace Juego
 
 		void DrawGameplay()
 		{
+
 			DrawBackground();
 			collisionCircleDraw();
 			
@@ -344,7 +349,7 @@ namespace Juego
 			DrawTimer(2.5f, 2.2f,14.0f);
 			DrawTexturePro(crosshair, { 0,0,30,30 }, { mouse.position.x,mouse.position.y,30,30 }, {15,15}, 0, crosshairColor);
 
-			if (!(gameON))//
+			if (!(gameON))
 			{
 				if (gamePaused)
 				{
