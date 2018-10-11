@@ -57,11 +57,15 @@ namespace Juego
 	Texture2D shipExplosion;
 	Texture2D asteroidExplosion;
 
-	#ifdef AUDIO
+#ifdef AUDIO
 
-	// Audio Code
+	Sound ship_explode01;
+	Sound ship_shoot01;
+	Sound asteroid_explode01;
 
-	#endif
+	Music ship_rocket01;
+
+#endif
 
 	void DrawBackground()
 	{
@@ -139,6 +143,25 @@ namespace Juego
 		UnloadImage(explosionImage);
 		UnloadImage(shipMovingImage);
 
+		#ifdef AUDIO
+
+		InitAudioDevice();
+
+		ship_explode01 = LoadSound("res/sounds/ship_explode01fix.wav");
+		ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
+		asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
+		
+		SetSoundVolume(ship_shoot01, 0.35f);
+		SetSoundVolume(ship_explode01, 0.4f);
+		SetSoundVolume(asteroid_explode01, 0.3);
+		//pong_menu_song = LoadMusicStream("res/menu2.ogg");
+
+		//PlayMusicStream(pong_menu_song);
+		ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
+		SetMusicVolume(ship_rocket01, 0.40);
+
+		#endif
+
 		InitMenuScreen();
 		createAsteroid();
 	}
@@ -183,7 +206,7 @@ namespace Juego
 				case buttonPlay:
 				{
 					#ifdef AUDIO
-										StopMusicStream(pong_menu_song);
+										//StopMusicStream(pong_menu_song);
 					#endif
 					RestartPhase();
 					gameScreen = Play;
@@ -211,7 +234,7 @@ namespace Juego
 				case buttonQuit:
 				{
 					#ifdef AUDIO
-										StopMusicStream(pong_menu_song);
+										//StopMusicStream(pong_menu_song);
 					#endif
 
 					gameScreen = 0;
@@ -305,8 +328,11 @@ namespace Juego
 	static void DeInit()
 	{
 		#ifdef AUDIO
-				// Audio Code
-				CloseAudioDevice();
+		UnloadSound(asteroid_explode01);
+		UnloadSound(ship_explode01);
+		UnloadSound(ship_shoot01);
+		UnloadMusicStream(ship_rocket01);
+		CloseAudioDevice();
 		#endif
 		UnloadTexture(scheme_arrows01);
 		UnloadTexture(scheme_sign01);

@@ -38,6 +38,16 @@ namespace Juego
 	extern Texture2D shipExplosion;
 	extern Texture2D asteroidExplosion;
 
+	#ifdef AUDIO
+
+	extern Sound ship_explode01;
+	extern Sound ship_shoot01;
+	extern Sound asteroid_explode01;
+
+	extern Music ship_rocket01;
+
+	#endif
+
 	extern Rectangle backgroundGameSource;
 	extern Rectangle backgroundGameDestination;
 	extern Vector2 backgroundGameOrigin;

@@ -158,6 +158,7 @@ namespace Juego
 
 		void UpdateGameplayScreen()
 		{
+			UpdateMusicStream(ship_rocket01);
 			player.inputActive = false;
 
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
@@ -229,6 +230,9 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active)
 					{
+					#ifdef AUDIO
+						PlaySound(ship_explode01);
+					#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
@@ -243,6 +247,9 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active)
 					{
+						#ifdef AUDIO
+						PlaySound(ship_explode01);
+						#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
@@ -257,6 +264,9 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active)
 					{
+						#ifdef AUDIO
+						PlaySound(ship_explode01);
+						#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;

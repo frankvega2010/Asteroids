@@ -60,9 +60,17 @@ namespace Juego
 		{
 			ShootInput();
 
+			#ifdef AUDIO
+			StopMusicStream(ship_rocket01);
+			#endif
+
 			//Player logic: acceleration
 			if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
 			{
+				#ifdef AUDIO
+				PlayMusicStream(ship_rocket01);
+				#endif
+				
 				player.inputActive = true;
 
 				normalizedDirection.x = rotationDirection.x / sqrt(pow(rotationDirection.x,2.0) + pow(rotationDirection.y, 2.0));

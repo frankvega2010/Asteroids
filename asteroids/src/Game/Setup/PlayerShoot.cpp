@@ -50,7 +50,10 @@ namespace Juego
 					if (rapidfiretimer > rapidFireRate)
 					{
 						if (!shoots[i].active)
-						{					//player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 }
+						{
+							#ifdef AUDIO
+							PlaySound(ship_shoot01);
+							#endif
 							shoots[i].position = { player.position.x + sinf(player.rotation)*(shipHeight), player.position.y - cosf(player.rotation)*(shipHeight) };
 							shoots[i].active = true;
 							shoots[i].speed.x = 2.0*sin(player.rotation)*player.defaultSpeed;
@@ -107,6 +110,9 @@ namespace Juego
 					{
 						if (asteroidsBig[a].active && CheckCollisionCircles(shoots[i].position, shoots[i].radius, asteroidsBig[a].position, asteroidsBig[a].radius))
 						{
+							#ifdef AUDIO
+							PlaySound(asteroid_explode01);
+							#endif
 							asteroidsBig[a].isExplosionActive = true;
 							shoots[i].active = false;
 							shoots[i].lifespan = 0;
@@ -138,6 +144,9 @@ namespace Juego
 					{
 						if (asteroidsMedium[b].active && CheckCollisionCircles(shoots[i].position, shoots[i].radius, asteroidsMedium[b].position, asteroidsMedium[b].radius))
 						{
+							#ifdef AUDIO
+							PlaySound(asteroid_explode01);
+							#endif
 							asteroidsMedium[b].isExplosionActive = true;
 							shoots[i].active = false;
 							shoots[i].lifespan = 0;
@@ -169,6 +178,9 @@ namespace Juego
 					{
 						if (asteroidsSmall[c].active && CheckCollisionCircles(shoots[i].position, shoots[i].radius, asteroidsSmall[c].position, asteroidsSmall[c].radius))
 						{
+							#ifdef AUDIO
+							PlaySound(asteroid_explode01);
+							#endif
 							asteroidsSmall[c].isExplosionActive = true;
 							shoots[i].active = false;
 							shoots[i].lifespan = 0;

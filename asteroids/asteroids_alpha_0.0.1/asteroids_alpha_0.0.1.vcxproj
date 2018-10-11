@@ -86,7 +86,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)lib\raylib-2.0.0-Win32-msvc15\include\;$(SolutionDir)src\Game\Setup\;$(SolutionDir)src\Game\;$(SolutionDir)src\Game\Screens\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <PreprocessorDefinitions>TESTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TESTING;%(PreprocessorDefinitions);AUDIO</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\raylib-2.0.0-Win32-msvc15\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -116,7 +116,7 @@ XCOPY "$(SolutionDir)res" "$(TargetDir)res" /E /Y /S</Command>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)lib\raylib-2.0.0-Win32-msvc15\include\;$(SolutionDir)src\Game\Setup\;$(SolutionDir)src\Game\;$(SolutionDir)src\Game\Screens\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions);AUDIO</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
