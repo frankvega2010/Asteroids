@@ -53,6 +53,7 @@ namespace Juego
 	Texture2D backgroundGame;
 	Texture2D crosshair;
 	Texture2D shipExplosion;
+	Texture2D asteroidExplosion;
 
 	#ifdef AUDIO
 
@@ -104,6 +105,9 @@ namespace Juego
 
 		ImageResize(&explosionImage, 60, 60);
 		shipExplosion = LoadTextureFromImage(explosionImage);
+
+		ImageResize(&explosionImage, 50, 50);
+		asteroidExplosion = LoadTextureFromImage(explosionImage);
 
 		ImageResize(&crosshairImage, 30, 30);
 		crosshair = LoadTextureFromImage(crosshairImage);

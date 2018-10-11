@@ -10,6 +10,9 @@ namespace Juego
 		Vector2 speed;
 		int radius;
 		bool active;
+		bool isExplosionActive;
+		float increasingExplosionSize;
+		float increasingExplosionFade;
 	};
 
 	const int asteroidsSpeed = 200;

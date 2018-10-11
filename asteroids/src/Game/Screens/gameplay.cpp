@@ -142,7 +142,6 @@ namespace Juego
 
 		void UpdateGameplayScreen()
 		{
-			
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 			GameplayInput();
 			if (gameON)

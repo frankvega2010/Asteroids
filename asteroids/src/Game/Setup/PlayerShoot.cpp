@@ -19,6 +19,8 @@ namespace Juego
 	{
 		void createShoot()
 		{
+			gameScore = 0;
+
 			for (int i = 0; i < maxShoots; i++)
 			{
 				shoots[i].position.x = 0;
@@ -105,6 +107,7 @@ namespace Juego
 					{
 						if (asteroidsBig[a].active && CheckCollisionCircles(shoots[i].position, shoots[i].radius, asteroidsBig[a].position, asteroidsBig[a].radius))
 						{
+							asteroidsBig[a].isExplosionActive = true;
 							shoots[i].active = false;
 							shoots[i].lifespan = 0;
 							asteroidsBig[a].active = false;
@@ -135,6 +138,7 @@ namespace Juego
 					{
 						if (asteroidsMedium[b].active && CheckCollisionCircles(shoots[i].position, shoots[i].radius, asteroidsMedium[b].position, asteroidsMedium[b].radius))
 						{
+							asteroidsMedium[b].isExplosionActive = true;
 							shoots[i].active = false;
 							shoots[i].lifespan = 0;
 							asteroidsMedium[b].active = false;
@@ -165,6 +169,7 @@ namespace Juego
 					{
 						if (asteroidsSmall[c].active && CheckCollisionCircles(shoots[i].position, shoots[i].radius, asteroidsSmall[c].position, asteroidsSmall[c].radius))
 						{
+							asteroidsSmall[c].isExplosionActive = true;
 							shoots[i].active = false;
 							shoots[i].lifespan = 0;
 							asteroidsSmall[c].active = false;

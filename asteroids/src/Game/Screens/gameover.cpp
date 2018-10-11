@@ -47,8 +47,10 @@ namespace Juego
 
 		void InitGameOverScreen()
 		{
+			increasingFinalScore = 0;
 			increasingExplosionSize = 0;
 			increasingExplosionFade = 1;
+			timerON = true;
 			timerExplosionON = true;
 			ShowCursor();
 			createGameOverButtons();
@@ -88,6 +90,7 @@ namespace Juego
 						break;
 					case 1:
 						buttonOption = buttonQuitToMenu;
+						createAsteroid();
 						break;
 					}
 					buttons[i].selected = false;

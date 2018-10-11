@@ -14,6 +14,9 @@ namespace Juego
 	static float rotationTimerMediumAsteroids = 0;
 	static float rotationTimerSmallAsteroids = 0;
 	static const int maxTimer = 1000;
+
+	static float explosionTimer = 0;
+	static bool timerExplosionON = true;
 	
 	static Rectangle bigAsteroidSource = { 0.0f,0.0f, 90,90 };
 	static Rectangle mediumAsteroidSource = { 0.0f,0.0f, 45,45 };
@@ -78,6 +81,9 @@ namespace Juego
 				asteroidsBig[i].speed = { speedX, speedY };
 				asteroidsBig[i].radius = 40;
 				asteroidsBig[i].active = true;
+				asteroidsBig[i].isExplosionActive = false;
+				asteroidsBig[i].increasingExplosionSize = 0;
+				asteroidsBig[i].increasingExplosionFade = 1;
 			}
 
 
@@ -87,6 +93,9 @@ namespace Juego
 				asteroidsMedium[i].speed = { 0, 0 };
 				asteroidsMedium[i].radius = 20;
 				asteroidsMedium[i].active = false;
+				asteroidsMedium[i].isExplosionActive = false;
+				asteroidsMedium[i].increasingExplosionSize = 0;
+				asteroidsMedium[i].increasingExplosionFade = 1;
 			}
 
 			for (int i = 0; i < asteroidsSmallLimit; i++)
@@ -95,12 +104,68 @@ namespace Juego
 				asteroidsSmall[i].speed = { 0, 0 };
 				asteroidsSmall[i].radius = 10;
 				asteroidsSmall[i].active = false;
+				asteroidsSmall[i].isExplosionActive = false;
+				asteroidsSmall[i].increasingExplosionSize = 0;
+				asteroidsSmall[i].increasingExplosionFade = 1;
 			}
 
 		}
 
 		void AsteroidUpdate()
 		{
+			if (timerExplosionON)
+			{
+				explosionTimer += 1 * GetFrameTime();
+			}
+
+			if (explosionTimer > 0.01)
+			{
+				explosionTimer = 0;
+				for (int i = 0; i < asteroidsBigLimit; i++)
+				{
+					if (asteroidsBig[i].isExplosionActive)
+					{
+						asteroidsBig[i].increasingExplosionSize++;
+						asteroidsBig[i].increasingExplosionFade = asteroidsBig[i].increasingExplosionFade - 0.005;
+					}
+
+					if (asteroidsBig[i].increasingExplosionSize >= 150)
+					{
+						asteroidsBig[i].isExplosionActive = false;
+					}
+				}
+
+				for (int i = 0; i < asteroidsMediumLimit; i++)
+				{
+					if (asteroidsMedium[i].isExplosionActive)
+					{
+						asteroidsMedium[i].increasingExplosionSize++;
+						asteroidsMedium[i].increasingExplosionFade = asteroidsMedium[i].increasingExplosionFade - 0.005;
+					}
+
+					if (asteroidsMedium[i].increasingExplosionSize >= 100)
+					{
+						asteroidsMedium[i].isExplosionActive = false;
+					}
+				}
+
+				for (int i = 0; i < asteroidsSmallLimit; i++)
+				{
+					if (asteroidsSmall[i].isExplosionActive)
+					{
+						asteroidsSmall[i].increasingExplosionSize++;
+						asteroidsSmall[i].increasingExplosionFade = asteroidsSmall[i].increasingExplosionFade - 0.005;
+					}
+
+					if (asteroidsSmall[i].increasingExplosionSize >= 100)
+					{
+						asteroidsSmall[i].isExplosionActive = false;
+					}
+				}
+			}
+
+			
+
 			if (rotationTimerBigAsteroids < maxTimer) rotationTimerBigAsteroids += 40 * GetFrameTime();
 			else rotationTimerBigAsteroids = 0;
 
@@ -214,6 +279,31 @@ namespace Juego
 				{
 					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, Fade(LIGHTGRAY, 0.3f));
 					DrawTexturePro(asteroidSmall, smallAsteroidSource, smallAsteroidDestination, smallAsteroidOrigin, 0, DARKGRAY);
+				}
+			}
+
+			//EXPLOSION SPRITES DRAW
+			for (int i = 0; i < asteroidsBigLimit; i++)
+			{
+				if (asteroidsBig[i].isExplosionActive)
+				{
+					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, asteroidsBig[i].increasingExplosionSize,asteroidsBig[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsBig[i].increasingExplosionFade));
+				}
+			}
+
+			for (int i = 0; i < asteroidsMediumLimit; i++)
+			{
+				if (asteroidsMedium[i].isExplosionActive)
+				{
+					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, asteroidsMedium[i].increasingExplosionSize,asteroidsMedium[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsMedium[i].increasingExplosionFade));
+				}
+			}
+
+			for (int i = 0; i < asteroidsSmallLimit; i++)
+			{
+				if (asteroidsSmall[i].isExplosionActive)
+				{
+					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, asteroidsSmall[i].increasingExplosionSize,asteroidsSmall[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsSmall[i].increasingExplosionFade));
 				}
 			}
 		}
