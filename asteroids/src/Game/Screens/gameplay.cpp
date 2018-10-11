@@ -131,6 +131,7 @@ namespace Juego
 			// Round Variables
 
 			//Execute Functions & Extern variables 
+			timerON = true;
 			createPauseButtons();
 			HideCursor();
 			createAsteroid();

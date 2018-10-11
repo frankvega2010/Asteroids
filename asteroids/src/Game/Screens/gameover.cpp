@@ -215,6 +215,8 @@ namespace Juego
 
 		bool FinishGameOverScreen()
 		{
+			timerON = false;
+			//timerExplosionON = false;
 			buttonDistance = 0;
 			return isScreenFinished;
 		}
