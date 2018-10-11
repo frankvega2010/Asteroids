@@ -51,7 +51,7 @@ namespace Juego
 					{
 						if (!shoots[i].active)
 						{					//player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 }
-							shoots[i].position = { player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) };
+							shoots[i].position = { player.position.x + sinf(player.rotation)*(shipHeight), player.position.y - cosf(player.rotation)*(shipHeight) };
 							shoots[i].active = true;
 							shoots[i].speed.x = 2.0*sin(player.rotation)*player.defaultSpeed;
 							shoots[i].speed.y = 2.0*cos(player.rotation)*player.defaultSpeed;
