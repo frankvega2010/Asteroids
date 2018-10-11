@@ -10,6 +10,7 @@ namespace Juego
 	static const int maxButtons = 3;
 
 	static Buttons buttons[maxButtons];
+	static Buttons pauseButton;
 	static int buttonDistance = 0;
 	static int buttonSelect = 0;
 	static Color optionColor = RED;
@@ -30,6 +31,14 @@ namespace Juego
 	{
 		static void createPauseButtons()
 		{
+			pauseButton.position.x = (float)screenWidth / 1.4f;
+			pauseButton.position.y = (float)screenHeight / 14.0f;
+			pauseButton.width = (float)screenWidth / 18.0f;
+			pauseButton.height = (float)screenHeight / 12.0f;
+			pauseButton.selected = false;
+			pauseButton.defaultColor = GOLD;
+			pauseButton.messageColor = BLANK;
+
 			for (int i = 0; i < maxButtons; i++)
 			{
 				buttons[i].position.x = (float)screenWidth / 2.4f;
@@ -46,6 +55,12 @@ namespace Juego
 
 		static void GameplayInput()
 		{
+			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && pauseButton.selected)
+			{
+				crosshairColor = BLANK;
+				gamePaused = true;
+				gameON = false;
+			}
 			// Gameplay Input
 			if (!(gameON))
 			{
@@ -145,6 +160,18 @@ namespace Juego
 		{
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 			GameplayInput();
+
+			if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { pauseButton.position.x, pauseButton.position.y, pauseButton.width, pauseButton.height }))
+			{
+				pauseButton.defaultColor = WHITE;
+				pauseButton.selected = true;
+			}
+			else
+			{
+				pauseButton.defaultColor = GOLD;
+				pauseButton.selected = false;
+			}
+
 			if (gameON)
 			{
 				if (timerON)
@@ -348,6 +375,8 @@ namespace Juego
 			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, 40, YELLOW);
 			DrawTimer(2.5f, 2.2f,14.0f);
 			DrawTexturePro(crosshair, { 0,0,30,30 }, { mouse.position.x,mouse.position.y,30,30 }, {15,15}, 0, crosshairColor);
+			DrawRectangleLines(pauseButton.position.x, pauseButton.position.y, pauseButton.width, pauseButton.height, pauseButton.defaultColor);
+			DrawText(FormatText("||"), pauseButton.position.x + 25, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
 
 			if (!(gameON))
 			{
