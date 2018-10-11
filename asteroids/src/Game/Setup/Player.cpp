@@ -18,8 +18,10 @@ namespace Juego
 	float shipHeightv2 = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
 
 	static Rectangle shipSource = { 0.0f,0.0f, 50,50 };
+	static Rectangle shipMovingSource = { 0.0f,0.0f, 50,58 };
 	static Rectangle shipDestination;
-	static Vector2 shipOrigin = { 25,40 };
+	static Rectangle shipMovingDestination;
+	static Vector2 shipOrigin = { 25,48 };//48 sweet spot
 	
 	static Vector2 rotationDirection;
 	static float rotationAngle = 0.0f;
@@ -39,9 +41,9 @@ namespace Juego
 			player.score = 0;
 			player.acceleration = {10,10};
 			player.rotation = 0.0f;
-			player.speed = { 0.0f, 0.0f };
 			player.defaultSpeed = 300.0f;
 			player.isAlive = true;
+			player.inputActive = false;
 
 		}
 
@@ -61,27 +63,25 @@ namespace Juego
 			//Player logic: acceleration
 			if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
 			{
+				player.inputActive = true;
+
 				normalizedDirection.x = rotationDirection.x / sqrt(pow(rotationDirection.x,2.0) + pow(rotationDirection.y, 2.0));
 				normalizedDirection.y = rotationDirection.y / sqrt(pow(rotationDirection.x, 2.0) + pow(rotationDirection.y, 2.0));
 
-				player.acceleration.x += normalizedDirection.x * 0.1;
-				player.acceleration.y += normalizedDirection.y * 0.1;
+				player.acceleration.x += normalizedDirection.x * 250 * GetFrameTime();
+				player.acceleration.y += normalizedDirection.y * 250 * GetFrameTime();
 			}
 		}
 
 		void playerUpdate()
 		{
+
 			rotationDirection.x = (float)mouse.position.x - (float)player.position.x;
 			rotationDirection.y = (float)mouse.position.y - (float)player.position.y;
 
 			rotationAngle = atan2(rotationDirection.y, rotationDirection.x) + 1.57f;
 
-			player.rotation = rotationAngle; //MAGIC NUMBER
-			
-			// Player logic: speed
-
-			player.speed.x = sin(player.rotation)*player.defaultSpeed;
-			player.speed.y = cos(player.rotation)*player.defaultSpeed;
+			player.rotation = rotationAngle;
 
 			// Player logic: movement
 
@@ -100,13 +100,22 @@ namespace Juego
 		void playerDraw()
 		{
 			shipDestination = { player.position.x,player.position.y, 50,50 };
+			shipMovingDestination = { player.position.x,player.position.y, 50,58 };
 			
 			Vector2 v1 = { player.position.x + sinf(player.rotation)*(shipHeight), player.position.y - cosf(player.rotation)*(shipHeight) };
 			Vector2 v2 = { player.position.x - cosf(player.rotation)*(playerBaseSize / 2), player.position.y - sinf(player.rotation)*(playerBaseSize / 2) };
 			Vector2 v3 = { player.position.x + cosf(player.rotation)*(playerBaseSize / 2), player.position.y + sinf(player.rotation)*(playerBaseSize / 2) };
 
 			DrawTriangle(v1, v2, v3, MAROON);
-			DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, rotationAngle*RAD2DEG, WHITE);
+			if (player.inputActive)
+			{
+				DrawTexturePro(shipMoving, shipMovingSource, shipMovingDestination, shipOrigin, rotationAngle*RAD2DEG, WHITE);
+			}
+			else
+			{
+				DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, rotationAngle*RAD2DEG, WHITE);
+			}
+			
 			
 		}
 

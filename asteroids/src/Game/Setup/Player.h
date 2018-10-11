@@ -8,12 +8,12 @@ namespace Juego
 	struct rocketShip
 	{
 		Vector2 position;
-		Vector2 speed;
 		Vector2 acceleration;
 		float rotation;
 		float defaultSpeed;
 		int score;
 		bool isAlive;
+		bool inputActive;
 	};
 
 	struct Circle {

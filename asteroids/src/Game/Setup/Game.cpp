@@ -40,6 +40,7 @@ namespace Juego
 	Texture2D scheme_arrows01;
 	Texture2D scheme_sign01;
 	Image shipImage;
+	Image shipMovingImage;
 	Image asteroidImage;
 	Image asteroidSmallImage;
 	Image asteroidMediumImage;
@@ -47,6 +48,7 @@ namespace Juego
 	Image crosshairImage;
 	Image explosionImage;
 	Texture2D ship;
+	Texture2D shipMoving;
 	Texture2D asteroid;
 	Texture2D asteroidMedium;
 	Texture2D asteroidSmall;
@@ -95,7 +97,8 @@ namespace Juego
 		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
 
 		crosshairImage = LoadImage("res/textures/crosshair01.png");
-		shipImage = LoadImage("res/textures/test01.png");
+		shipImage = LoadImage("res/textures/nave01.png");
+		shipMovingImage = LoadImage("res/textures/nave01_moving.png");
 		asteroidImage = LoadImage("res/textures/asteroid.png");
 		backgroundGameImage = LoadImage("res/textures/backgroundgame.png");
 		explosionImage = LoadImage("res/textures/explosion01.png");
@@ -123,6 +126,9 @@ namespace Juego
 
 		ImageResize(&shipImage, 50, 50);
 		ship = LoadTextureFromImage(shipImage);
+
+		ImageResize(&shipMovingImage, 50, 58);//58
+		shipMoving = LoadTextureFromImage(shipMovingImage);
 		
 		backgroundGame = LoadTextureFromImage(backgroundGameImage);
 
@@ -131,6 +137,7 @@ namespace Juego
 		UnloadImage(backgroundGameImage);
 		UnloadImage(crosshairImage);
 		UnloadImage(explosionImage);
+		UnloadImage(shipMovingImage);
 
 		InitMenuScreen();
 		createAsteroid();

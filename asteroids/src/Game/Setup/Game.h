@@ -29,6 +29,7 @@ namespace Juego
 	extern Texture2D scheme_arrows01;
 	extern Texture2D scheme_sign01;
 	extern Texture2D ship;
+	extern Texture2D shipMoving;
 	extern Texture2D asteroid;
 	extern Texture2D asteroidMedium;
 	extern Texture2D asteroidSmall;
