@@ -41,6 +41,7 @@ namespace Juego
 			player.rotation = 0.0f;
 			player.speed = { 0.0f, 0.0f };
 			player.defaultSpeed = 300.0f;
+			player.isAlive = true;
 
 		}
 

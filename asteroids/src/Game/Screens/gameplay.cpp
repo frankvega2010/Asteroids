@@ -232,6 +232,7 @@ namespace Juego
 						isScreenFinished = true;
 						scoreMultiplier = 1;
 						isExplosionActive = true;
+						player.isAlive = false;
 						break;
 					}
 				}
@@ -245,6 +246,7 @@ namespace Juego
 						isScreenFinished = true;
 						scoreMultiplier = 1;
 						isExplosionActive = true;
+						player.isAlive = false;
 						break;
 					}
 				}
@@ -258,6 +260,7 @@ namespace Juego
 						isScreenFinished = true;
 						scoreMultiplier = 1;
 						isExplosionActive = true;
+						player.isAlive = false;
 						break;
 					}
 				}

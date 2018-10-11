@@ -13,6 +13,7 @@ namespace Juego
 		float rotation;
 		float defaultSpeed;
 		int score;
+		bool isAlive;
 	};
 
 	struct Circle {

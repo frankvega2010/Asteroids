@@ -47,7 +47,9 @@ namespace Juego
 
 		void InitGameOverScreen()
 		{
+			finalScore = (gameScore * scoreMultiplier);
 			increasingFinalScore = 0;
+			finalScoreTimer = 0;
 			increasingExplosionSize = 0;
 			increasingExplosionFade = 1;
 			timerON = true;
@@ -104,7 +106,7 @@ namespace Juego
 			GameOverInput(); 
 			AsteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
-			finalScore = (gameScore * scoreMultiplier);
+			
 
 			for (int i = 0; i < maxButtons; i++)
 			{
@@ -136,29 +138,7 @@ namespace Juego
 				explosionTimer = 0;
 				increasingExplosionSize++;
 				increasingExplosionFade = increasingExplosionFade - 0.005;
-				/*if (increasingExplosionFade >= 1.0f)
-				{
-					increasingExplosionFade = increasingExplosionFade - 0.1;
-				}
-				else
-				{
-					increasingExplosionFade = increasingExplosionFade + 0.1;
-				}*/
 			}
-
-			//if (explosionTimer > 0.1)
-			//{
-			//	explosionTimer = 0;
-			//	increasingExplosionFade = increasingExplosionFade - 0.1;
-			//	/*if (increasingExplosionFade >= 1.0f)
-			//	{
-			//	increasingExplosionFade = increasingExplosionFade - 0.1;
-			//	}
-			//	else
-			//	{
-			//	increasingExplosionFade = increasingExplosionFade + 0.1;
-			//	}*/
-			//}
 
 			if (finalScoreTimer > 0.0001)
 			{
@@ -193,7 +173,7 @@ namespace Juego
 			DrawText(FormatText("RESTART"), buttons[0].position.x + 25, buttons[0].position.y + 5, defaultFontSize / 1.3f, buttons[0].defaultColor);
 			DrawText(FormatText("QUIT"), buttons[1].position.x + 60, buttons[1].position.y + 5, defaultFontSize, buttons[1].defaultColor);
 
-			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
+			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit) && player.isAlive)
 			{
 				DrawText("YOU WON!", buttons[0].position.x + 20, buttons[0].position.y - 60, 40, YELLOW);
 			}
@@ -215,7 +195,7 @@ namespace Juego
 
 		bool FinishGameOverScreen()
 		{
-			timerON = false;
+			//timerON = false;
 			//timerExplosionON = false;
 			buttonDistance = 0;
 			return isScreenFinished;
