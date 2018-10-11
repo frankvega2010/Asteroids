@@ -137,7 +137,7 @@ namespace Juego
 				}
 			}
 			DrawText(FormatText("Simple! Asteroids"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 10, defaultFontSize + 20, WHITE);
-			DrawText(FormatText("Beta Build 0.20"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 5, defaultFontSize / 2, WHITE);
+			DrawText(FormatText("Version 0.3"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 5, defaultFontSize / 2, WHITE);
 
 			DrawText(FormatText("Game made by"), (float)screenWidth / 2.5f, screenHeight / 3.3, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Franco Vega aka frankvega"), (float)screenWidth / 3.3f, screenHeight / 2.8, defaultFontSize / 1.5, WHITE);
