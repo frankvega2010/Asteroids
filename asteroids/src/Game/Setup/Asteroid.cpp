@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Game.h"
 #include "Player.h"
+#include "Screens\gameplay.h"
 
 namespace Juego
 {

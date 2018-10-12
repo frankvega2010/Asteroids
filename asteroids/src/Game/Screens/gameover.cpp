@@ -27,6 +27,8 @@ namespace Juego
 	static bool timerON = true;
 	static bool timerExplosionON = true;
 
+	Texture2D shipExplosion;
+
 	namespace GameOver_Section
 	{
 		static void createGameOverButtons()
@@ -47,6 +49,10 @@ namespace Juego
 
 		void InitGameOverScreen()
 		{
+			explosionImage = LoadImage("res/textures/explosion01.png");
+			ImageResize(&explosionImage, 60, 60);
+			shipExplosion = LoadTextureFromImage(explosionImage);
+
 			#ifdef AUDIO
 			ship_explode01 = LoadSound("res/sounds/ship_explode01fix.wav");
 			SetSoundVolume(ship_explode01, 0.3);
@@ -209,8 +215,9 @@ namespace Juego
 			return isScreenFinished;
 		}
 
-		void DeInitGameOverAudio()
+		void DeInitGameOverResources()
 		{
+			UnloadImage(explosionImage);
 			#ifdef AUDIO
 			StopSound(ship_explode01);
 			UnloadSound(ship_explode01);

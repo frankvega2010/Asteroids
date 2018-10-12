@@ -33,27 +33,16 @@ namespace Juego
 	Rectangle backgroundGameDestination;
 	Vector2 backgroundGameOrigin;
 
-	Image shipImage;
-	Image shipMovingImage;
 	Image asteroidImage;
 	Image asteroidSmallImage;
 	Image asteroidMediumImage;
 	Image backgroundGameImage;
-	Image crosshairImage;
-	Image explosionImage;
-	
-	Texture2D ship;
-	Texture2D shipMoving;
+
 	Texture2D asteroid;
 	Texture2D asteroidMedium;
 	Texture2D asteroidSmall;
 	Texture2D backgroundGame;
-	Texture2D crosshair;
-	Texture2D shipExplosion;
-	Texture2D asteroidExplosion;
-	
-
-#ifdef AUDIO
+	#ifdef AUDIO
 
 	Sound ship_explode01;
 	Sound ship_shoot01;
@@ -61,8 +50,7 @@ namespace Juego
 
 	Music ship_rocket01;
 
-#endif
-
+	#endif
 	void DrawBackground()
 	{
 		backgroundGameSource = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
@@ -83,7 +71,6 @@ namespace Juego
 
 	static void Init()
 	{
-
 		SetExitKey(0);
 
 		screenWidth = 1300;
@@ -93,32 +80,11 @@ namespace Juego
 
 		InitWindow(screenWidth, screenHeight, "Simple! Asteroids");
 		
-		//GAME
 		backgroundGameImage = LoadImage("res/textures/backgroundgame.png");
 		asteroidImage = LoadImage("res/textures/asteroid.png");
 
-		//CONTROLS
-		
-
-		//GAMEPLAY
-		crosshairImage = LoadImage("res/textures/crosshair01.png");
-		shipImage = LoadImage("res/textures/nave01.png");
-		shipMovingImage = LoadImage("res/textures/nave01_moving.png");
-		explosionImage = LoadImage("res/textures/explosion01.png");
-
-		
 		ImageResize(&backgroundGameImage, screenWidth, screenHeight);
 		
-
-		ImageResize(&explosionImage, 60, 60);
-		shipExplosion = LoadTextureFromImage(explosionImage);
-
-		ImageResize(&explosionImage, 50, 50);
-		asteroidExplosion = LoadTextureFromImage(explosionImage);
-
-		ImageResize(&crosshairImage, 30, 30);
-		crosshair = LoadTextureFromImage(crosshairImage);
-
 		ImageResize(&asteroidImage, 90, 90);
 		asteroid = LoadTextureFromImage(asteroidImage);
 
@@ -128,25 +94,10 @@ namespace Juego
 		ImageResize(&asteroidImage, 22.5, 22.5);
 		asteroidSmall = LoadTextureFromImage(asteroidImage);
 
-		ImageResize(&shipImage, 50, 50);
-		ship = LoadTextureFromImage(shipImage);
-
-		ImageResize(&shipMovingImage, 50, 58);//58
-		shipMoving = LoadTextureFromImage(shipMovingImage);
-		
 		backgroundGame = LoadTextureFromImage(backgroundGameImage);
-		
-
 
 		UnloadImage(asteroidImage);
 		UnloadImage(backgroundGameImage);
-
-		UnloadImage(shipImage);
-		UnloadImage(crosshairImage);
-		UnloadImage(explosionImage);
-		UnloadImage(shipMovingImage);
-
-		
 
 		#ifdef AUDIO
 		InitAudioDevice();
@@ -277,7 +228,7 @@ namespace Juego
 
 			if (FinishGameOverScreen())
 			{
-				DeInitGameOverAudio();
+				DeInitGameOverResources();
 				switch (buttonOption)
 				{
 				case buttonRestart:
@@ -322,14 +273,13 @@ namespace Juego
 	static void DeInit()
 	{
 		#ifdef AUDIO
-		////UnloadSound(ship_explode01);
-		//UnloadSound(asteroid_explode01);
-		//UnloadSound(ship_shoot01);
-		//UnloadMusicStream(ship_rocket01);
 		CloseAudioDevice();
 		#endif
-		
-		UnloadTexture(ship);
+		UnloadTexture(asteroid);
+		UnloadTexture(asteroidMedium);
+		UnloadTexture(asteroidSmall);
+		UnloadTexture(backgroundGame);
+
 		CloseWindow();
 	}
 

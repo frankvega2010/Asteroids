@@ -4,6 +4,7 @@
 #include "Setup\Game.h"
 #include "Setup\Asteroid.h"
 #include "Setup\PlayerShoot.h"
+#include "Screens\gameplay.h"
 
 namespace Juego
 {

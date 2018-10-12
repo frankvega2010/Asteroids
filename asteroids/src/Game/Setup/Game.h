@@ -26,16 +26,24 @@ namespace Juego
 		Color defaultColor;
 	};
 
+	extern Image explosionImage;
 
-	extern Texture2D ship;
-	extern Texture2D shipMoving;
+	//gameplay
+	//extern Texture2D ship;
+	//extern Texture2D shipMoving;
+	//extern Texture2D crosshair;
+	//extern Texture2D asteroidExplosion;
+
+	//game
 	extern Texture2D asteroid;
 	extern Texture2D asteroidMedium;
 	extern Texture2D asteroidSmall;
 	extern Texture2D backgroundGame;
-	extern Texture2D crosshair;
-	extern Texture2D shipExplosion;
-	extern Texture2D asteroidExplosion;
+
+	//gameover
+	//extern Texture2D shipExplosion;
+
+	
 	
 
 	#ifdef AUDIO

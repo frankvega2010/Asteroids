@@ -9,7 +9,7 @@ namespace Juego
 		void UpdateGameOverScreen();
 		void DrawGameOver();
 		bool FinishGameOverScreen();
-		void DeInitGameOverAudio();
+		void DeInitGameOverResources();
 	}
 }
 #endif // GAMEOVER_H

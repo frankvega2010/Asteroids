@@ -27,6 +27,17 @@ namespace Juego
 	bool isExplosionActive = false;
 	int scoreMultiplier = 5;
 
+	//Resources
+	Image shipImage;
+	Image shipMovingImage;
+	Image crosshairImage;
+	Image explosionImage;
+
+	Texture2D ship;
+	Texture2D shipMoving;
+	Texture2D crosshair;
+	Texture2D asteroidExplosion;
+
 	namespace Gameplay_Section
 	{
 		static void createPauseButtons()
@@ -126,16 +137,17 @@ namespace Juego
 							break;
 						case 2:
 							buttonOption = buttonQuitToMenu;
+							isScreenFinished = true;
 							break;
 						}
 						buttons[i].selected = false;
-						isScreenFinished = true;
 					}
 				}
 
 				if (IsKeyPressed(KEY_P))
 				{
 					gamePaused = false;
+					timerON = true;
 					gameON = true;
 				}
 			}
@@ -143,18 +155,6 @@ namespace Juego
 
 		void InitGameplayVariables()
 		{
-			#ifdef AUDIO
-			ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
-			SetSoundVolume(ship_shoot01, 0.35f);
-
-			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
-			SetMusicVolume(ship_rocket01, 0.40);
-
-			asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
-			SetSoundVolume(asteroid_explode01, 0.3);
-
-			
-			#endif
 
 			//Execute Functions & Extern variables 
 			timerON = true;
@@ -165,6 +165,8 @@ namespace Juego
 			createPlayer();
 			createShoot();
 			createCollisionCircle();
+
+
 			//collisionCircle.active = true;
 		}
 
@@ -326,6 +328,39 @@ namespace Juego
 
 		void InitGameplayScreen()
 		{
+			//Textures Load
+			crosshairImage = LoadImage("res/textures/crosshair01.png");
+			ImageResize(&crosshairImage, 30, 30);
+			crosshair = LoadTextureFromImage(crosshairImage);
+
+			shipImage = LoadImage("res/textures/nave01.png");
+			ImageResize(&shipImage, 50, 50);
+			ship = LoadTextureFromImage(shipImage);
+
+			shipMovingImage = LoadImage("res/textures/nave01_moving.png");
+			ImageResize(&shipMovingImage, 50, 58);//58
+			shipMoving = LoadTextureFromImage(shipMovingImage);
+
+			explosionImage = LoadImage("res/textures/explosion01.png");
+			ImageResize(&explosionImage, 50, 50);
+			asteroidExplosion = LoadTextureFromImage(explosionImage);
+
+			UnloadImage(crosshairImage);
+			UnloadImage(shipImage);
+			UnloadImage(explosionImage);
+			UnloadImage(shipMovingImage);
+
+#ifdef AUDIO
+			ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
+			SetSoundVolume(ship_shoot01, 0.35f);
+
+			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
+			SetMusicVolume(ship_rocket01, 0.40);
+
+			asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
+			SetSoundVolume(asteroid_explode01, 0.3);
+
+#endif
 			isScreenFinished = false;
 		}
 
@@ -337,6 +372,11 @@ namespace Juego
 
 		void DeInitGameplayResources()
 		{
+			UnloadTexture(ship);
+			UnloadTexture(shipMoving);
+			UnloadTexture(crosshair);
+			UnloadTexture(asteroidExplosion);
+
 			#ifdef AUDIO
 			StopSound(asteroid_explode01);
 			StopSound(ship_shoot01);
