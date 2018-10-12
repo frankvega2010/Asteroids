@@ -137,7 +137,7 @@ namespace Juego
 				}
 			}
 			DrawText(FormatText("Simple! Asteroids"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 10, defaultFontSize + 20, WHITE);
-			DrawText(FormatText("Version 0.41"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 5, defaultFontSize / 2, WHITE);
+			DrawText(FormatText("Version 0.5"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 5, defaultFontSize / 2, WHITE);
 
 			DrawText(FormatText("Game made by"), (float)screenWidth / 2.5f, screenHeight / 3.3, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Franco Vega aka frankvega"), (float)screenWidth / 3.3f, screenHeight / 2.8, defaultFontSize / 1.5, WHITE);
@@ -145,6 +145,8 @@ namespace Juego
 			DrawText(FormatText("Tools Used"), (float)screenWidth / 2.5f, screenHeight / 2.2, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Raylib"), (float)screenWidth / 2.2f, screenHeight / 2.0, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Adobe Illustrator"), (float)screenWidth / 2.6f, screenHeight / 1.8, defaultFontSize / 1.5, WHITE);
+			DrawText(FormatText("Adobe Photoshop"), (float)screenWidth / 2.6f, screenHeight / 1.65, defaultFontSize / 1.5, WHITE);
+			DrawText(FormatText("Bfxr"), (float)screenWidth / 2.6f, screenHeight / 1.55, defaultFontSize / 1.5, WHITE);
 
 			DrawText(FormatText("MENU"), buttons[0].position.x + 50, buttons[0].position.y + 5, defaultFontSize, buttons[0].defaultColor);
 		}
