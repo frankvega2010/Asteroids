@@ -47,6 +47,7 @@ namespace Juego
 	Image backgroundGameImage;
 	Image crosshairImage;
 	Image explosionImage;
+	Image controlSchemeImage;
 	Texture2D ship;
 	Texture2D shipMoving;
 	Texture2D asteroid;
@@ -56,6 +57,7 @@ namespace Juego
 	Texture2D crosshair;
 	Texture2D shipExplosion;
 	Texture2D asteroidExplosion;
+	Texture2D controlScheme;
 
 #ifdef AUDIO
 
@@ -99,6 +101,7 @@ namespace Juego
 		
 		scheme_arrows01 = LoadTexture("res/textures/controls01.png");	
 		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
+		controlSchemeImage = LoadImage("res/textures/controlscheme01.png");
 
 		crosshairImage = LoadImage("res/textures/crosshair01.png");
 		shipImage = LoadImage("res/textures/nave01.png");
@@ -109,6 +112,7 @@ namespace Juego
 
 		
 		ImageResize(&backgroundGameImage, screenWidth, screenHeight);
+		ImageResize(&controlSchemeImage, screenWidth, screenHeight);
 
 		ImageResize(&explosionImage, 60, 60);
 		shipExplosion = LoadTextureFromImage(explosionImage);
@@ -135,6 +139,7 @@ namespace Juego
 		shipMoving = LoadTextureFromImage(shipMovingImage);
 		
 		backgroundGame = LoadTextureFromImage(backgroundGameImage);
+		controlScheme = LoadTextureFromImage(controlSchemeImage);
 
 		UnloadImage(shipImage);
 		UnloadImage(asteroidImage);
@@ -142,6 +147,7 @@ namespace Juego
 		UnloadImage(crosshairImage);
 		UnloadImage(explosionImage);
 		UnloadImage(shipMovingImage);
+		UnloadImage(controlSchemeImage);
 
 		#ifdef AUDIO
 

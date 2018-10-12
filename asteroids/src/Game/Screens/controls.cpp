@@ -131,8 +131,13 @@ namespace Juego
 			DrawText(FormatText("MENU"), buttonsControls[0].position.x + 50, buttonsControls[0].position.y + 5, defaultFontSize, buttonsControls[0].defaultColor);
 
 			// Testing Images
-			DrawTexture(scheme_arrows01, 0, 0, WHITE);
-			DrawTexture(scheme_sign01, 350, -100, WHITE);
+			backgroundGameSource = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
+			backgroundGameDestination = { 0,0, (float)screenWidth,(float)screenHeight };
+			backgroundGameOrigin = { 0,0 };
+
+			DrawTexturePro(controlScheme, backgroundGameSource, backgroundGameDestination, backgroundGameOrigin, 0, WHITE);
+			//DrawTexture(scheme_arrows01, 0, 0, WHITE);
+			//DrawTexture(scheme_sign01, 350, -100, WHITE);
 		}
 
 		bool FinishControlsScreen()

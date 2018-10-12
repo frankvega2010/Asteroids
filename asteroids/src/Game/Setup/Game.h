@@ -37,6 +37,7 @@ namespace Juego
 	extern Texture2D crosshair;
 	extern Texture2D shipExplosion;
 	extern Texture2D asteroidExplosion;
+	extern Texture2D controlScheme;
 
 	#ifdef AUDIO
 
