@@ -15,6 +15,9 @@ namespace Juego
 	static Buttons buttonsControls[maxButtonsControls];
 	static int buttonSelect = 0;
 
+	Image controlSchemeImage;
+	Texture2D controlScheme;
+
 	namespace Controls_Section
 	{
 		static void createControlsButtons()
@@ -34,6 +37,12 @@ namespace Juego
 		void InitControlsScreen()
 		{
 			createControlsButtons();
+
+			controlSchemeImage = LoadImage("res/textures/controlscheme01.png");
+			ImageResize(&controlSchemeImage, screenWidth, screenHeight);
+			controlScheme = LoadTextureFromImage(controlSchemeImage);
+			UnloadImage(controlSchemeImage);
+
 			isScreenFinished = false;
 		}
 
@@ -143,6 +152,11 @@ namespace Juego
 		bool FinishControlsScreen()
 		{
 			return isScreenFinished;
+		}
+
+		void DeInitControlsResources()
+		{
+			UnloadTexture(controlScheme);
 		}
 	}
 }

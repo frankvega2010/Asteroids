@@ -24,7 +24,7 @@ namespace Juego
 		bool FinishGameplayScreen();
 		void DrawGameplay();
 		void DrawTimer(float widthvalue1, float widthvalue2, float heightvalue1);
-		void DeInitGameplayAudio();
+		void DeInitGameplayResources();
 	}
 }
 #endif // GAMEPLAY_H

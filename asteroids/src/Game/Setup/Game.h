@@ -26,8 +26,7 @@ namespace Juego
 		Color defaultColor;
 	};
 
-	extern Texture2D scheme_arrows01;
-	extern Texture2D scheme_sign01;
+
 	extern Texture2D ship;
 	extern Texture2D shipMoving;
 	extern Texture2D asteroid;
@@ -37,7 +36,7 @@ namespace Juego
 	extern Texture2D crosshair;
 	extern Texture2D shipExplosion;
 	extern Texture2D asteroidExplosion;
-	extern Texture2D controlScheme;
+	
 
 	#ifdef AUDIO
 

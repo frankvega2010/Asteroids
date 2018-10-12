@@ -6,12 +6,15 @@ namespace Juego
 		buttonGoMenu = 12
 	};
 
+	//extern Texture2D controlScheme; // CHECK IF ITS USED
+
 	namespace Controls_Section
 	{
 		void InitControlsScreen();
 		void UpdateControlsScreen();
 		void DrawControls();
 		bool FinishControlsScreen();
+		void DeInitControlsResources();
 	}
 }
 #endif // CONTROLS_H

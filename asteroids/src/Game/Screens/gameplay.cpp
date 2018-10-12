@@ -335,7 +335,7 @@ namespace Juego
 			return isScreenFinished;
 		}
 
-		void DeInitGameplayAudio()
+		void DeInitGameplayResources()
 		{
 			#ifdef AUDIO
 			StopSound(asteroid_explode01);

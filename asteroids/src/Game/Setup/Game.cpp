@@ -29,16 +29,10 @@ namespace Juego
 
 	bool isScreenFinished;
 
-	//source = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
-	//dest = { 0,0, (float)screenWidth,(float)screenHeight };
-	// origin = { 0,0 };
-
 	Rectangle backgroundGameSource;
 	Rectangle backgroundGameDestination;
 	Vector2 backgroundGameOrigin;
 
-	Texture2D scheme_arrows01;
-	Texture2D scheme_sign01;
 	Image shipImage;
 	Image shipMovingImage;
 	Image asteroidImage;
@@ -47,7 +41,7 @@ namespace Juego
 	Image backgroundGameImage;
 	Image crosshairImage;
 	Image explosionImage;
-	Image controlSchemeImage;
+	
 	Texture2D ship;
 	Texture2D shipMoving;
 	Texture2D asteroid;
@@ -57,7 +51,7 @@ namespace Juego
 	Texture2D crosshair;
 	Texture2D shipExplosion;
 	Texture2D asteroidExplosion;
-	Texture2D controlScheme;
+	
 
 #ifdef AUDIO
 
@@ -104,9 +98,7 @@ namespace Juego
 		asteroidImage = LoadImage("res/textures/asteroid.png");
 
 		//CONTROLS
-		scheme_arrows01 = LoadTexture("res/textures/controls01.png");	
-		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
-		controlSchemeImage = LoadImage("res/textures/controlscheme01.png");
+		
 
 		//GAMEPLAY
 		crosshairImage = LoadImage("res/textures/crosshair01.png");
@@ -116,7 +108,7 @@ namespace Juego
 
 		
 		ImageResize(&backgroundGameImage, screenWidth, screenHeight);
-		ImageResize(&controlSchemeImage, screenWidth, screenHeight);
+		
 
 		ImageResize(&explosionImage, 60, 60);
 		shipExplosion = LoadTextureFromImage(explosionImage);
@@ -143,15 +135,18 @@ namespace Juego
 		shipMoving = LoadTextureFromImage(shipMovingImage);
 		
 		backgroundGame = LoadTextureFromImage(backgroundGameImage);
-		controlScheme = LoadTextureFromImage(controlSchemeImage);
+		
 
-		UnloadImage(shipImage);
+
 		UnloadImage(asteroidImage);
 		UnloadImage(backgroundGameImage);
+
+		UnloadImage(shipImage);
 		UnloadImage(crosshairImage);
 		UnloadImage(explosionImage);
 		UnloadImage(shipMovingImage);
-		UnloadImage(controlSchemeImage);
+
+		
 
 		#ifdef AUDIO
 		InitAudioDevice();
@@ -171,7 +166,7 @@ namespace Juego
 
 			if (FinishGameplayScreen())
 			{
-				DeInitGameplayAudio();
+				DeInitGameplayResources();
 				switch (buttonOption)
 				{
 				case buttonQuitToMenu:
@@ -248,6 +243,7 @@ namespace Juego
 
 			if (FinishControlsScreen())
 			{
+				DeInitControlsResources();
 				gameScreen = Menu;
 				InitMenuScreen();
 			}
@@ -332,8 +328,7 @@ namespace Juego
 		//UnloadMusicStream(ship_rocket01);
 		CloseAudioDevice();
 		#endif
-		UnloadTexture(scheme_arrows01);
-		UnloadTexture(scheme_sign01);
+		
 		UnloadTexture(ship);
 		CloseWindow();
 	}
