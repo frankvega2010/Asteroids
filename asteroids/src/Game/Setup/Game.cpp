@@ -99,15 +99,19 @@ namespace Juego
 
 		InitWindow(screenWidth, screenHeight, "Simple! Asteroids");
 		
+		//GAME
+		backgroundGameImage = LoadImage("res/textures/backgroundgame.png");
+		asteroidImage = LoadImage("res/textures/asteroid.png");
+
+		//CONTROLS
 		scheme_arrows01 = LoadTexture("res/textures/controls01.png");	
 		scheme_sign01 = LoadTexture("res/textures/arrow01.png");
 		controlSchemeImage = LoadImage("res/textures/controlscheme01.png");
 
+		//GAMEPLAY
 		crosshairImage = LoadImage("res/textures/crosshair01.png");
 		shipImage = LoadImage("res/textures/nave01.png");
 		shipMovingImage = LoadImage("res/textures/nave01_moving.png");
-		asteroidImage = LoadImage("res/textures/asteroid.png");
-		backgroundGameImage = LoadImage("res/textures/backgroundgame.png");
 		explosionImage = LoadImage("res/textures/explosion01.png");
 
 		
@@ -150,22 +154,7 @@ namespace Juego
 		UnloadImage(controlSchemeImage);
 
 		#ifdef AUDIO
-
 		InitAudioDevice();
-
-		ship_explode01 = LoadSound("res/sounds/ship_explode01fix.wav");
-		ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
-		asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
-		
-		SetSoundVolume(ship_shoot01, 0.35f);
-		SetSoundVolume(ship_explode01, 0.4f);
-		SetSoundVolume(asteroid_explode01, 0.3);
-		//pong_menu_song = LoadMusicStream("res/menu2.ogg");
-
-		//PlayMusicStream(pong_menu_song);
-		ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
-		SetMusicVolume(ship_rocket01, 0.40);
-
 		#endif
 
 		InitMenuScreen();
@@ -182,11 +171,13 @@ namespace Juego
 
 			if (FinishGameplayScreen())
 			{
+				DeInitGameplayAudio();
 				switch (buttonOption)
 				{
 				case buttonQuitToMenu:
 				{
 					gameScreen = Menu;
+					
 					InitMenuScreen();
 					break;
 				}
@@ -290,6 +281,7 @@ namespace Juego
 
 			if (FinishGameOverScreen())
 			{
+				DeInitGameOverAudio();
 				switch (buttonOption)
 				{
 				case buttonRestart:
@@ -334,10 +326,10 @@ namespace Juego
 	static void DeInit()
 	{
 		#ifdef AUDIO
-		UnloadSound(asteroid_explode01);
-		UnloadSound(ship_explode01);
-		UnloadSound(ship_shoot01);
-		UnloadMusicStream(ship_rocket01);
+		////UnloadSound(ship_explode01);
+		//UnloadSound(asteroid_explode01);
+		//UnloadSound(ship_shoot01);
+		//UnloadMusicStream(ship_rocket01);
 		CloseAudioDevice();
 		#endif
 		UnloadTexture(scheme_arrows01);

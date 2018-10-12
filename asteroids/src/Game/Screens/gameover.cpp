@@ -47,6 +47,12 @@ namespace Juego
 
 		void InitGameOverScreen()
 		{
+			#ifdef AUDIO
+			ship_explode01 = LoadSound("res/sounds/ship_explode01fix.wav");
+			SetSoundVolume(ship_explode01, 0.3);
+			PlaySound(ship_explode01);
+			#endif
+
 			finalScore = (gameScore * scoreMultiplier);
 			increasingFinalScore = 0;
 			finalScoreTimer = 0;
@@ -198,7 +204,17 @@ namespace Juego
 			//timerON = false;
 			//timerExplosionON = false;
 			buttonDistance = 0;
+			#ifdef AUDIO
+			#endif
 			return isScreenFinished;
+		}
+
+		void DeInitGameOverAudio()
+		{
+			#ifdef AUDIO
+			StopSound(ship_explode01);
+			UnloadSound(ship_explode01);
+			#endif
 		}
 	}
 }

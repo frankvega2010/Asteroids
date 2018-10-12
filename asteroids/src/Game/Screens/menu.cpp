@@ -38,7 +38,6 @@ namespace Juego
 		void InitMenuScreen()
 		{
 			createMenuButtons();
-			
 			//EnableCursor();
 			//ShowCursor();
 			//ShowCursor();

@@ -143,10 +143,22 @@ namespace Juego
 
 		void InitGameplayVariables()
 		{
-			// Round Variables
+			#ifdef AUDIO
+			ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
+			SetSoundVolume(ship_shoot01, 0.35f);
+
+			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
+			SetMusicVolume(ship_rocket01, 0.40);
+
+			asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
+			SetSoundVolume(asteroid_explode01, 0.3);
+
+			
+			#endif
 
 			//Execute Functions & Extern variables 
 			timerON = true;
+			
 			createPauseButtons();
 			HideCursor();
 			createAsteroid();
@@ -231,7 +243,7 @@ namespace Juego
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active)
 					{
 					#ifdef AUDIO
-						PlaySound(ship_explode01);
+						//PlaySound(ship_explode01);
 					#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
@@ -248,7 +260,7 @@ namespace Juego
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active)
 					{
 						#ifdef AUDIO
-						PlaySound(ship_explode01);
+						//PlaySound(ship_explode01);
 						#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
@@ -265,7 +277,7 @@ namespace Juego
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active)
 					{
 						#ifdef AUDIO
-						PlaySound(ship_explode01);
+						//PlaySound(ship_explode01);
 						#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
@@ -317,10 +329,22 @@ namespace Juego
 			isScreenFinished = false;
 		}
 
-		bool FinishGameplayScreen()
+		bool FinishGameplayScreen()// check this?
 		{
 			buttonDistance = 0;
 			return isScreenFinished;
+		}
+
+		void DeInitGameplayAudio()
+		{
+			#ifdef AUDIO
+			StopSound(asteroid_explode01);
+			StopSound(ship_shoot01);
+			StopMusicStream(ship_rocket01);
+			UnloadSound(asteroid_explode01);
+			UnloadSound(ship_shoot01);
+			UnloadMusicStream(ship_rocket01);
+			#endif
 		}
 
 		void RestartPhase()
