@@ -1,6 +1,7 @@
 #include "Powerups.h"
 #include "Setup\Game.h"
 #include "Setup\Player.h"
+#include "Screens\gameplay.h"
 
 namespace Juego
 {
@@ -28,24 +29,27 @@ namespace Juego
 		{
 			for (int i = 0; i < maxPowerups; i++)
 			{
-				if (!powerups[i].onScreen)
+				if (gameON)
 				{
-					powerups[i].spawnTimer += 1 * GetFrameTime();
-					if (powerups[i].spawnTimer  > 1)
+					if (!powerups[i].onScreen)
 					{
-						powerups[i].spawnTimer = 0;
-						powerups[i].spawnCountdown--;
-						if (powerups[i].spawnCountdown < 0)
+						powerups[i].spawnTimer += 1 * GetFrameTime();
+						if (powerups[i].spawnTimer  > 1)
 						{
-							powerups[i].spawnCountdown = GetRandomValue(15, 30);
-							powerups[i].onScreen = true;
+							powerups[i].spawnTimer = 0;
+							powerups[i].spawnCountdown--;
+							if (powerups[i].spawnCountdown < 0)
+							{
+								powerups[i].spawnCountdown = GetRandomValue(15, 30);
+								powerups[i].onScreen = true;
+							}
 						}
 					}
-				}
 
-				if (powerups[i].activated)
-				{
-					powerups[i].useTimer += 1 * GetFrameTime();
+					if (powerups[i].activated)
+					{
+						powerups[i].useTimer += 1 * GetFrameTime();
+					}
 				}
 
 				if (powerups[i].useTimer> 1)
