@@ -13,6 +13,7 @@ namespace Juego
 	};
 
 	extern Powerup powerupInvincibility;
+	extern Powerup powerupmaxRapidFire;
 
 	namespace Gameplay_Section
 	{

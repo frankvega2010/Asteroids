@@ -1,13 +1,15 @@
 #include "PlayerShoot.h"
 #include "Screens\gameplay.h"
+#include "Setup\Powerups.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
 
 namespace Juego
 {
-	Shoot shoots[maxShoots];
+	Shoot shoots[maxShootsSpecial];
 
+	int maxShoots = 10;
 	static int midAsteroidsCount = 0;
 	static int smallAsteroidsCount = 0;
 	int destroyedAsteroidsCount = 0;
@@ -20,8 +22,8 @@ namespace Juego
 		void createShoot()
 		{
 			gameScore = 0;
-
-			for (int i = 0; i < maxShoots; i++)
+			
+			for (int i = 0; i < maxShootsSpecial; i++)
 			{
 				shoots[i].position.x = 0;
 				shoots[i].position.y = 0;
@@ -44,6 +46,14 @@ namespace Juego
 			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
 			{
 				rapidfiretimer += 1 * GetFrameTime();
+				if (powerupmaxRapidFire.activated)
+				{
+					maxShoots = 30;
+				}
+				else
+				{
+					maxShoots = 10;
+				}
 				for (int i = 0; i < maxShoots; i++)
 				{
 					
@@ -68,6 +78,14 @@ namespace Juego
 		}
 		void ShootUpdate()
 		{
+			if (powerupmaxRapidFire.activated)
+			{
+				rapidFireRate = 0.05;
+			}
+			else
+			{
+				rapidFireRate = 0.15;
+			}
 			// Shot logic
 			for (int i = 0; i < maxShoots; i++)
 			{

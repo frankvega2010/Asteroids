@@ -18,8 +18,10 @@ namespace Juego
 		Color color;
 	};
 
-	const int maxShoots = 10;
-	extern Shoot shoots[maxShoots];
+	extern int maxShoots;
+	const int maxShootsSpecial = 30;
+
+	extern Shoot shoots[maxShootsSpecial];
 	extern int gameScore;
 	extern int destroyedAsteroidsCount;
 
