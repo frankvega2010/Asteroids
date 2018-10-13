@@ -12,6 +12,8 @@ namespace Juego
 		buttonQuitToMenu
 	};
 
+	extern bool gameON;
+
 	extern int scoreMultiplier;
 	extern bool isExplosionActive;
 

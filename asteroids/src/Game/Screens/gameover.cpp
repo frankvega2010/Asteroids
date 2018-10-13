@@ -198,7 +198,7 @@ namespace Juego
 			DrawText(FormatText("Final Time:"), buttons[0].position.x + 20, buttons[1].position.y + 135, 40, YELLOW);
 			DrawTimer(2.2f, 1.9f, 1.45);
 
-			if (isExplosionActive)
+			if (isExplosionActive && !(player.isAlive))
 			{
 				DrawTexturePro(shipExplosion, { 0.0f,0.0f, 60,60 }, { player.position.x,player.position.y, increasingExplosionSize,increasingExplosionSize }, { 0,0 }, 0, Fade(WHITE, increasingExplosionFade));
 			}

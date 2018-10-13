@@ -15,7 +15,7 @@ namespace Juego
 	static int buttonSelect = 0;
 	static Color optionColor = RED;
 
-	static bool gameON = true;
+	bool gameON = true;
 	static bool gamePaused = false;
 	
 	static bool timerON = true;

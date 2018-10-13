@@ -286,7 +286,7 @@ namespace Juego
 			//EXPLOSION SPRITES DRAW
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
-				if (asteroidsBig[i].isExplosionActive)
+				if (asteroidsBig[i].isExplosionActive && gameON)
 				{
 					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, asteroidsBig[i].increasingExplosionSize,asteroidsBig[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsBig[i].increasingExplosionFade));
 				}
@@ -294,7 +294,7 @@ namespace Juego
 
 			for (int i = 0; i < asteroidsMediumLimit; i++)
 			{
-				if (asteroidsMedium[i].isExplosionActive)
+				if (asteroidsMedium[i].isExplosionActive && gameON)
 				{
 					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, asteroidsMedium[i].increasingExplosionSize,asteroidsMedium[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsMedium[i].increasingExplosionFade));
 				}
@@ -302,7 +302,7 @@ namespace Juego
 
 			for (int i = 0; i < asteroidsSmallLimit; i++)
 			{
-				if (asteroidsSmall[i].isExplosionActive)
+				if (asteroidsSmall[i].isExplosionActive && gameON)
 				{
 					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, asteroidsSmall[i].increasingExplosionSize,asteroidsSmall[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsSmall[i].increasingExplosionFade));
 				}
