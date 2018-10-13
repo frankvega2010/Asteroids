@@ -423,7 +423,7 @@ namespace Juego
 				}
 				else
 				{
-					DrawText(FormatText("0"), screenWidth / widthvalue1, screenHeight / 14, 40, YELLOW);
+					DrawText(FormatText("0"), screenWidth / widthvalue1, screenHeight / heightvalue1, 40, YELLOW);
 					DrawText(FormatText("%i:", matchMinutes), screenWidth / (widthvalue2 + 0.15), screenHeight / heightvalue1, 40, YELLOW);
 				}
 			}
