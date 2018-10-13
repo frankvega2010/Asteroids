@@ -156,6 +156,7 @@ XCOPY "$(SolutionDir)res" "$(TargetDir)res" /E /Y /S</Command>
     <ClCompile Include="..\src\Game\Setup\Game.cpp" />
     <ClCompile Include="..\src\Game\Setup\Player.cpp" />
     <ClCompile Include="..\src\Game\Setup\PlayerShoot.cpp" />
+    <ClCompile Include="..\src\Game\Setup\Powerups.cpp" />
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +170,7 @@ XCOPY "$(SolutionDir)res" "$(TargetDir)res" /E /Y /S</Command>
     <ClInclude Include="..\src\Game\Setup\Game.h" />
     <ClInclude Include="..\src\Game\Setup\Player.h" />
     <ClInclude Include="..\src\Game\Setup\PlayerShoot.h" />
+    <ClInclude Include="..\src\Game\Setup\Powerups.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

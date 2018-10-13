@@ -55,6 +55,9 @@
     <ClCompile Include="..\src\Game\Screens\controls.cpp">
       <Filter>Game\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Game\Setup\Powerups.cpp">
+      <Filter>Game\Setup</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game\Setup\Game.h">
@@ -86,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Game\Screens\controls.h">
       <Filter>Game\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Game\Setup\Powerups.h">
+      <Filter>Game\Setup</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

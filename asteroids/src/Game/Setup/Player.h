@@ -14,6 +14,7 @@ namespace Juego
 		int score;
 		bool isAlive;
 		bool inputActive;
+		Color textureTint;
 	};
 
 	struct Circle {

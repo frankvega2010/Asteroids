@@ -47,6 +47,7 @@ namespace Juego
 	Sound ship_explode01;
 	Sound ship_shoot01;
 	Sound asteroid_explode01;
+	Sound powerup01;
 
 	Music ship_rocket01;
 

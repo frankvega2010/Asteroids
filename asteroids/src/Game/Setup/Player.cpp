@@ -45,6 +45,7 @@ namespace Juego
 			player.defaultSpeed = 300.0f;
 			player.isAlive = true;
 			player.inputActive = false;
+			player.textureTint = WHITE;
 
 		}
 
@@ -118,11 +119,11 @@ namespace Juego
 			DrawTriangle(v1, v2, v3, MAROON);
 			if (player.inputActive)
 			{
-				DrawTexturePro(shipMoving, shipMovingSource, shipMovingDestination, shipOrigin, rotationAngle*RAD2DEG, WHITE);
+				DrawTexturePro(shipMoving, shipMovingSource, shipMovingDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
 			}
 			else
 			{
-				DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, rotationAngle*RAD2DEG, WHITE);
+				DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
 			}
 			
 			

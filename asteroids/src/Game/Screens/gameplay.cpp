@@ -4,6 +4,7 @@
 #include "Setup\Player.h"
 #include "Setup\Asteroid.h"
 #include "Setup\PlayerShoot.h"
+#include "Setup\Powerups.h"
 
 namespace Juego
 {
@@ -165,6 +166,7 @@ namespace Juego
 			createPlayer();
 			createShoot();
 			createCollisionCircle();
+			createPowerups();
 
 
 			//collisionCircle.active = true;
@@ -173,6 +175,7 @@ namespace Juego
 		void UpdateGameplayScreen()
 		{
 			UpdateMusicStream(ship_rocket01);
+			PowerupsUpdate();
 			player.inputActive = false;
 
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
@@ -242,7 +245,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsBigLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active && !powerupInvincibility.activated)
 					{
 					#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -259,7 +262,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsMediumLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active && !powerupInvincibility.activated)
 					{
 						#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -276,7 +279,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsSmallLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active && !powerupInvincibility.activated)
 					{
 						#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -360,6 +363,9 @@ namespace Juego
 			asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
 			SetSoundVolume(asteroid_explode01, 0.3);
 
+			powerup01 = LoadSound("res/sounds/powerup01.wav");
+			SetSoundVolume(powerup01, 0.4);
+
 #endif
 			isScreenFinished = false;
 		}
@@ -380,9 +386,11 @@ namespace Juego
 			#ifdef AUDIO
 			StopSound(asteroid_explode01);
 			StopSound(ship_shoot01);
+			StopSound(powerup01);
 			StopMusicStream(ship_rocket01);
 			UnloadSound(asteroid_explode01);
 			UnloadSound(ship_shoot01);
+			UnloadSound(powerup01);
 			UnloadMusicStream(ship_rocket01);
 			#endif
 		}
@@ -448,6 +456,7 @@ namespace Juego
 			collisionCircleDraw();
 			
 			AsteroidDraw();
+			PowerupsDraw();
 			ShootDraw();
 			playerDraw();
 			DrawText(FormatText("Eliminations: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);

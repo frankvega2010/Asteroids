@@ -51,6 +51,7 @@ namespace Juego
 	extern Sound ship_explode01;
 	extern Sound ship_shoot01;
 	extern Sound asteroid_explode01;
+	extern Sound powerup01;
 
 	extern Music ship_rocket01;
 
