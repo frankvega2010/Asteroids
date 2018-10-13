@@ -46,17 +46,8 @@ namespace Juego
 			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
 			{
 				rapidfiretimer += 1 * GetFrameTime();
-				if (powerupmaxRapidFire.activated)
-				{
-					maxShoots = 30;
-				}
-				else
-				{
-					maxShoots = 10;
-				}
 				for (int i = 0; i < maxShoots; i++)
 				{
-					
 					if (rapidfiretimer > rapidFireRate)
 					{
 						if (!shoots[i].active)
@@ -65,10 +56,10 @@ namespace Juego
 							PlaySound(ship_shoot01);
 							#endif
 							shoots[i].position = { player.position.x + sinf(player.rotation)*(shipHeight), player.position.y - cosf(player.rotation)*(shipHeight) };
-							shoots[i].active = true;
 							shoots[i].speed.x = 2.0*sin(player.rotation)*player.defaultSpeed;
 							shoots[i].speed.y = 2.0*cos(player.rotation)*player.defaultSpeed;
 							shoots[i].rotation = player.rotation;
+							shoots[i].active = true;
 							rapidfiretimer = 0;
 							break;
 						}
@@ -78,12 +69,14 @@ namespace Juego
 		}
 		void ShootUpdate()
 		{
-			if (powerupmaxRapidFire.activated)
+			if (powerups[MaxRapidFire].activated)
 			{
+				maxShoots = 30;
 				rapidFireRate = 0.05;
 			}
 			else
 			{
+				maxShoots = 10;
 				rapidFireRate = 0.15;
 			}
 			// Shot logic

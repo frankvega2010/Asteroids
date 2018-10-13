@@ -175,7 +175,7 @@ namespace Juego
 		void UpdateGameplayScreen()
 		{
 			UpdateMusicStream(ship_rocket01);
-			PowerupsUpdate();
+			
 			player.inputActive = false;
 
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
@@ -234,6 +234,7 @@ namespace Juego
 				playerUpdate();
 				collisionCircleUpdate();
 				ShootUpdate();
+				PowerupsUpdate();
 				AsteroidUpdate();
 				
 
@@ -245,7 +246,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsBigLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active && !powerupInvincibility.activated)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active && !powerups[Invicibility].activated)
 					{
 					#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -262,7 +263,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsMediumLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active && !powerupInvincibility.activated)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active && !powerups[Invicibility].activated)
 					{
 						#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -279,7 +280,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsSmallLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active && !powerupInvincibility.activated)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active && !powerups[Invicibility].activated)
 					{
 						#ifdef AUDIO
 						//PlaySound(ship_explode01);

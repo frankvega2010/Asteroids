@@ -4,16 +4,29 @@
 
 namespace Juego
 {
+	enum PowerupsNames
+	{
+		Invicibility,
+		MaxRapidFire
+	};
+
 	struct Powerup {
 		Vector2 position;
 		Vector2 speed;
 		int radius;
 		bool activated;
 		bool onScreen;
+		float useTimer;
+		int useCountdown;
+		float spawnTimer;
+		int spawnCountdown;
 	};
 
-	extern Powerup powerupInvincibility;
-	extern Powerup powerupmaxRapidFire;
+	const int maxPowerups = 2;
+	extern Powerup powerups[maxPowerups];
+
+	//extern Powerup powerupInvincibility;
+	//extern Powerup powerupmaxRapidFire;
 
 	namespace Gameplay_Section
 	{

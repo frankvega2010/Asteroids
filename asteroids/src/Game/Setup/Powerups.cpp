@@ -4,151 +4,103 @@
 
 namespace Juego
 {
-	Powerup powerupInvincibility;
-	Powerup powerupmaxRapidFire;
+	Powerup powerups[maxPowerups];
 
 	namespace Gameplay_Section
 	{
-		static float powerupMaxRapidFireSpawnTimer = 0;
-		static int powerupMaxRapidFireSpawn = 25;
-
-		static float powerupMaxRapidFireTimer = 0;
-		static int powerupMaxRapidFireTimeCountdown = 6;
-
-
-		static float powerupInvicibilitySpawnTimer = 0;
-		static int powerupInvicibilitySpawn = 15;
-
-		static float powerupInvincibilityTimer = 0;
-		static int powerupInvincibilityTimeCountdown = 4;
-
 		void createPowerups()
 		{
-			powerupInvincibility.activated = false;
-			powerupInvincibility.onScreen = true;
-			powerupInvincibility.position = { (float)(GetRandomValue(0.0, screenWidth)),(float)(GetRandomValue(0.0, screenHeight)) };
-			powerupInvincibility.radius = 10;
-			powerupInvincibility.speed = {0,0};
-
-			powerupmaxRapidFire.activated = false;
-			powerupmaxRapidFire.onScreen = true;
-			powerupmaxRapidFire.position = { (float)(GetRandomValue(0.0, screenWidth)),(float)(GetRandomValue(0.0, screenHeight)) };
-			powerupmaxRapidFire.radius = 10;
-			powerupmaxRapidFire.speed = { 0,0 };
+			for (int i = 0; i < maxPowerups; i++)
+			{
+				powerups[i].activated = false;
+				powerups[i].onScreen = false;
+				powerups[i].position = { (float)(GetRandomValue(0.0, screenWidth)),(float)(GetRandomValue(0.0, screenHeight)) };
+				powerups[i].radius = 10;
+				powerups[i].speed = { 0,0 };
+				powerups[i].useTimer = 0;
+				powerups[i].useCountdown = 5;
+				powerups[i].spawnTimer = 0;
+				powerups[i].spawnCountdown = GetRandomValue(15, 30);
+			}
 		}
 
-		void PowerupsUpdate() // hacer un array!
+		void PowerupsUpdate()
 		{
-			if (!powerupmaxRapidFire.onScreen)
+			for (int i = 0; i < maxPowerups; i++)
 			{
-				powerupMaxRapidFireSpawnTimer += 1 * GetFrameTime();
-				if (powerupMaxRapidFireSpawnTimer  > 1)
+				if (!powerups[i].onScreen)
 				{
-					powerupMaxRapidFireSpawnTimer = 0;
-					powerupMaxRapidFireSpawn--;
-					if (powerupMaxRapidFireSpawn < 0)
+					powerups[i].spawnTimer += 1 * GetFrameTime();
+					if (powerups[i].spawnTimer  > 1)
 					{
-						powerupMaxRapidFireSpawn = 25;
-						powerupmaxRapidFire.onScreen = true;
+						powerups[i].spawnTimer = 0;
+						powerups[i].spawnCountdown--;
+						if (powerups[i].spawnCountdown < 0)
+						{
+							powerups[i].spawnCountdown = GetRandomValue(15, 30);
+							powerups[i].onScreen = true;
+						}
 					}
 				}
-			}
 
-			if (powerupmaxRapidFire.activated)
-			{
-				powerupMaxRapidFireTimer += 1 * GetFrameTime();
-			}
-
-			if (powerupMaxRapidFireTimer > 1)
-			{
-				powerupMaxRapidFireTimer = 0;
-				powerupMaxRapidFireTimeCountdown--;
-			}
-
-			if (powerupMaxRapidFireTimeCountdown < 0)
-			{
-				player.textureTint = WHITE;
-				powerupmaxRapidFire.activated = false;
-				powerupMaxRapidFireTimeCountdown = 6;
-			}
-
-			if (!powerupInvincibility.onScreen)
-			{
-				powerupInvicibilitySpawnTimer += 1 * GetFrameTime();
-				if (powerupInvicibilitySpawnTimer > 1)
+				if (powerups[i].activated)
 				{
-					powerupInvicibilitySpawnTimer = 0;
-					powerupInvicibilitySpawn--;
-					if (powerupInvicibilitySpawn < 0)
-					{
-						powerupInvicibilitySpawn = 15;
-						powerupInvincibility.onScreen = true;
-					}
+					powerups[i].useTimer += 1 * GetFrameTime();
 				}
-			}
 
-			if (powerupInvincibility.activated)
-			{
-				powerupInvincibilityTimer += 1 * GetFrameTime();
-			}
+				if (powerups[i].useTimer> 1)
+				{
+					powerups[i].useTimer = 0;
+					powerups[i].useCountdown--;
+				}
 
-			if (powerupInvincibilityTimer > 1)
-			{
-				powerupInvincibilityTimer = 0;
-				powerupInvincibilityTimeCountdown--;
-			}
+				if (powerups[i].useCountdown < 0)
+				{
+					player.textureTint = WHITE;
+					powerups[i].activated = false;
+					powerups[i].useCountdown = 5;
+				}
 
+				switch (i)
+				{
+				case Invicibility: if (powerups[Invicibility].activated) player.textureTint = RED; break;
+				case MaxRapidFire: if (powerups[MaxRapidFire].activated) player.textureTint = GOLD; break;
+				}
 
-			if (powerupInvincibilityTimeCountdown < 0)
-			{
-				player.textureTint = WHITE;
-				powerupInvincibility.activated = false;
-				powerupInvincibilityTimeCountdown = 4;
-			}
+				if (powerups[Invicibility].activated && powerups[MaxRapidFire].activated) player.textureTint = LIME;
 
-			if (CheckCollisionCircles(powerupInvincibility.position, powerupInvincibility.radius, collisionCircle.position, collisionCircle.radius) && powerupInvincibility.onScreen)
-			{
-				powerupInvicibilitySpawn = 15;
-				powerupInvincibilityTimer = 0;
-				player.textureTint = RED;
-				PlaySound(powerup01);
-				powerupInvincibility.activated = true;
-				powerupInvincibility.onScreen = false;	
-				powerupInvincibility.position = { (float)(GetRandomValue(0.0, screenWidth)),(float)(GetRandomValue(0.0, screenHeight)) };
-			}
+				if (CheckCollisionCircles(powerups[i].position, powerups[i].radius, collisionCircle.position, collisionCircle.radius) && powerups[i].onScreen)
+				{
+					powerups[i].useTimer = 0;
 
-			if (CheckCollisionCircles(powerupmaxRapidFire.position, powerupmaxRapidFire.radius, collisionCircle.position, collisionCircle.radius) && powerupmaxRapidFire.onScreen)
-			{
-				powerupMaxRapidFireSpawn = 25;
-				powerupMaxRapidFireTimer = 0;
-				player.textureTint = GOLD;
-				PlaySound(powerup01);
-				powerupmaxRapidFire.activated = true;
-				powerupmaxRapidFire.onScreen = false;
-				powerupmaxRapidFire.position = { (float)(GetRandomValue(0.0, screenWidth)),(float)(GetRandomValue(0.0, screenHeight)) };
+					PlaySound(powerup01);
+					powerups[i].activated = true;
+					powerups[i].onScreen = false;
+					powerups[i].position = { (float)(GetRandomValue(0.0, screenWidth)),(float)(GetRandomValue(0.0, screenHeight)) };
+				}
 			}
 		}
 
 		void PowerupsDraw()
 		{
-			if (powerupInvincibility.activated)
+			if (powerups[Invicibility].activated)
 			{
-				DrawText(FormatText("Invincibility: %i", powerupInvincibilityTimeCountdown), screenWidth / 1.5, screenHeight / 14, 40, YELLOW);
+				DrawText(FormatText("Invincibility: %i", powerups[Invicibility].useCountdown), screenWidth / 1.5, screenHeight / 6, 40, YELLOW);
 			}
 
-			if (powerupmaxRapidFire.activated)
+			if (!powerups[Invicibility].activated && powerups[Invicibility].onScreen)
 			{
-				DrawText(FormatText("Max Rapid Fire: %i", powerupMaxRapidFireTimeCountdown), screenWidth / 1.5, screenHeight / 14, 40, YELLOW);
-			}
-			
-			if (!powerupInvincibility.activated && powerupInvincibility.onScreen)
-			{
-				DrawCircleV(powerupInvincibility.position, powerupInvincibility.radius, RED);
+				DrawCircleV(powerups[Invicibility].position, powerups[Invicibility].radius, RED);
 			}
 
-			if (!powerupmaxRapidFire.activated && powerupmaxRapidFire.onScreen)
+			if (powerups[MaxRapidFire].activated)
 			{
-				DrawCircleV(powerupmaxRapidFire.position, powerupmaxRapidFire.radius, GOLD);
+				DrawText(FormatText("Max Rapid Fire: %i", powerups[MaxRapidFire].useCountdown), screenWidth / 1.5, screenHeight / 4.5, 40, YELLOW);
+			}
+
+			if (!powerups[MaxRapidFire].activated && powerups[MaxRapidFire].onScreen)
+			{
+				DrawCircleV(powerups[MaxRapidFire].position, powerups[MaxRapidFire].radius, GOLD);
 			}
 		}
 	}
