@@ -144,7 +144,7 @@ namespace Juego
 						DrawText("of Asteroids!", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					case 1:
-						DrawText("Learn the keyboard scheme ", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("Learn how to play ", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
 						DrawText("here!", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					case 2:

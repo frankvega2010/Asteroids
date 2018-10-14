@@ -10,10 +10,12 @@ using namespace Gameplay_Section;
 
 namespace Juego
 {
-	static const int maxButtonsControls = 1;
+	static const int maxButtonsControls = 2;
 
 	static Buttons buttonsControls[maxButtonsControls];
 	static int buttonSelect = 0;
+	static int buttonDistance_Controls = 0;
+	static bool moreControls = false;
 
 	Image controlSchemeImage;
 	Texture2D controlScheme;
@@ -25,12 +27,13 @@ namespace Juego
 			for (int i = 0; i < maxButtonsControls; i++)
 			{
 				buttonsControls[i].position.x = (float)screenWidth / 90.0f;
-				buttonsControls[i].position.y = (float)screenHeight / 1.1f; //+ buttonDistance_Controls;
+				buttonsControls[i].position.y = (float)screenHeight / 1.4f + buttonDistance_Controls;
 				buttonsControls[i].width = (float)screenWidth / 5.0f;
 				buttonsControls[i].height = (float)screenHeight / 12.0f;
 				buttonsControls[i].selected = false;
 				buttonsControls[i].defaultColor = RED;
 				buttonsControls[i].messageColor = BLANK;
+				buttonDistance_Controls = buttonDistance_Controls + 100;
 			}
 		}
 
@@ -75,11 +78,14 @@ namespace Juego
 					switch (i)
 					{
 					case 0:
+						moreControls =! moreControls;
+						break;
+					case 1:
 						buttonOption = buttonGoMenu;
+						isScreenFinished = true;
 						break;
 					}
 					buttonsControls[i].selected = false;
-					isScreenFinished = true;
 				}
 			}
 		}
@@ -125,9 +131,9 @@ namespace Juego
 
 					switch (i)
 					{
-					case 0:
-						DrawText("Click or Enter to go back!", buttonsControls[i].position.x + 300, buttonsControls[i].position.y, defaultFontSize / 2, buttonsControls[i].messageColor);
-						DrawText("", buttonsControls[i].position.x + 300, buttonsControls[i].position.y + 50, defaultFontSize / 2, buttonsControls[i].messageColor);
+					case 1:
+						DrawText("Click or Enter ", buttonsControls[i].position.x + 300, buttonsControls[i].position.y, defaultFontSize / 2, buttonsControls[i].messageColor);
+						DrawText("to go back!", buttonsControls[i].position.x + 300, buttonsControls[i].position.y + 50, defaultFontSize / 2, buttonsControls[i].messageColor);
 						break;
 					}
 				}
@@ -137,16 +143,32 @@ namespace Juego
 				}
 			}
 
-			DrawText(FormatText("MENU"), buttonsControls[0].position.x + 50, buttonsControls[0].position.y + 5, defaultFontSize, buttonsControls[0].defaultColor);
+			//More Controls Text
+			if (moreControls)
+			{
+				DrawText(FormatText("How to Play"), screenWidth / 18, 20, defaultFontSize, WHITE);
+				DrawText(FormatText("Destroy all asteroids in the least amount of time!"), screenWidth / 18, screenHeight / 8, defaultFontSize / 1.8, WHITE);
+				DrawText(FormatText("Powerups"), screenWidth / 18, screenHeight / 4.5, defaultFontSize, WHITE);
+				DrawText(FormatText("There are 2 powerups which will help you get a highscore"), screenWidth / 18, screenHeight / 3, defaultFontSize / 1.8, WHITE);
+				DrawText(FormatText("Invincibility Powerup"), screenWidth / 18, screenHeight / 2.5, defaultFontSize / 1.8, RED);
+				DrawText(FormatText("Makes you invincible to any asteroid for 5 seconds."), screenWidth / 18, screenHeight / 2.2, defaultFontSize / 1.8, RED);
+				DrawText(FormatText("Max Rapid Fire Powerup"), screenWidth / 18, screenHeight / 1.9, defaultFontSize / 1.8, GOLD);
+				DrawText(FormatText("You will be able to shoot more quickly for 5 seconds."), screenWidth / 18, screenHeight / 1.7, defaultFontSize / 1.8, GOLD);
+			}
+
+			DrawText(FormatText("MORE"), buttonsControls[0].position.x + 50, buttonsControls[0].position.y + 5, defaultFontSize, buttonsControls[0].defaultColor);
+			DrawText(FormatText("MENU"), buttonsControls[1].position.x + 50, buttonsControls[1].position.y + 5, defaultFontSize, buttonsControls[1].defaultColor);
 
 			// Testing Images
 			backgroundGameSource = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
 			backgroundGameDestination = { 0,0, (float)screenWidth,(float)screenHeight };
 			backgroundGameOrigin = { 0,0 };
 
-			DrawTexturePro(controlScheme, backgroundGameSource, backgroundGameDestination, backgroundGameOrigin, 0, WHITE);
-			//DrawTexture(scheme_arrows01, 0, 0, WHITE);
-			//DrawTexture(scheme_sign01, 350, -100, WHITE);
+			if (!moreControls)
+			{
+				DrawTexturePro(controlScheme, backgroundGameSource, backgroundGameDestination, backgroundGameOrigin, 0, WHITE);
+			}
+			
 		}
 
 		bool FinishControlsScreen()
@@ -157,6 +179,7 @@ namespace Juego
 		void DeInitControlsResources()
 		{
 			UnloadTexture(controlScheme);
+			buttonDistance_Controls = 0;
 		}
 	}
 }
