@@ -96,6 +96,10 @@ namespace Juego
 
 		void UpdateSettingsScreen()
 		{
+			#ifdef AUDIO
+			UpdateMusicStream(song_alert);
+			#endif
+
 			AsteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 

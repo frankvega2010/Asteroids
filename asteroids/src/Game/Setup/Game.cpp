@@ -50,6 +50,7 @@ namespace Juego
 	Sound powerup01;
 
 	Music ship_rocket01;
+	Music song_alert;
 
 	#endif
 	void DrawBackground()
@@ -102,6 +103,8 @@ namespace Juego
 
 		#ifdef AUDIO
 		InitAudioDevice();
+		song_alert = LoadMusicStream("res/music/alert.ogg");
+		SetMusicVolume(song_alert, 0.80);
 		#endif
 
 		InitMenuScreen();
@@ -150,7 +153,7 @@ namespace Juego
 				case buttonPlay:
 				{
 					#ifdef AUDIO
-										//StopMusicStream(pong_menu_song);
+					StopMusicStream(song_alert);
 					#endif
 					RestartPhase();
 					gameScreen = Play;
@@ -178,7 +181,7 @@ namespace Juego
 				case buttonQuit:
 				{
 					#ifdef AUDIO
-										//StopMusicStream(pong_menu_song);
+					StopMusicStream(song_alert);		//StopMusicStream(pong_menu_song);
 					#endif
 
 					gameScreen = 0;

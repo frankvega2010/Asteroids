@@ -37,6 +37,10 @@ namespace Juego
 
 		void InitMenuScreen()
 		{
+			#ifdef AUDIO
+			PlayMusicStream(song_alert);
+			#endif
+
 			createMenuButtons();
 			//EnableCursor();
 			//ShowCursor();
@@ -97,7 +101,7 @@ namespace Juego
 		void UpdateMenuScreen()
 		{
 			#ifdef AUDIO
-			// audio code
+			UpdateMusicStream(song_alert);
 			#endif
 			AsteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };

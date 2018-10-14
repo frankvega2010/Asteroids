@@ -86,7 +86,7 @@ namespace Juego
 		void UpdateCreditsScreen()
 		{
 			#ifdef AUDIO
-								// Audio Code
+			UpdateMusicStream(song_alert);
 			#endif
 			
 			

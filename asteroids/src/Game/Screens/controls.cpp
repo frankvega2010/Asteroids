@@ -87,7 +87,7 @@ namespace Juego
 		void UpdateControlsScreen()
 		{
 			#ifdef AUDIO
-						// audio code
+			UpdateMusicStream(song_alert);
 			#endif
 			AsteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };

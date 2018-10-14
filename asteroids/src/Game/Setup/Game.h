@@ -54,6 +54,7 @@ namespace Juego
 	extern Sound powerup01;
 
 	extern Music ship_rocket01;
+	extern Music song_alert;
 
 	#endif
 
