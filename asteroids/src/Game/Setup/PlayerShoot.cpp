@@ -1,6 +1,7 @@
 #include "PlayerShoot.h"
 #include "Screens\gameplay.h"
 #include "Setup\Powerups.h"
+#include "Screens\settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -13,8 +14,8 @@ namespace Juego
 	static int midAsteroidsCount = 0;
 	static int smallAsteroidsCount = 0;
 	int destroyedAsteroidsCount = 0;
-	static float rapidfiretimer = 0;
-	static float rapidFireRate = 0.15;
+	float rapidfiretimer = 0;
+	float rapidFireRate = 0.15;
 	int gameScore = 0; // llevar a gameplay?
 
 	namespace Gameplay_Section
@@ -30,7 +31,10 @@ namespace Juego
 				shoots[i].speed.x = 0;
 				shoots[i].speed.y = 0;
 				shoots[i].rotation = 0;
-				shoots[i].radius = 2;
+
+				if (resolutionNormal) shoots[i].radius = 2;
+				else if (resolutionSmall) shoots[i].radius = 1;
+				
 				shoots[i].lifespan = 0;
 				shoots[i].color = WHITE;
 				shoots[i].active = false;
@@ -56,11 +60,26 @@ namespace Juego
 							PlaySound(ship_shoot01);
 							#endif
 							shoots[i].position = { player.position.x + sinf(player.rotation)*(shipHeight), player.position.y - cosf(player.rotation)*(shipHeight) };
-							shoots[i].speed.x = 2.0*sin(player.rotation)*player.defaultSpeed;
-							shoots[i].speed.y = 2.0*cos(player.rotation)*player.defaultSpeed;
+
+							if (resolutionNormal && !(resolutionBig))
+							{
+								shoots[i].speed.x = 2.0*sin(player.rotation)*player.defaultSpeed;
+								shoots[i].speed.y = 2.0*cos(player.rotation)*player.defaultSpeed;
+							}
+							else if (resolutionSmall)
+							{
+								shoots[i].speed.x = 1.5*sin(player.rotation)*player.defaultSpeed;
+								shoots[i].speed.y = 1.5*cos(player.rotation)*player.defaultSpeed;
+							}
+							else if (resolutionNormal && resolutionBig)
+							{
+								shoots[i].speed.x = 2.5*sin(player.rotation)*player.defaultSpeed;
+								shoots[i].speed.y = 2.5*cos(player.rotation)*player.defaultSpeed;
+							}
+							
 							shoots[i].rotation = player.rotation;
-							shoots[i].active = true;
 							rapidfiretimer = 0;
+							shoots[i].active = true;
 							break;
 						}
 					}		
@@ -69,7 +88,7 @@ namespace Juego
 		}
 		void ShootUpdate()
 		{
-			if (powerups[MaxRapidFire].activated)
+			/*if (powerups[MaxRapidFire].activated)
 			{
 				maxShoots = 30;
 				rapidFireRate = 0.05;
@@ -78,7 +97,7 @@ namespace Juego
 			{
 				maxShoots = 10;
 				rapidFireRate = 0.15;
-			}
+			}*/
 			// Shot logic
 			for (int i = 0; i < maxShoots; i++)
 			{

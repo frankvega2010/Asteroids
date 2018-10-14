@@ -4,6 +4,7 @@
 #include "Setup/Game.h"
 #include "Setup\Player.h"
 #include "Setup\Asteroid.h"
+#include "Screens\settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -26,12 +27,18 @@ namespace Juego
 				buttons[i].position.x = (float)screenWidth / 2.5f; //3.8f
 				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance;
 				buttons[i].width = (float)screenWidth / 5.0f;
-				buttons[i].height = (float)screenHeight / 12.0f;
+
+				if(resolutionNormal) buttons[i].height = (float)screenHeight / 12.0f;
+				else if(resolutionSmall) buttons[i].height = (float)screenHeight / 14.0f;
+				
 				buttons[i].selected = false;
 				buttons[i].defaultColor = RED;
 				buttons[i].messageColor = BLANK;
+				
 
-				buttonDistance = buttonDistance + 100;
+				if (resolutionNormal && !(resolutionBig)) buttonDistance = buttonDistance + 100;
+				else if (resolutionSmall) buttonDistance = buttonDistance + 50;
+				else if (resolutionBig && resolutionNormal) buttonDistance = buttonDistance + 125;
 			}
 		}
 
@@ -140,24 +147,24 @@ namespace Juego
 					switch (i)
 					{
 					case 0:
-						DrawText("Start playing a classic match", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
-						DrawText("of Asteroids!", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("Start playing a classic match", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("of Asteroids!", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					case 1:
-						DrawText("Learn how to play ", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
-						DrawText("here!", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("Learn how to play ", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("here!", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					case 2:
-						DrawText("Change different settings", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
-						DrawText("to your liking", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("Change different settings", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("to your liking", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					case 3:
-						DrawText("Get to know who made", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
-						DrawText("this game!", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("Get to know who made", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("this game!", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					case 4:
-						DrawText("Stop playing the game", buttons[i].position.x + 300, buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
-						DrawText("", buttons[i].position.x + 300, buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("Stop playing the game", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					}
 				}
@@ -171,11 +178,11 @@ namespace Juego
 			DrawText(FormatText("Simple! Asteroids"), buttons[0].position.x * 0.63f, screenHeight / 10, defaultFontSize + 20, WHITE);
 			DrawText(FormatText("By frankvega"), buttons[0].position.x * 1.4f, screenHeight / 5, defaultFontSize / 2, WHITE);
 			DrawText(FormatText("Version 0.6"), buttons[0].position.x * 0.63f, screenHeight / 5, defaultFontSize / 2, WHITE);
-			DrawText(FormatText("PLAY"), buttons[0].position.x + 50, buttons[0].position.y + 5, defaultFontSize, buttons[0].defaultColor);
+			DrawText(FormatText("PLAY"), buttons[0].position.x + 10, buttons[0].position.y + 5, defaultFontSize, buttons[0].defaultColor);
 			DrawText(FormatText("CONTROLS"), buttons[1].position.x + 8, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
 			DrawText(FormatText("SETTINGS"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);
 			DrawText(FormatText("CREDITS"), buttons[3].position.x + 10, buttons[3].position.y + 5, defaultFontSize / 1.1, buttons[3].defaultColor);
-			DrawText(FormatText("QUIT"), buttons[4].position.x + 55, buttons[4].position.y + 5, defaultFontSize, buttons[4].defaultColor);
+			DrawText(FormatText("QUIT"), buttons[4].position.x + 10, buttons[4].position.y + 5, defaultFontSize, buttons[4].defaultColor);
 			//DrawRectangle(mouse.position.x + 50, mouse.position.y, mouse.width, mouse.height, mouse.defaultColor); // placeholder if you want to use a custom Mouse Icon instead of the windows default one. If you use this remember to put Enbale and Disable Cursor.?
 		}
 

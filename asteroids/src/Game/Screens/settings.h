@@ -2,6 +2,10 @@
 #define SETTINGS_H
 namespace Juego
 {
+	extern bool resolutionSmall;
+	extern bool resolutionNormal;
+	extern bool resolutionBig;
+
 	namespace Settings_Section
 	{
 		void UpdateSettingsScreen();

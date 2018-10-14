@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "Screens\gameplay.h"
+#include "Screens\settings.h"
 
 namespace Juego
 {
@@ -16,20 +17,41 @@ namespace Juego
 	static float rotationTimerSmallAsteroids = 0;
 	static const int maxTimer = 1000;
 
+	int asteroidsSpeed = 0;
+
 	static float explosionTimer = 0;
 	static bool timerExplosionON = true;
 	
 	static Rectangle bigAsteroidSource = { 0.0f,0.0f, 90,90 };
+	static Rectangle bigAsteroidSourceSmall = { 0.0f,0.0f, 90/2,90/2 };
+
 	static Rectangle mediumAsteroidSource = { 0.0f,0.0f, 45,45 };
+	static Rectangle mediumAsteroidSourceSmall = { 0.0f,0.0f, 45/2,45/2 };
+
 	static Rectangle smallAsteroidSource = { 0.0f,0.0f, 22.5f,22.5f };
+	static Rectangle smallAsteroidSourceSmall = { 0.0f,0.0f, 22.5f/2,22.5f/2 };
 
 	static Rectangle bigAsteroidDestination;
+	static Rectangle bigAsteroidDestinationSmall;
+
 	static Rectangle mediumAsteroidDestination;
+	static Rectangle mediumAsteroidDestinationSmall;
+
 	static Rectangle smallAsteroidDestination;
+	static Rectangle smallAsteroidDestinationSmall;
 
 	static Vector2 bigAsteroidOrigin = { 45,45 };
+	static Vector2 bigAsteroidOriginSmall = { 45/2,45/2 };
+
 	static Vector2 mediumAsteroidOrigin = { 22.5f,22.5f };
+	static Vector2 mediumAsteroidOriginSmall = { 22.5f/2,22.5f/2 };
+
 	static Vector2 smallAsteroidOrigin = { 11.25f,11.25f };
+	static Vector2 smallAsteroidOriginSmall = { 11.25f/2,11.25f/2 };
+
+	static Rectangle explosionSpriteNormal = { 0.0f,0.0f, 50,50 };
+	static Rectangle explosionSpriteSmall = { 0.0f,0.0f, 50/2,50/2 };
+	static Rectangle explosionSprite;
 
 	Asteroid asteroidsSmall[asteroidsSmallLimit];
 	Asteroid asteroidsMedium[asteroidsMediumLimit];
@@ -39,6 +61,22 @@ namespace Juego
 	{
 		void createAsteroid()
 		{
+			if (resolutionNormal && !(resolutionBig))
+			{
+				asteroidsSpeed = 200;
+				explosionSprite = explosionSpriteNormal;
+			}
+			else if (resolutionSmall)
+			{
+				asteroidsSpeed = 100;
+				explosionSprite = explosionSpriteSmall;
+			}
+			else if (resolutionNormal && resolutionBig)
+			{
+				asteroidsSpeed = 250;
+				explosionSprite = explosionSpriteNormal;
+			}
+
 			rotationTimerBigAsteroids = 0;
 			rotationTimerMediumAsteroids = 0;
 			rotationTimerSmallAsteroids = 0;
@@ -79,8 +117,10 @@ namespace Juego
 					else correctRange = true;
 				}
 
-				asteroidsBig[i].speed = { speedX, speedY };
-				asteroidsBig[i].radius = 40;
+				asteroidsBig[i].speed = { speedX, speedY};
+				if (resolutionNormal) asteroidsBig[i].radius = 40;
+				else if (resolutionSmall) asteroidsBig[i].radius = 20;
+				//asteroidsBig[i].radius = 40;
 				asteroidsBig[i].active = true;
 				asteroidsBig[i].isExplosionActive = false;
 				asteroidsBig[i].increasingExplosionSize = 0;
@@ -92,7 +132,11 @@ namespace Juego
 			{
 				asteroidsMedium[i].position = { -100, -100 };
 				asteroidsMedium[i].speed = { 0, 0 };
-				asteroidsMedium[i].radius = 20;
+
+				if (resolutionNormal) asteroidsMedium[i].radius = 20;
+				else if (resolutionSmall) asteroidsMedium[i].radius = 10;
+
+				//asteroidsMedium[i].radius = 20;
 				asteroidsMedium[i].active = false;
 				asteroidsMedium[i].isExplosionActive = false;
 				asteroidsMedium[i].increasingExplosionSize = 0;
@@ -103,7 +147,11 @@ namespace Juego
 			{
 				asteroidsSmall[i].position = { -100, -100 };
 				asteroidsSmall[i].speed = { 0, 0 };
-				asteroidsSmall[i].radius = 10;
+
+				if (resolutionNormal) asteroidsSmall[i].radius = 10;
+				else if (resolutionSmall) asteroidsSmall[i].radius = 5;
+
+				//asteroidsSmall[i].radius = 10;
 				asteroidsSmall[i].active = false;
 				asteroidsSmall[i].isExplosionActive = false;
 				asteroidsSmall[i].increasingExplosionSize = 0;
@@ -238,48 +286,65 @@ namespace Juego
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
 				bigAsteroidDestination = { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90,90 };
+				bigAsteroidDestinationSmall = { asteroidsBig[i].position.x,asteroidsBig[i].position.y, 90/2,90/2 };
 
 				if (asteroidsBig[i].active)
 				{
 					DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, DARKGRAY);
-					DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, rotationTimerBigAsteroids, BLUE);
+
+					if (resolutionNormal) DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, rotationTimerBigAsteroids, BLUE);
+					else if (resolutionSmall) DrawTexturePro(asteroid, bigAsteroidSourceSmall, bigAsteroidDestinationSmall, bigAsteroidOriginSmall, rotationTimerBigAsteroids, BLUE);
+					
 				}
 				else 
 				{
 					DrawCircleV(asteroidsBig[i].position, asteroidsBig[i].radius, Fade(LIGHTGRAY, 0.3f));
-					DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, 0, DARKGRAY);
+
+					if (resolutionNormal) DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, 0, DARKGRAY);
+					else if (resolutionSmall) DrawTexturePro(asteroid, bigAsteroidSourceSmall, bigAsteroidDestinationSmall, bigAsteroidOriginSmall, 0, DARKGRAY);
+					
 				} 
 			}
 
 			for (int i = 0; i < asteroidsMediumLimit; i++)
 			{
 				mediumAsteroidDestination = { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45,45 };
+				mediumAsteroidDestinationSmall = { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, 45/2,45/2 };
 
 				if (asteroidsMedium[i].active)
 				{
 					DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, GRAY);
-					DrawTexturePro(asteroidMedium, mediumAsteroidSource, mediumAsteroidDestination, mediumAsteroidOrigin, rotationTimerMediumAsteroids, BLUE);
+
+					if (resolutionNormal) DrawTexturePro(asteroidMedium, mediumAsteroidSource, mediumAsteroidDestination, mediumAsteroidOrigin, rotationTimerMediumAsteroids, BLUE);
+					else if (resolutionSmall) DrawTexturePro(asteroidMedium, mediumAsteroidSourceSmall, mediumAsteroidDestinationSmall, mediumAsteroidOriginSmall, rotationTimerMediumAsteroids, BLUE);
 				}
 				else
 				{
 					DrawCircleV(asteroidsMedium[i].position, asteroidsMedium[i].radius, Fade(LIGHTGRAY, 0.3f));
-					DrawTexturePro(asteroidMedium, mediumAsteroidSource, mediumAsteroidDestination, mediumAsteroidOrigin, 0, DARKGRAY);
+
+					if (resolutionNormal) DrawTexturePro(asteroidMedium, mediumAsteroidSource, mediumAsteroidDestination, mediumAsteroidOrigin, 0, DARKGRAY);
+					else if (resolutionSmall) DrawTexturePro(asteroidMedium, mediumAsteroidSourceSmall, mediumAsteroidDestinationSmall, mediumAsteroidOriginSmall, 0, DARKGRAY);
 				}
 			}
 
 			for (int i = 0; i < asteroidsSmallLimit; i++)
 			{
 				smallAsteroidDestination = { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5f,22.5f };
+				smallAsteroidDestinationSmall = { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, 22.5f/2,22.5f/2 };
 
 				if (asteroidsSmall[i].active)
 				{
 					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, GRAY);
-					DrawTexturePro(asteroidSmall, smallAsteroidSource, smallAsteroidDestination, smallAsteroidOrigin, rotationTimerSmallAsteroids, BLUE);
+
+					if (resolutionNormal) DrawTexturePro(asteroidSmall, smallAsteroidSource, smallAsteroidDestination, smallAsteroidOrigin, rotationTimerSmallAsteroids, BLUE);
+					else if (resolutionSmall) DrawTexturePro(asteroidSmall, smallAsteroidSourceSmall, smallAsteroidDestinationSmall, smallAsteroidOriginSmall, rotationTimerSmallAsteroids, BLUE);
 				}
 				else
 				{
 					DrawCircleV(asteroidsSmall[i].position, asteroidsSmall[i].radius, Fade(LIGHTGRAY, 0.3f));
-					DrawTexturePro(asteroidSmall, smallAsteroidSource, smallAsteroidDestination, smallAsteroidOrigin, 0, DARKGRAY);
+
+					if (resolutionNormal) DrawTexturePro(asteroidSmall, smallAsteroidSource, smallAsteroidDestination, smallAsteroidOrigin, 0, DARKGRAY);
+					else if (resolutionSmall) DrawTexturePro(asteroidSmall, smallAsteroidSourceSmall, smallAsteroidDestinationSmall, smallAsteroidOriginSmall, 0, DARKGRAY);
 				}
 			}
 
@@ -288,7 +353,8 @@ namespace Juego
 			{
 				if (asteroidsBig[i].isExplosionActive && gameON)
 				{
-					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, asteroidsBig[i].increasingExplosionSize,asteroidsBig[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsBig[i].increasingExplosionFade));
+					if(resolutionNormal) DrawTexturePro(asteroidExplosion, explosionSprite, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, asteroidsBig[i].increasingExplosionSize,asteroidsBig[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsBig[i].increasingExplosionFade));
+					else if(resolutionSmall) DrawTexturePro(asteroidExplosion, explosionSpriteSmall, { asteroidsBig[i].position.x,asteroidsBig[i].position.y, asteroidsBig[i].increasingExplosionSize,asteroidsBig[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsBig[i].increasingExplosionFade));
 				}
 			}
 
@@ -296,7 +362,9 @@ namespace Juego
 			{
 				if (asteroidsMedium[i].isExplosionActive && gameON)
 				{
-					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, asteroidsMedium[i].increasingExplosionSize,asteroidsMedium[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsMedium[i].increasingExplosionFade));
+					if(resolutionNormal) DrawTexturePro(asteroidExplosion, explosionSprite, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, asteroidsMedium[i].increasingExplosionSize,asteroidsMedium[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsMedium[i].increasingExplosionFade));
+					else if(resolutionSmall) DrawTexturePro(asteroidExplosion, explosionSpriteSmall, { asteroidsMedium[i].position.x,asteroidsMedium[i].position.y, asteroidsMedium[i].increasingExplosionSize,asteroidsMedium[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsMedium[i].increasingExplosionFade));
+					
 				}
 			}
 
@@ -304,7 +372,8 @@ namespace Juego
 			{
 				if (asteroidsSmall[i].isExplosionActive && gameON)
 				{
-					DrawTexturePro(asteroidExplosion, { 0.0f,0.0f, 50,50 }, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, asteroidsSmall[i].increasingExplosionSize,asteroidsSmall[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsSmall[i].increasingExplosionFade));
+					if (resolutionNormal) DrawTexturePro(asteroidExplosion, explosionSprite, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, asteroidsSmall[i].increasingExplosionSize,asteroidsSmall[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsSmall[i].increasingExplosionFade));
+					else if (resolutionSmall) DrawTexturePro(asteroidExplosion, explosionSpriteSmall, { asteroidsSmall[i].position.x,asteroidsSmall[i].position.y, asteroidsSmall[i].increasingExplosionSize,asteroidsSmall[i].increasingExplosionSize }, { 0,0 }, 0, Fade(RED, asteroidsSmall[i].increasingExplosionFade));
 				}
 			}
 		}

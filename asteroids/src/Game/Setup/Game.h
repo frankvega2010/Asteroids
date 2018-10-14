@@ -35,6 +35,7 @@ namespace Juego
 	//extern Texture2D asteroidExplosion;
 
 	//game
+	extern Image asteroidImage;
 	extern Texture2D asteroid;
 	extern Texture2D asteroidMedium;
 	extern Texture2D asteroidSmall;
@@ -72,6 +73,8 @@ namespace Juego
 
 	extern bool isScreenFinished;
 
+	void checkAsteroidSprite();
+	void resolutionBackground();
 	void DrawBackground();
 	void Execute();
 }

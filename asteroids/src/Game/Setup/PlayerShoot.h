@@ -20,6 +20,8 @@ namespace Juego
 
 	extern int maxShoots;
 	const int maxShootsSpecial = 30;
+	extern float rapidfiretimer;
+	extern float rapidFireRate;
 
 	extern Shoot shoots[maxShootsSpecial];
 	extern int gameScore;

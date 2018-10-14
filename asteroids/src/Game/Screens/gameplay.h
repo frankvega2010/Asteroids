@@ -20,6 +20,8 @@ namespace Juego
 	extern Texture2D asteroidExplosion;
 	extern Texture2D ship;
 	extern Texture2D shipMoving;
+	extern Texture2D powerupMaxRapidFire;
+	extern Texture2D powerupInvincibility;
 
 	namespace Gameplay_Section
 	{

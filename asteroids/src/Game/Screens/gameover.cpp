@@ -5,6 +5,7 @@
 #include "Setup\Player.h"
 #include "Setup\Asteroid.h"
 #include "Setup\PlayerShoot.h"
+#include "Screens\settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -27,6 +28,12 @@ namespace Juego
 	static bool timerON = true;
 	static bool timerExplosionON = true;
 
+	static Rectangle shipExplosionSource = { 0.0f,0.0f, 60,60 };
+	static Rectangle shipExplosionSourceSmall = { 0.0f,0.0f,60/2,60/2 };
+
+	static Rectangle shipExplosionDestination;
+	static Vector2 shipExplosionOrigin = { 0,0 };
+
 	Texture2D shipExplosion;
 
 	namespace GameOver_Section
@@ -35,23 +42,41 @@ namespace Juego
 		{
 			for (int i = 0; i < maxButtons; i++)
 			{
-				buttons[i].position.x = (float)screenWidth / 2.4f;
+				buttons[i].position.x = (float)screenWidth / 2.5f;
 				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance;
 				buttons[i].width = (float)screenWidth / 5.0f;
-				buttons[i].height = (float)screenHeight / 12.0f;
+
+				if (resolutionNormal) buttons[i].height = (float)screenHeight / 12.0f;
+				else if (resolutionSmall) buttons[i].height = (float)screenHeight / 14.0f;
+
+				//buttons[i].height = (float)screenHeight / 12.0f;
 				buttons[i].selected = false;
 				buttons[i].defaultColor = RED;
 				buttons[i].messageColor = BLANK;
 
-				buttonDistance = buttonDistance + 100;
+				if (resolutionNormal && !(resolutionBig)) buttonDistance = buttonDistance + 100;
+				else if (resolutionSmall) buttonDistance = buttonDistance + 50;
+				else if (resolutionBig && resolutionNormal) buttonDistance = buttonDistance + 125;
 			}
 		}
 
 		void InitGameOverScreen()
 		{
-			explosionImage = LoadImage("res/textures/explosion01.png");
-			ImageResize(&explosionImage, 60, 60);
-			shipExplosion = LoadTextureFromImage(explosionImage);
+			if (resolutionNormal)
+			{
+				explosionImage = LoadImage("res/textures/explosion01.png");
+				ImageResize(&explosionImage, 60, 60);
+				shipExplosion = LoadTextureFromImage(explosionImage);
+			}
+			else if (resolutionSmall)
+			{
+				explosionImage = LoadImage("res/textures/explosion01.png");
+				ImageResize(&explosionImage, 60/2, 60/2);
+				shipExplosion = LoadTextureFromImage(explosionImage);
+			}
+			
+
+			UnloadImage(explosionImage);
 
 			#ifdef AUDIO
 			ship_explode01 = LoadSound("res/sounds/ship_explode01fix.wav");
@@ -182,25 +207,31 @@ namespace Juego
 				DrawRectangleLines(buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height, buttons[i].defaultColor);
 			}
 
-			DrawText(FormatText("RESTART"), buttons[0].position.x + 25, buttons[0].position.y + 5, defaultFontSize / 1.3f, buttons[0].defaultColor);
-			DrawText(FormatText("QUIT"), buttons[1].position.x + 60, buttons[1].position.y + 5, defaultFontSize, buttons[1].defaultColor);
+			DrawText(FormatText("RESTART"), buttons[0].position.x + 10, buttons[0].position.y + 5, defaultFontSize / 1.3, buttons[0].defaultColor);
+			DrawText(FormatText("MENU"), buttons[1].position.x + 10, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
 
 			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit) && player.isAlive)
 			{
-				DrawText("YOU WON!", buttons[0].position.x + 20, buttons[0].position.y - 60, 40, YELLOW);
+				DrawText("YOU WON!", buttons[0].position.x, buttons[0].position.y - 60, defaultFontSize / 1.2, YELLOW);
 			}
 			else
 			{
-				DrawText("YOU LOST!", buttons[0].position.x + 20, buttons[0].position.y - 60, 40, RED);
+				DrawText("YOU LOST!", buttons[0].position.x, buttons[0].position.y - 60, defaultFontSize / 1.2, RED);
 			}
 
-			DrawText(FormatText("Final Score: %i", increasingFinalScore), buttons[0].position.x - 10, buttons[1].position.y + 90, 40, YELLOW);
-			DrawText(FormatText("Final Time:"), buttons[0].position.x + 20, buttons[1].position.y + 135, 40, YELLOW);
-			DrawTimer(2.2f, 1.9f, 1.45);
+			DrawText(FormatText("Final Score: %i", increasingFinalScore), buttons[0].position.x - (screenWidth * 0.02), buttons[1].position.y + 90, defaultFontSize / 1.2, YELLOW);
+			DrawText(FormatText("Final Time:"), buttons[0].position.x - (screenWidth * 0.02), buttons[1].position.y + 135, defaultFontSize / 1.2, YELLOW);
+			if(resolutionNormal) DrawTimer(2.2f, 1.9f, 1.45);
+			else if(resolutionSmall) DrawTimer(2.2f, 1.9f, 1.25);
 
 			if (isExplosionActive && !(player.isAlive))
 			{
-				DrawTexturePro(shipExplosion, { 0.0f,0.0f, 60,60 }, { player.position.x,player.position.y, increasingExplosionSize,increasingExplosionSize }, { 0,0 }, 0, Fade(WHITE, increasingExplosionFade));
+				shipExplosionDestination = { player.position.x,player.position.y, increasingExplosionSize,increasingExplosionSize };
+
+				if(resolutionNormal) DrawTexturePro(shipExplosion, shipExplosionSource, shipExplosionDestination, shipExplosionOrigin, 0, Fade(WHITE, increasingExplosionFade));
+				else if(resolutionSmall ) DrawTexturePro(shipExplosion, shipExplosionSourceSmall, shipExplosionDestination, shipExplosionOrigin, 0, Fade(WHITE, increasingExplosionFade));
+		
+				//DrawTexturePro(shipExplosion, { 0.0f,0.0f, 60,60 }, { player.position.x,player.position.y, increasingExplosionSize,increasingExplosionSize }, { 0,0 }, 0, Fade(WHITE, increasingExplosionFade));
 			}
 			
 		}
@@ -217,7 +248,7 @@ namespace Juego
 
 		void DeInitGameOverResources()
 		{
-			UnloadImage(explosionImage);
+			//UnloadImage(explosionImage);
 			#ifdef AUDIO
 			StopSound(ship_explode01);
 			UnloadSound(ship_explode01);

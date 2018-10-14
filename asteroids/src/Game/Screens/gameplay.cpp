@@ -5,6 +5,7 @@
 #include "Setup\Asteroid.h"
 #include "Setup\PlayerShoot.h"
 #include "Setup\Powerups.h"
+#include "Screens\settings.h"
 
 namespace Juego
 {
@@ -25,44 +26,72 @@ namespace Juego
 	static int matchMinutes = 0;
 	static int matchSeconds = 0;
 	static Color crosshairColor = WHITE;
+
+	static Rectangle pauseBoxRec;
+
 	bool isExplosionActive = false;
 	int scoreMultiplier = 5;
 
 	//Resources
-	Image shipImage;
+	Image shipImage; // make static?
 	Image shipMovingImage;
 	Image crosshairImage;
 	Image explosionImage;
+	Image powerupMaxRapidFireImage;
+	Image powerupInvincibilityImage;
 
 	Texture2D ship;
 	Texture2D shipMoving;
+
 	Texture2D crosshair;
 	Texture2D asteroidExplosion;
+
+	Texture2D powerupMaxRapidFire;
+	Texture2D powerupInvincibility;
 
 	namespace Gameplay_Section
 	{
 		static void createPauseButtons()
 		{
-			pauseButton.position.x = (float)screenWidth / 1.4f;
-			pauseButton.position.y = (float)screenHeight / 14.0f;
-			pauseButton.width = (float)screenWidth / 18.0f;
-			pauseButton.height = (float)screenHeight / 12.0f;
-			pauseButton.selected = false;
-			pauseButton.defaultColor = GOLD;
-			pauseButton.messageColor = BLANK;
 
 			for (int i = 0; i < maxButtons; i++)
 			{
-				buttons[i].position.x = (float)screenWidth / 2.4f;
-				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance;
+				buttons[i].position.x = (float)screenWidth / 2.5f;//2.4f
+				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance; //3.0f
 				buttons[i].width = (float)screenWidth / 5.0f;
-				buttons[i].height = (float)screenHeight / 12.0f;
+
+				if (resolutionNormal) buttons[i].height = (float)screenHeight / 12.0f;
+				else if (resolutionSmall) buttons[i].height = (float)screenHeight / 14.0f;
+				//buttons[i].height = (float)screenHeight / 12.0f;
+
 				buttons[i].selected = false;
 				buttons[i].defaultColor = GOLD;
 				buttons[i].messageColor = BLANK;
 
-				buttonDistance = buttonDistance + 100;
+				if (resolutionNormal && !(resolutionBig)) buttonDistance = buttonDistance + 100;
+				else if (resolutionSmall) buttonDistance = buttonDistance + 50;
+				else if (resolutionBig && resolutionNormal) buttonDistance = buttonDistance + 125;
 			}
+
+			pauseButton.position.x = (float)screenWidth / 1.4f;
+			pauseButton.position.y = (float)screenHeight / 14.0f;
+			pauseButton.width = (float)screenWidth / 18.0f;
+
+			if (resolutionNormal)
+			{
+				pauseBoxRec = { buttons[0].position.x - (screenWidth / 50), buttons[0].position.y - (screenHeight / 30), (float)screenWidth / 4.2f, (float)screenHeight / 2.5f };
+				pauseButton.height = (float)screenHeight / 12.0f;
+			}
+			else if (resolutionSmall)
+			{
+				pauseBoxRec = { buttons[0].position.x - (screenWidth / 50), buttons[0].position.y - (screenHeight / 30), (float)screenWidth / 4.2f, (float)screenHeight / 3.3f };
+				pauseButton.height = (float)screenHeight / 14.0f;
+			}
+
+			//pauseButton.height = (float)screenHeight / 12.0f;
+			pauseButton.selected = false;
+			pauseButton.defaultColor = GOLD;
+			pauseButton.messageColor = BLANK;
 		}
 
 		static void GameplayInput()
@@ -233,8 +262,8 @@ namespace Juego
 				}
 				playerUpdate();
 				collisionCircleUpdate();
-				ShootUpdate();
 				PowerupsUpdate();
+				ShootUpdate();
 				AsteroidUpdate();
 				
 
@@ -246,7 +275,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsBigLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active && !powerups[Invicibility].activated)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active && !powerups[Invincibility].activated)
 					{
 					#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -263,7 +292,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsMediumLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active && !powerups[Invicibility].activated)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active && !powerups[Invincibility].activated)
 					{
 						#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -280,7 +309,7 @@ namespace Juego
 
 				for (int i = 0; i < asteroidsSmallLimit; i++)
 				{
-					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active && !powerups[Invicibility].activated)
+					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active && !powerups[Invincibility].activated)
 					{
 						#ifdef AUDIO
 						//PlaySound(ship_explode01);
@@ -337,22 +366,59 @@ namespace Juego
 			ImageResize(&crosshairImage, 30, 30);
 			crosshair = LoadTextureFromImage(crosshairImage);
 
-			shipImage = LoadImage("res/textures/nave01.png");
-			ImageResize(&shipImage, 50, 50);
-			ship = LoadTextureFromImage(shipImage);
+			if (resolutionNormal)
+			{
+				shipImage = LoadImage("res/textures/nave01.png");
+				ImageResize(&shipImage, 50, 50);
+				ship = LoadTextureFromImage(shipImage);
 
-			shipMovingImage = LoadImage("res/textures/nave01_moving.png");
-			ImageResize(&shipMovingImage, 50, 58);//58
-			shipMoving = LoadTextureFromImage(shipMovingImage);
+				shipMovingImage = LoadImage("res/textures/nave01_moving.png");
+				ImageResize(&shipMovingImage, 50, 58);//58
+				shipMoving = LoadTextureFromImage(shipMovingImage);
 
-			explosionImage = LoadImage("res/textures/explosion01.png");
-			ImageResize(&explosionImage, 50, 50);
-			asteroidExplosion = LoadTextureFromImage(explosionImage);
+				explosionImage = LoadImage("res/textures/explosion01.png");
+				ImageResize(&explosionImage, 50, 50);
+
+				asteroidExplosion = LoadTextureFromImage(explosionImage);
+
+				powerupMaxRapidFireImage = LoadImage("res/textures/powerup02.png");
+				ImageResize(&powerupMaxRapidFireImage, 30, 30);
+				powerupMaxRapidFire = LoadTextureFromImage(powerupMaxRapidFireImage);
+
+				powerupInvincibilityImage = LoadImage("res/textures/powerup01.png");
+				ImageResize(&powerupInvincibilityImage, 30, 30);
+				powerupInvincibility = LoadTextureFromImage(powerupInvincibilityImage);
+			}
+			else if (resolutionSmall)
+			{
+				shipImage = LoadImage("res/textures/nave01.png");
+				ImageResize(&shipImage, 50/2, 50/2);
+				ship = LoadTextureFromImage(shipImage);
+
+				shipMovingImage = LoadImage("res/textures/nave01_moving.png");
+				ImageResize(&shipMovingImage, 50/2, 58/2);//58
+				shipMoving = LoadTextureFromImage(shipMovingImage);
+
+				explosionImage = LoadImage("res/textures/explosion01.png");
+				ImageResize(&explosionImage, 50/2, 50/2);
+
+				asteroidExplosion = LoadTextureFromImage(explosionImage);
+
+				powerupMaxRapidFireImage = LoadImage("res/textures/powerup02.png");
+				ImageResize(&powerupMaxRapidFireImage, 30/2, 30/2);
+				powerupMaxRapidFire = LoadTextureFromImage(powerupMaxRapidFireImage);
+
+				powerupInvincibilityImage = LoadImage("res/textures/powerup01.png");
+				ImageResize(&powerupInvincibilityImage, 30/2, 30/2);
+				powerupInvincibility = LoadTextureFromImage(powerupInvincibilityImage);
+			}
 
 			UnloadImage(crosshairImage);
 			UnloadImage(shipImage);
 			UnloadImage(explosionImage);
 			UnloadImage(shipMovingImage);
+			UnloadImage(powerupMaxRapidFireImage);
+			UnloadImage(powerupInvincibilityImage);
 
 #ifdef AUDIO
 			ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
@@ -383,6 +449,7 @@ namespace Juego
 			UnloadTexture(shipMoving);
 			UnloadTexture(crosshair);
 			UnloadTexture(asteroidExplosion);
+			UnloadTexture(powerupMaxRapidFire);
 
 			#ifdef AUDIO
 			StopSound(asteroid_explode01);
@@ -398,7 +465,10 @@ namespace Juego
 
 		void RestartPhase()
 		{
+			maxShoots = 10;
+			rapidFireRate = 0.15;
 			InitGameplayVariables();
+			createPowerups();
 			buttonDistance = 0;
 			gameON = true;
 			timerON = true;
@@ -412,41 +482,41 @@ namespace Juego
 		{
 			if (matchHours > 0) // DrawTimer?
 			{
-				DrawText(FormatText("%i:", matchHours), screenWidth / (widthvalue1 + 0.25), screenHeight / heightvalue1, 40, YELLOW);
+				DrawText(FormatText("%i:", matchHours), screenWidth / (widthvalue1 + 0.25), screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 			}
 
 			if (matchMinutes > 0)
 			{
 				if (matchMinutes > 9)
 				{
-					DrawText(FormatText("%i:", matchMinutes), screenWidth / widthvalue1, screenHeight / heightvalue1, 40, YELLOW);
+					DrawText(FormatText("%i:", matchMinutes), screenWidth / widthvalue1, screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 				}
 				else
 				{
-					DrawText(FormatText("0"), screenWidth / widthvalue1, screenHeight / heightvalue1, 40, YELLOW);
-					DrawText(FormatText("%i:", matchMinutes), screenWidth / (widthvalue2 + 0.15), screenHeight / heightvalue1, 40, YELLOW);
+					DrawText(FormatText("0"), screenWidth / widthvalue1, screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
+					DrawText(FormatText("%i:", matchMinutes), screenWidth / (widthvalue2 + 0.15), screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 				}
 			}
 			else
 			{
-				DrawText(FormatText("00:"), screenWidth / widthvalue1, screenHeight / heightvalue1, 40, YELLOW);
+				DrawText(FormatText("00:"), screenWidth / widthvalue1, screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 			}
 
 			if (matchSeconds > 0)
 			{
 				if (matchSeconds > 9)
 				{
-					DrawText(FormatText("%i", matchSeconds), screenWidth / widthvalue2, screenHeight / heightvalue1, 40, YELLOW);
+					DrawText(FormatText("%i", matchSeconds), screenWidth / widthvalue2, screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 				}
 				else
 				{
-					DrawText(FormatText("0"), screenWidth / widthvalue2, screenHeight / heightvalue1, 40, YELLOW);
-					DrawText(FormatText("%i", matchSeconds), screenWidth / (widthvalue2 - 0.10), screenHeight / heightvalue1, 40, YELLOW);
+					DrawText(FormatText("0"), screenWidth / widthvalue2, screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
+					DrawText(FormatText("%i", matchSeconds), screenWidth / (widthvalue2 - 0.10), screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 				}
 			}
 			else
 			{
-				DrawText(FormatText("00"), screenWidth / widthvalue2, screenHeight / heightvalue1, 40, YELLOW);
+				DrawText(FormatText("00"), screenWidth / widthvalue2, screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 			}
 		}
 
@@ -460,23 +530,27 @@ namespace Juego
 			PowerupsDraw();
 			ShootDraw();
 			playerDraw();
-			DrawText(FormatText("Eliminations: %i", destroyedAsteroidsCount), screenWidth / 70, screenHeight / 14, 40, YELLOW);
-			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, 40, YELLOW);
+			DrawText(FormatText("Eliminations:%i", destroyedAsteroidsCount), screenWidth / 80, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
+			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
 			DrawTimer(2.5f, 2.2f,14.0f);
 			DrawTexturePro(crosshair, { 0,0,30,30 }, { mouse.position.x,mouse.position.y,30,30 }, {15,15}, 0, crosshairColor);
 			DrawRectangleLines(pauseButton.position.x, pauseButton.position.y, pauseButton.width, pauseButton.height, pauseButton.defaultColor);
-			DrawText(FormatText("||"), pauseButton.position.x + 25, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
+
+			if (resolutionNormal && !(resolutionBig)) DrawText(FormatText(" ||"), pauseButton.position.x, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
+			else if (resolutionSmall) DrawText(FormatText(" ||"), pauseButton.position.x + 2, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
+			else if (resolutionBig && resolutionNormal) DrawText(FormatText(" ||"), pauseButton.position.x + 12, pauseButton.position.y + 15, defaultFontSize, pauseButton.defaultColor);
+			
 
 			if (!(gameON))
 			{
 				if (gamePaused)
 				{
-					DrawRectangle(buttons[0].position.x - 25, buttons[0].position.y - 25, (float)screenWidth / 4.2f, (float)screenHeight / 2.5f, DARKPURPLE);
+					DrawRectangleRec(pauseBoxRec, DARKPURPLE);
 					for (int i = 0; i < maxButtons; i++)
 					{
 						DrawRectangleLines(buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height, buttons[i].defaultColor);
 					}
-					DrawText("PAUSED", buttons[0].position.x + 50, buttons[0].position.y - 100, 40, GOLD);
+					DrawText("PAUSED", buttons[0].position.x + (screenWidth * 0.02), buttons[0].position.y - (screenHeight * 0.1), defaultFontSize / 1.2, GOLD);
 					DrawText(FormatText("CONTINUE"), buttons[0].position.x + 10, buttons[0].position.y + 5, defaultFontSize / 1.3, buttons[0].defaultColor);
 					DrawText(FormatText("RESTART"), buttons[1].position.x + 8, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
 					DrawText(FormatText("MENU"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);

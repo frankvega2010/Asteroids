@@ -15,7 +15,7 @@ namespace Juego
 		float increasingExplosionFade;
 	};
 
-	const int asteroidsSpeed = 200;
+	extern int asteroidsSpeed;
 	const int asteroidsBigLimit = 4;
 	const int asteroidsMediumLimit = 8;
 	const int asteroidsSmallLimit = 16;

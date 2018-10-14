@@ -4,6 +4,7 @@
 #include "Setup\Game.h"
 #include "Setup\Asteroid.h"
 #include "Setup\PlayerShoot.h"
+#include "Screens\settings.h"
 #include "Screens\gameplay.h"
 
 namespace Juego
@@ -14,24 +15,30 @@ namespace Juego
 	static int defaultBreakSpeed = 2.0f;
 	rocketShip player;
 	Circle collisionCircle;
-	static const int playerBaseSize = 25;
+	
 	float shipHeight = (playerBaseSize / 2) / tanf(20 * DEG2RAD);
 	float shipHeightv2 = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
+	float shipHeightv2Small = (playerBaseSize / 2) / tanf(62 * DEG2RAD);
 
 	static Rectangle shipSource = { 0.0f,0.0f, 50,50 };
+	static Rectangle shipSourceSmall = { 0.0f,0.0f, 50/2,50/2 };
+
 	static Rectangle shipMovingSource = { 0.0f,0.0f, 50,58 };
+	static Rectangle shipMovingSourceSmall = { 0.0f,0.0f, 50/2,58/2 };
+
 	static Rectangle shipDestination;
+	static Rectangle shipDestinationSmall;
+
 	static Rectangle shipMovingDestination;
+	static Rectangle shipMovingDestinationSmall;
+
 	static Vector2 shipOrigin = { 25,48 };//48 sweet spot
+	static Vector2 shipOriginSmall = { 25/2,48/2 };//48 sweet spot
 	
 	static Vector2 rotationDirection;
 	static float rotationAngle = 0.0f;
 	static Vector2 normalizedDirection = {0,0};
 	static Vector2 playerNewPosition = { 0,0 };
-
-	//Vector2 v1 = { (float)screenWidth / 2 + sinf(player.rotation)*(shipHeight), (float)screenHeight / 2 - cosf(player.rotation)*(shipHeight) };
-	//Vector2 v2 = { (float)screenWidth / 2 - cosf(player.rotation)*(playerBaseSize / 2), (float)screenHeight / 2 - sinf(player.rotation)*(playerBaseSize / 2) };
-	//Vector2 v3 = { (float)screenWidth / 2 + cosf(player.rotation)*(playerBaseSize / 2), (float)screenHeight / 2 + sinf(player.rotation)*(playerBaseSize / 2) };
 
 	namespace Gameplay_Section
 	{
@@ -53,7 +60,10 @@ namespace Juego
 		{
 			collisionCircle.position.x = player.position.x;
 			collisionCircle.position.y = player.position.y;
-			collisionCircle.radius = 15;
+
+			if(resolutionNormal) collisionCircle.radius = 15;
+			else if(resolutionSmall) collisionCircle.radius = 15/2;
+
 			collisionCircle.speed = { 0,0 };
 			collisionCircle.active = true;
 		}
@@ -103,27 +113,69 @@ namespace Juego
 		void collisionCircleUpdate()
 		{
 			// Players Collision Circle logic: movement
-			collisionCircle.position.x = player.position.x + sinf(player.rotation)*(shipHeightv2);
-			collisionCircle.position.y = player.position.y - cosf(player.rotation)*(shipHeightv2);
+			if (resolutionNormal)
+			{
+				collisionCircle.position.x = player.position.x + sinf(player.rotation)*(shipHeightv2);
+				collisionCircle.position.y = player.position.y - cosf(player.rotation)*(shipHeightv2);
+			}
+			else if (resolutionSmall)
+			{
+				collisionCircle.position.x = player.position.x + sinf(player.rotation)*(shipHeightv2Small);
+				collisionCircle.position.y = player.position.y - cosf(player.rotation)*(shipHeightv2Small);
+			}
+			
 		}
 
 		void playerDraw()
 		{
 			shipDestination = { player.position.x,player.position.y, 50,50 };
-			shipMovingDestination = { player.position.x,player.position.y, 50,58 };
-			
-			Vector2 v1 = { player.position.x + sinf(player.rotation)*(shipHeight), player.position.y - cosf(player.rotation)*(shipHeight) };
-			Vector2 v2 = { player.position.x - cosf(player.rotation)*(playerBaseSize / 2), player.position.y - sinf(player.rotation)*(playerBaseSize / 2) };
-			Vector2 v3 = { player.position.x + cosf(player.rotation)*(playerBaseSize / 2), player.position.y + sinf(player.rotation)*(playerBaseSize / 2) };
+			shipDestinationSmall = { player.position.x,player.position.y, 50/2,50/2 };
 
-			DrawTriangle(v1, v2, v3, MAROON);
+			shipMovingDestination = { player.position.x,player.position.y, 50,58 };
+			shipMovingDestinationSmall = { player.position.x,player.position.y, 50/2,58/2 };
+
+			if (resolutionNormal)
+			{
+				Vector2 v1 = { player.position.x + sinf(player.rotation)*(shipHeight), player.position.y - cosf(player.rotation)*(shipHeight) };
+				Vector2 v2 = { player.position.x - cosf(player.rotation)*(playerBaseSize / 2), player.position.y - sinf(player.rotation)*(playerBaseSize / 2) };
+				Vector2 v3 = { player.position.x + cosf(player.rotation)*(playerBaseSize / 2), player.position.y + sinf(player.rotation)*(playerBaseSize / 2) };
+
+				DrawTriangle(v1, v2, v3, MAROON);
+			}
+			else if (resolutionSmall)
+			{
+				Vector2 v1 = { player.position.x + sinf(player.rotation)*(shipHeight / 2), player.position.y - cosf(player.rotation)*(shipHeight / 2) };
+				Vector2 v2 = { player.position.x - cosf(player.rotation)*((playerBaseSize / 2) / 2), player.position.y - sinf(player.rotation)*((playerBaseSize / 2) / 2) };
+				Vector2 v3 = { player.position.x + cosf(player.rotation)*((playerBaseSize / 2) / 2), player.position.y + sinf(player.rotation)*((playerBaseSize / 2) / 2) };
+
+				DrawTriangle(v1, v2, v3, MAROON);
+			}
+
+			
+
 			if (player.inputActive)
 			{
-				DrawTexturePro(shipMoving, shipMovingSource, shipMovingDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
+				if (resolutionSmall)
+				{
+					DrawTexturePro(shipMoving, shipMovingSourceSmall, shipMovingDestinationSmall, shipOriginSmall, rotationAngle*RAD2DEG, player.textureTint);
+				}
+				else if (resolutionNormal)
+				{
+					DrawTexturePro(shipMoving, shipMovingSource, shipMovingDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
+				}
+				
 			}
 			else
 			{
-				DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
+				if (resolutionSmall)
+				{
+					DrawTexturePro(ship, shipSourceSmall, shipDestinationSmall, shipOriginSmall, rotationAngle*RAD2DEG, player.textureTint);
+				}
+				else if (resolutionNormal)
+				{
+					DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
+				}
+				
 			}
 			
 			
@@ -132,14 +184,31 @@ namespace Juego
 		#ifdef TESTING
 				void collisionCircleDraw() // only in DEBUG mode
 				{
-					DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 });
+					if (resolutionNormal)//shipHeightv2Small
+					{
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 });
+						
+					}
+					else if (resolutionSmall)
+					{
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2Small), player.position.y - cosf(player.rotation)*(shipHeightv2Small) }, collisionCircle.radius, { 100, 0, 0, 200 });
+					}
 					DrawLineEx(player.position, mouse.position, 1, YELLOW);
+					
 				}
 		#endif
 		#ifdef RELEASE
 				void collisionCircleDraw() // only in RELEASE mode
 				{
-					DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 0, 0, 0, 0 });
+					if (resolutionNormal)//shipHeightv2Small
+					{
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 0, 0, 0,0 });
+
+					}
+					else if (resolutionSmall)
+					{
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2Small), player.position.y - cosf(player.rotation)*(shipHeightv2Small) }, collisionCircle.radius, { 0, 0, 0, 0 });
+					}
 				}
 		#endif
 	}

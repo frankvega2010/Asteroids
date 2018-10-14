@@ -6,7 +6,7 @@ namespace Juego
 {
 	enum PowerupsNames
 	{
-		Invicibility,
+		Invincibility,
 		MaxRapidFire
 	};
 

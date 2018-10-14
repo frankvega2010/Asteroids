@@ -132,8 +132,8 @@ namespace Juego
 					switch (i)
 					{
 					case 1:
-						DrawText("Click or Enter ", buttonsControls[i].position.x + 300, buttonsControls[i].position.y, defaultFontSize / 2, buttonsControls[i].messageColor);
-						DrawText("to go back!", buttonsControls[i].position.x + 300, buttonsControls[i].position.y + 50, defaultFontSize / 2, buttonsControls[i].messageColor);
+						DrawText("Click or Enter ", buttonsControls[i].position.x + (screenWidth / 4.5), buttonsControls[i].position.y, defaultFontSize / 2, buttonsControls[i].messageColor);
+						DrawText("to go back!", buttonsControls[i].position.x + (screenWidth / 4.5), buttonsControls[i].position.y + 50, defaultFontSize / 2, buttonsControls[i].messageColor);
 						break;
 					}
 				}
