@@ -5,6 +5,7 @@
 #include "Screens\gameplay.h"
 #include "Setup/Asteroid.h"
 #include "Screens\controls.h"
+#include "Screens\settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -15,6 +16,9 @@ namespace Juego
 
 	static Buttons buttons[maxButtons];
 	static int buttonSelect = 0;
+
+	static bool isButtonSoundPlaying = false;
+	static int buttonSelectSaveNumber = 0;
 
 	namespace Credits_Section
 	{
@@ -34,6 +38,10 @@ namespace Juego
 
 		void InitCreditsScreen()
 		{
+			#ifdef AUDIO
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
+			#endif
 			createCreditsButtons();
 			isScreenFinished = false;
 		}
@@ -44,6 +52,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect++;
+				PlaySound(button_navigate01);
 				if (buttonSelect > maxButtons - 1)
 				{
 					buttonSelect--;
@@ -54,6 +63,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect--;
+				PlaySound(button_navigate01);
 				if (buttonSelect < 0)
 				{
 					buttonSelect++;
@@ -64,6 +74,7 @@ namespace Juego
 			{
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttons[i].selected || IsKeyPressed(KEY_ENTER) && buttons[i].selected)
 				{
+					PlaySound(button_select01);
 					switch (i)
 					{
 					case 0:
@@ -106,6 +117,21 @@ namespace Juego
 				{
 					buttons[i].defaultColor = RED;
 					buttons[i].selected = false;
+				}
+
+				if (buttonSelect != buttonSelectSaveNumber)
+				{
+					isButtonSoundPlaying = false;
+				}
+
+				if (buttonSelect == i)
+				{
+					if (!(isButtonSoundPlaying))
+					{
+						PlaySound(button_navigate01);
+						isButtonSoundPlaying = true;
+						buttonSelectSaveNumber = i;
+					}
 				}
 			}
 		}

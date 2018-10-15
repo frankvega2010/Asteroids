@@ -4,6 +4,7 @@
 #include "Setup/Game.h"
 #include "Screens\gameplay.h"
 #include "Setup/Asteroid.h"
+#include "Screens\settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -16,6 +17,9 @@ namespace Juego
 	static int buttonSelect = 0;
 	static int buttonDistance_Controls = 0;
 	static bool moreControls = false;
+
+	static bool isButtonSoundPlaying = false;
+	static int buttonSelectSaveNumber = 0;
 
 	Image controlSchemeImage;
 	Texture2D controlScheme;
@@ -46,6 +50,11 @@ namespace Juego
 			controlScheme = LoadTextureFromImage(controlSchemeImage);
 			UnloadImage(controlSchemeImage);
 
+			#ifdef AUDIO
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
+			#endif
+
 			isScreenFinished = false;
 		}
 
@@ -55,6 +64,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect++;
+				PlaySound(button_navigate01);
 				if (buttonSelect > maxButtonsControls - 1)
 				{
 					buttonSelect--;
@@ -65,6 +75,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect--;
+				PlaySound(button_navigate01);
 				if (buttonSelect < 0)
 				{
 					buttonSelect++;
@@ -75,6 +86,7 @@ namespace Juego
 			{
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttonsControls[i].selected || IsKeyPressed(KEY_ENTER) && buttonsControls[i].selected)
 				{
+					PlaySound(button_select01);
 					switch (i)
 					{
 					case 0:
@@ -111,6 +123,21 @@ namespace Juego
 				{
 					buttonsControls[i].defaultColor = RED;
 					buttonsControls[i].selected = false;
+				}
+
+				if (buttonSelect != buttonSelectSaveNumber)
+				{
+					isButtonSoundPlaying = false;
+				}
+
+				if (buttonSelect == i)
+				{
+					if (!(isButtonSoundPlaying))
+					{
+						PlaySound(button_navigate01);
+						isButtonSoundPlaying = true;
+						buttonSelectSaveNumber = i;
+					}
 				}
 			}
 		}

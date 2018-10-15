@@ -51,6 +51,9 @@ namespace Juego
 	Sound ship_shoot01;
 	Sound asteroid_explode01;
 	Sound powerup01;
+	Sound points01;
+	Sound button_navigate01;
+	Sound button_select01;
 
 	Music ship_rocket01;
 	Music song_alert;
@@ -157,6 +160,12 @@ namespace Juego
 		InitAudioDevice();
 		song_alert = LoadMusicStream("res/music/alert.ogg");
 		SetMusicVolume(song_alert, songVolume);
+
+		button_navigate01 = LoadSound("res/sounds/button_navigate01.wav");
+		SetSoundVolume(button_navigate01, soundVolume);
+
+		button_select01 = LoadSound("res/sounds/button_select01.wav");
+		SetSoundVolume(button_select01, soundVolume);
 		#endif
 
 		InitMenuScreen();
@@ -330,6 +339,10 @@ namespace Juego
 	static void DeInit()
 	{
 		#ifdef AUDIO
+		StopSound(button_navigate01);
+		StopSound(button_select01);
+		UnloadSound(button_navigate01);
+		UnloadSound(button_select01);
 		CloseAudioDevice();
 		#endif
 		UnloadTexture(asteroid);

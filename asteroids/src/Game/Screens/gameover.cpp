@@ -34,6 +34,9 @@ namespace Juego
 	static Rectangle shipExplosionDestination;
 	static Vector2 shipExplosionOrigin = { 0,0 };
 
+	static bool isButtonSoundPlaying = false;
+	static int buttonSelectSaveNumber = 0;
+
 	Texture2D shipExplosion;
 
 	namespace GameOver_Section
@@ -55,7 +58,7 @@ namespace Juego
 				buttons[i].messageColor = BLANK;
 
 				if (resolutionNormal && !(resolutionBig)) buttonDistance = buttonDistance + 100;
-				else if (resolutionSmall) buttonDistance = buttonDistance + 50;
+				else if (resolutionSmall) buttonDistance = buttonDistance + 60;
 				else if (resolutionBig && resolutionNormal) buttonDistance = buttonDistance + 125;
 			}
 		}
@@ -82,6 +85,11 @@ namespace Juego
 			ship_explode01 = LoadSound("res/sounds/ship_explode01fix.wav");
 			SetSoundVolume(ship_explode01, soundVolume);
 			PlaySound(ship_explode01);
+
+			points01 = LoadSound("res/sounds/points01.wav");
+			SetSoundVolume(points01, soundVolume);
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
 			#endif
 
 			finalScore = (gameScore * scoreMultiplier);
@@ -102,6 +110,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect++;
+				PlaySound(button_navigate01);
 				if (buttonSelect > maxButtons - 1)
 				{
 					buttonSelect--;
@@ -112,6 +121,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect--;
+				PlaySound(button_navigate01);
 				if (buttonSelect < 0)
 				{
 					buttonSelect++;
@@ -122,6 +132,7 @@ namespace Juego
 			{
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttons[i].selected || IsKeyPressed(KEY_ENTER) && buttons[i].selected)
 				{
+					PlaySound(button_select01);
 					switch (i)
 					{
 					case 0:
@@ -158,6 +169,21 @@ namespace Juego
 					buttons[i].defaultColor = RED;
 					buttons[i].selected = false;
 				}
+
+				if (buttonSelect != buttonSelectSaveNumber)
+				{
+					isButtonSoundPlaying = false;
+				}
+
+				if (buttonSelect == i)
+				{
+					if (!(isButtonSoundPlaying))
+					{
+						PlaySound(button_navigate01);
+						isButtonSoundPlaying = true;
+						buttonSelectSaveNumber = i;
+					}
+				}
 			}
 
 			if (timerON)
@@ -177,10 +203,13 @@ namespace Juego
 				increasingExplosionFade = increasingExplosionFade - 0.005;
 			}
 
-			if (finalScoreTimer > 0.0001)
+			if (finalScoreTimer > 0.08)
 			{
 				finalScoreTimer = 0;
-				increasingFinalScore++;
+				increasingFinalScore = increasingFinalScore + 100;
+				#ifdef AUDIO
+				PlaySound(points01);
+				#endif			
 			}
 
 			if (increasingFinalScore >= finalScore)
@@ -250,8 +279,10 @@ namespace Juego
 		{
 			//UnloadImage(explosionImage);
 			#ifdef AUDIO
+			StopSound(points01);
 			StopSound(ship_explode01);
 			UnloadSound(ship_explode01);
+			UnloadSound(points01);
 			#endif
 		}
 	}

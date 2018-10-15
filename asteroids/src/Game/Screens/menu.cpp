@@ -18,6 +18,9 @@ namespace Juego
 	static int buttonSelect = 0;
 	static Color optionColor = RED;
 
+	static bool isButtonSoundPlaying = false;
+	static int buttonSelectSaveNumber = 0;
+
 	namespace Menu_Section
 	{
 		static void createMenuButtons()
@@ -37,7 +40,7 @@ namespace Juego
 				
 
 				if (resolutionNormal && !(resolutionBig)) buttonDistance = buttonDistance + 100;
-				else if (resolutionSmall) buttonDistance = buttonDistance + 50;
+				else if (resolutionSmall) buttonDistance = buttonDistance + 60;
 				else if (resolutionBig && resolutionNormal) buttonDistance = buttonDistance + 125;
 			}
 		}
@@ -46,6 +49,8 @@ namespace Juego
 		{
 			#ifdef AUDIO
 			PlayMusicStream(song_alert);
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
 			#endif
 
 			createMenuButtons();
@@ -61,6 +66,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect++;
+				PlaySound(button_navigate01);
 				if (buttonSelect > maxButtons - 1)
 				{
 					buttonSelect--;
@@ -71,6 +77,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect--;
+				PlaySound(button_navigate01);
 				if (buttonSelect < 0)
 				{
 					buttonSelect++;
@@ -81,6 +88,7 @@ namespace Juego
 			{
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttons[i].selected || IsKeyPressed(KEY_ENTER) && buttons[i].selected)
 				{
+					PlaySound(button_select01);
 					switch (i)
 					{
 					case 0:
@@ -116,16 +124,34 @@ namespace Juego
 			MenuInput();
 			for (int i = 0; i < maxButtons; i++)
 			{
+
 				if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height }) || buttonSelect == i)
 				{
 						buttonSelect = i;
 						buttons[i].defaultColor = WHITE;
 						buttons[i].selected = true;
+						
 				}
 				else
 				{
 					buttons[i].defaultColor = RED;
 					buttons[i].selected = false;
+					
+				}
+				
+				if (buttonSelect != buttonSelectSaveNumber)
+				{
+					isButtonSoundPlaying = false;
+				}
+
+				if (buttonSelect == i)
+				{
+					if (!(isButtonSoundPlaying))
+					{
+						PlaySound(button_navigate01);
+						isButtonSoundPlaying = true;
+						buttonSelectSaveNumber = i;
+					}
 				}
 			}
 			

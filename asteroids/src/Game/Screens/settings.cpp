@@ -70,6 +70,9 @@ namespace Juego
 	bool resolutionNormal = true;
 	bool resolutionBig = false;
 
+	static bool isButtonSoundPlaying = false;
+	static int buttonSelectSaveNumber = 0;
+
 	static Image asteroidImage;
 
 	namespace Settings_Section
@@ -127,7 +130,7 @@ namespace Juego
 				}
 				else if (resolutionSmall)
 				{
-					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 50;
+					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 60;
 				}
 				else if (resolutionBig && resolutionNormal)
 				{
@@ -198,7 +201,9 @@ namespace Juego
 			#ifdef AUDIO
 			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
 			SetMusicVolume(ship_rocket01, soundVolume);
-						//SetSoundVolume(ship_shoot01, soundVolume);
+
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
 			#endif
 			checkAsteroidSprite();
 			createSettingsButtons();
@@ -211,6 +216,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect++;
+				PlaySound(button_navigate01);
 				if (buttonSelect > maxButtons - 1)
 				{
 					buttonSelect--;
@@ -221,6 +227,7 @@ namespace Juego
 			{
 				mouse.selected = false;
 				buttonSelect--;
+				PlaySound(button_navigate01);
 				if (buttonSelect < 0)
 				{
 					buttonSelect++;
@@ -252,9 +259,7 @@ namespace Juego
 			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && volumeSliders[Effects].Selected)
 			{
 				volumeSliders[Effects].shape.x = mouse.position.x;
-
 				
-				//SetMusicVolume(song_alert, songVolume);
 				for (int i = 0; i < 101; i++)
 				{
 					if (volumeSliders[Effects].shape.x >= effectsLine.PosStart.x + effectsLineCounter) soundVolume = effectsLineCounterVolume;
@@ -266,6 +271,8 @@ namespace Juego
 				effectsLineCounter = 0;
 				effectsLineCounterVolume = 0.0;
 
+				SetSoundVolume(button_select01, soundVolume);
+				SetSoundVolume(button_navigate01, soundVolume);
 
 				if (volumeSliders[Effects].shape.x < effectsLine.PosStart.x) volumeSliders[Effects].shape.x = effectsLine.PosStart.x;
 				else if (volumeSliders[Effects].shape.x > effectsLine.PosEnd.x) volumeSliders[Effects].shape.x = effectsLine.PosEnd.x;
@@ -280,6 +287,7 @@ namespace Juego
 
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttonsSettings[i].selected || IsKeyPressed(KEY_ENTER) && buttonsSettings[i].selected && !(volumeSliders[Effects].Selected) && !(volumeSliders[Music].Selected))
 				{
+					PlaySound(button_select01);
 					switch (i)
 					{
 					case 0:
@@ -298,7 +306,7 @@ namespace Juego
 						ChangeResolutionNormal(1300, 800);
 						break;
 					case 5:
-						ChangeResolutionNormal(1024, 768);
+						ChangeResolutionSmall(1024, 768);
 						break;
 					case 6:
 						ChangeResolutionSmall(800, 600);
@@ -355,6 +363,21 @@ namespace Juego
 					{
 						buttonsSettings[i].defaultColor = RED;
 						buttonsSettings[i].selected = false;
+					}
+
+					if (buttonSelect != buttonSelectSaveNumber)
+					{
+						isButtonSoundPlaying = false;
+					}
+
+					if (buttonSelect == i)
+					{
+						if (!(isButtonSoundPlaying))
+						{
+							PlaySound(button_navigate01);
+							isButtonSoundPlaying = true;
+							buttonSelectSaveNumber = i;
+						}
 					}
 				}
 			

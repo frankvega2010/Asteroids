@@ -29,6 +29,9 @@ namespace Juego
 
 	static Rectangle pauseBoxRec;
 
+	static bool isButtonSoundPlaying = false;
+	static int buttonSelectSaveNumber = 0;
+
 	bool isExplosionActive = false;
 	int scoreMultiplier = 5;
 
@@ -69,7 +72,7 @@ namespace Juego
 				buttons[i].messageColor = BLANK;
 
 				if (resolutionNormal && !(resolutionBig)) buttonDistance = buttonDistance + 100;
-				else if (resolutionSmall) buttonDistance = buttonDistance + 50;
+				else if (resolutionSmall) buttonDistance = buttonDistance + 60;
 				else if (resolutionBig && resolutionNormal) buttonDistance = buttonDistance + 125;
 			}
 
@@ -98,6 +101,7 @@ namespace Juego
 		{
 			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && pauseButton.selected)
 			{
+				PlaySound(button_select01);
 				crosshairColor = BLANK;
 				gamePaused = true;
 				gameON = false;
@@ -124,6 +128,7 @@ namespace Juego
 			{
 				if (IsKeyPressed(KEY_P))
 				{
+					PlaySound(button_select01);
 					crosshairColor = BLANK;
 					gamePaused = true;
 					gameON = false;
@@ -135,6 +140,7 @@ namespace Juego
 				{
 					mouse.selected = false;
 					buttonSelect++;
+					PlaySound(button_navigate01);
 					if (buttonSelect > maxButtons - 1)
 					{
 						buttonSelect--;
@@ -145,6 +151,7 @@ namespace Juego
 				{
 					mouse.selected = false;
 					buttonSelect--;
+					PlaySound(button_navigate01);
 					if (buttonSelect < 0)
 					{
 						buttonSelect++;
@@ -155,6 +162,7 @@ namespace Juego
 				{
 					if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttons[i].selected || IsKeyPressed(KEY_ENTER) && buttons[i].selected)
 					{
+						PlaySound(button_select01);
 						switch (i)
 						{
 						case 0:
@@ -176,6 +184,7 @@ namespace Juego
 
 				if (IsKeyPressed(KEY_P))
 				{
+					PlaySound(button_select01);
 					gamePaused = false;
 					timerON = true;
 					gameON = true;
@@ -342,6 +351,21 @@ namespace Juego
 						buttons[i].defaultColor = GOLD;
 						buttons[i].selected = false;
 					}
+
+					if (buttonSelect != buttonSelectSaveNumber)
+					{
+						isButtonSoundPlaying = false;
+					}
+
+					if (buttonSelect == i)
+					{
+						if (!(isButtonSoundPlaying))
+						{
+							PlaySound(button_navigate01);
+							isButtonSoundPlaying = true;
+							buttonSelectSaveNumber = i;
+						}
+					}
 				}
 			}
 
@@ -433,6 +457,8 @@ namespace Juego
 			powerup01 = LoadSound("res/sounds/powerup01.wav");
 			SetSoundVolume(powerup01, soundVolume);
 
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
 #endif
 			isScreenFinished = false;
 		}
