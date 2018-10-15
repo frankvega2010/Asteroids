@@ -106,15 +106,6 @@ namespace Juego
 				gamePaused = true;
 				gameON = false;
 			}
-			// Gameplay Input
-			if (!(gameON))
-			{
-				ShowCursor();
-				if (IsKeyPressed(KEY_SPACE))
-				{
-					RestartPhase();
-				}
-			}
 			// Player Input
 			if (gameON)
 			{
@@ -126,7 +117,7 @@ namespace Juego
 			
 			if (!gamePaused)
 			{
-				if (IsKeyPressed(KEY_P))
+				if (IsKeyPressed(KEY_ESCAPE))
 				{
 					PlaySound(button_select01);
 					crosshairColor = BLANK;
@@ -182,7 +173,7 @@ namespace Juego
 					}
 				}
 
-				if (IsKeyPressed(KEY_P))
+				if (IsKeyPressed(KEY_ESCAPE))
 				{
 					PlaySound(button_select01);
 					gamePaused = false;
