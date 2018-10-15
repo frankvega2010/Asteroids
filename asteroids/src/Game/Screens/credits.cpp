@@ -146,7 +146,8 @@ namespace Juego
 			DrawText(FormatText("Raylib"), (float)screenWidth / 2.2f, screenHeight / 2.0, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Adobe Illustrator"), (float)screenWidth / 2.6f, screenHeight / 1.8, defaultFontSize / 1.5, WHITE);
 			DrawText(FormatText("Adobe Photoshop"), (float)screenWidth / 2.6f, screenHeight / 1.65, defaultFontSize / 1.5, WHITE);
-			DrawText(FormatText("Bfxr"), (float)screenWidth / 2.6f, screenHeight / 1.55, defaultFontSize / 1.5, WHITE);
+			DrawText(FormatText("Bfxr"), (float)screenWidth / 2.2f, screenHeight / 1.54, defaultFontSize / 1.5, WHITE);
+			DrawText(FormatText("Bosca Ceoil"), (float)screenWidth / 2.3f, screenHeight / 1.45, defaultFontSize / 1.5, WHITE);
 
 			DrawText(FormatText("MENU"), buttons[0].position.x + 50, buttons[0].position.y + 5, defaultFontSize, buttons[0].defaultColor);
 		}
