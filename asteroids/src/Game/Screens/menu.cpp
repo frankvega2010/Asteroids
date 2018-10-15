@@ -173,8 +173,8 @@ namespace Juego
 					switch (i)
 					{
 					case 0:
-						DrawText("Start playing a classic match", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
-						DrawText("of Asteroids!", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("Start playing a match", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);
+						DrawText("of Simple! Asteroids!", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y + 50, defaultFontSize / 2, buttons[i].messageColor);
 						break;
 					case 1:
 						DrawText("Learn how to play ", buttons[i].position.x + (buttons[i].position.x * 0.55), buttons[i].position.y, defaultFontSize / 2, buttons[i].messageColor);

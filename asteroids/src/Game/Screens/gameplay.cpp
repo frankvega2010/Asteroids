@@ -106,6 +106,11 @@ namespace Juego
 				gamePaused = true;
 				gameON = false;
 			}
+			// Gameplay Input
+			if (!(gameON))
+			{
+				ShowCursor();
+			}
 			// Player Input
 			if (gameON)
 			{

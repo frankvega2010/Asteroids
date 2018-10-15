@@ -175,6 +175,7 @@ namespace Juego
 			{
 				DrawText(FormatText("How to Play"), screenWidth / 18, 20, defaultFontSize, WHITE);
 				DrawText(FormatText("Destroy all asteroids in the least amount of time!"), screenWidth / 18, screenHeight / 8, defaultFontSize / 1.8, WHITE);
+				DrawText(FormatText("You can get up to 10400 points at the end of the match."), screenWidth / 18, screenHeight / 6, defaultFontSize / 1.8, WHITE);
 				DrawText(FormatText("Powerups"), screenWidth / 18, screenHeight / 4.5, defaultFontSize, WHITE);
 				DrawText(FormatText("There are 2 powerups which will help you get a highscore"), screenWidth / 18, screenHeight / 3, defaultFontSize / 1.8, WHITE);
 				DrawText(FormatText("Invincibility Powerup"), screenWidth / 18, screenHeight / 2.5, defaultFontSize / 1.8, RED);
