@@ -27,7 +27,7 @@ namespace Juego
 				powerups[i].useTimer = 0;
 				powerups[i].useCountdown = 5;
 				powerups[i].spawnTimer = 0;
-				powerups[i].spawnCountdown = GetRandomValue(15, 30);
+				powerups[i].spawnCountdown = GetRandomValue(5, 20);
 			}
 		}
 
@@ -46,7 +46,7 @@ namespace Juego
 							powerups[i].spawnCountdown--;
 							if (powerups[i].spawnCountdown < 0)
 							{
-								powerups[i].spawnCountdown = GetRandomValue(15, 30);
+								powerups[i].spawnCountdown = GetRandomValue(5, 20);
 								powerups[i].onScreen = true;
 							}
 						}
