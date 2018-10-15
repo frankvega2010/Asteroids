@@ -12,10 +12,30 @@ using namespace Gameplay_Section;
 
 namespace Juego
 {
+	static enum SlidersNames
+	{
+		Music,
+		Effects
+	};
+	static struct volumeLine 
+	{
+		Vector2 PosStart;
+		Vector2 PosEnd;
+		int Thick;
+		Color Color;
+	};
+
+	static struct Slider
+	{
+		Rectangle shape;
+		Color color;
+		bool Selected;
+	};
 
 	//static const int maxButtons = 1;
 	static const int maxButtons = 8;
 	static const int maxButtonsRight = 4;
+	static const int maxSliders = 2;
 
 	//static Buttons buttons[maxButtons];
 	static Buttons buttonsSettings[maxButtons];
@@ -23,6 +43,28 @@ namespace Juego
 	static int buttonSelect = 0;
 	//static int buttonSelectLeft = 0;
 	static int buttonDistanceSettingsLeft = 0;
+
+	static int musicLineCounter = 0;
+	static float musicLineCounterVolume = 0.8;
+
+	static int effectsLineCounter = 0;
+	static float effectsLineCounterVolume = 0.6;
+
+	Slider volumeSliders[maxSliders];
+
+	float songVolume = 0.80;
+	float soundVolume = 0.60;
+
+	volumeLine musicLine;
+	volumeLine effectsLine;
+
+	/*static Rectangle musicLineSlider;
+	static Rectangle effectsLineSlider;
+
+	static Color musicLineSliderColor = WHITE;
+	static bool musicLineSliderSelected = false;
+	static Color effectsLineSliderColor = WHITE;
+	static bool effectsLineSliderSelected = false;*/
 
 	bool resolutionSmall = false;
 	bool resolutionNormal = true;
@@ -34,16 +76,25 @@ namespace Juego
 	{
 		static void createSettingsButtons()
 		{
-			//for (int i = 0; i < maxButtons; i++)
-			//{
-			//	buttons[i].position.x = (float)screenWidth / 90.0f;
-			//	buttons[i].position.y = (float)screenHeight / 1.1f; //+ buttonDistance_Controls;
-			//	buttons[i].width = (float)screenWidth / 5.0f;
-			//	buttons[i].height = (float)screenHeight / 12.0f;
-			//	buttons[i].selected = false;
-			//	buttons[i].defaultColor = RED;
-			//	buttons[i].messageColor = BLANK;
-			//}
+			musicLine.PosStart = { (float)screenWidth / 3.1f,(float)screenHeight / 4 };
+			musicLine.PosEnd = { (float)screenWidth / 3.1f + 500,(float)screenHeight / 4 };
+			musicLine.Thick = 10;
+			musicLine.Color = WHITE;
+
+			effectsLine.PosStart = { (float)screenWidth / 3.1f,(float)screenHeight / 1.8f };
+			effectsLine.PosEnd = { (float)screenWidth / 3.1f + 500,(float)screenHeight / 1.8f };
+			effectsLine.Thick = 10;
+			effectsLine.Color = WHITE;
+
+
+			volumeSliders[Music].shape = { musicLine.PosStart.x,musicLine.PosStart.y - 50,25,100 };
+			volumeSliders[Effects].shape = { effectsLine.PosStart.x,effectsLine.PosStart.y - 50,25,100 };
+
+			for (int i = 0; i < maxSliders; i++)
+			{
+				volumeSliders[i].color = WHITE;
+				volumeSliders[i].Selected = false;
+			}
 
 			for (int i = 0; i < maxButtons; i++)
 			{
@@ -70,9 +121,18 @@ namespace Juego
 				}
 
 				
-				if (resolutionNormal && !(resolutionBig)) buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 75;
-				else if (resolutionSmall) buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 50;
-				else if (resolutionBig && resolutionNormal) buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 100;
+				if (resolutionNormal && !(resolutionBig))
+				{
+					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 75;
+				}
+				else if (resolutionSmall)
+				{
+					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 50;
+				}
+				else if (resolutionBig && resolutionNormal)
+				{
+					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 100;
+				}
 				
 				
 			}
@@ -134,6 +194,12 @@ namespace Juego
 
 		void InitSettingsScreen()
 		{
+
+			#ifdef AUDIO
+			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
+			SetMusicVolume(ship_rocket01, soundVolume);
+						//SetSoundVolume(ship_shoot01, soundVolume);
+			#endif
 			checkAsteroidSprite();
 			createSettingsButtons();
 			isScreenFinished = false;
@@ -161,9 +227,58 @@ namespace Juego
 				}
 			}
 
+			//Music Volume Settings
+			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && volumeSliders[Music].Selected)
+			{
+				volumeSliders[Music].shape.x = mouse.position.x;
+
+				SetMusicVolume(song_alert, songVolume);
+				for (int i = 0; i < 101; i++)
+				{
+					if (volumeSliders[Music].shape.x >= musicLine.PosStart.x + musicLineCounter) songVolume = musicLineCounterVolume;
+					musicLineCounter = musicLineCounter + 5;
+					musicLineCounterVolume = musicLineCounterVolume + 0.01;
+				}
+				musicLineCounter = 0;
+				musicLineCounterVolume = 0.0;
+				
+
+				if (volumeSliders[Music].shape.x < musicLine.PosStart.x) volumeSliders[Music].shape.x = musicLine.PosStart.x;
+				else if (volumeSliders[Music].shape.x > musicLine.PosEnd.x) volumeSliders[Music].shape.x = musicLine.PosEnd.x;
+			}
+
+
+			//Sound Effects Volume Settings
+			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && volumeSliders[Effects].Selected)
+			{
+				volumeSliders[Effects].shape.x = mouse.position.x;
+
+				
+				//SetMusicVolume(song_alert, songVolume);
+				for (int i = 0; i < 101; i++)
+				{
+					if (volumeSliders[Effects].shape.x >= effectsLine.PosStart.x + effectsLineCounter) soundVolume = effectsLineCounterVolume;
+					effectsLineCounter = effectsLineCounter + 5;
+					effectsLineCounterVolume = effectsLineCounterVolume + 0.01;
+					PlayMusicStream(ship_rocket01);
+					SetMusicVolume(ship_rocket01, soundVolume);
+				}
+				effectsLineCounter = 0;
+				effectsLineCounterVolume = 0.0;
+
+
+				if (volumeSliders[Effects].shape.x < effectsLine.PosStart.x) volumeSliders[Effects].shape.x = effectsLine.PosStart.x;
+				else if (volumeSliders[Effects].shape.x > effectsLine.PosEnd.x) volumeSliders[Effects].shape.x = effectsLine.PosEnd.x;
+			}
+			else
+			{
+				StopMusicStream(ship_rocket01);
+			}
+
 			for (int i = 0; i < maxButtons; i++)
 			{
-				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttonsSettings[i].selected || IsKeyPressed(KEY_ENTER) && buttonsSettings[i].selected)
+
+				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && buttonsSettings[i].selected || IsKeyPressed(KEY_ENTER) && buttonsSettings[i].selected && !(volumeSliders[Effects].Selected) && !(volumeSliders[Music].Selected))
 				{
 					switch (i)
 					{
@@ -202,32 +317,58 @@ namespace Juego
 		{
 			#ifdef AUDIO
 			UpdateMusicStream(song_alert);
+			UpdateMusicStream(ship_rocket01);
 			#endif
+
+			volumeSliders[Music].shape.x = musicLine.PosStart.x + ((songVolume*100)*5);
+			volumeSliders[Effects].shape.x = effectsLine.PosStart.x + ((soundVolume * 100) * 5);
 
 			AsteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 
 			SettingsInput();
-			for (int i = 0; i < maxButtons; i++)
+
+			for (int s = 0; s < maxSliders; s++)
 			{
-				if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttonsSettings[i].position.x, buttonsSettings[i].position.y, buttonsSettings[i].width, buttonsSettings[i].height }) || buttonSelect == i)
+				if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { volumeSliders[s].shape.x, volumeSliders[s].shape.y, volumeSliders[s].shape.width, volumeSliders[s].shape.height }))
 				{
-					buttonSelect = i;
-					buttonsSettings[i].defaultColor = WHITE;
-					buttonsSettings[i].selected = true;
+					volumeSliders[s].color = GREEN;
+					volumeSliders[s].Selected = true;
 				}
 				else
 				{
-					buttonsSettings[i].defaultColor = RED;
-					buttonsSettings[i].selected = false;
+					volumeSliders[s].color = WHITE;
+					volumeSliders[s].Selected = false;
 				}
 			}
+
+			
+				for (int i = 0; i < maxButtons; i++)
+				{
+					if (CheckCollisionRecs({ mouse.position.x,  mouse.position.y, mouse.width, mouse.height }, { buttonsSettings[i].position.x, buttonsSettings[i].position.y, buttonsSettings[i].width, buttonsSettings[i].height }) || buttonSelect == i && !(volumeSliders[Effects].Selected) && !(volumeSliders[Music].Selected))
+					{
+						buttonSelect = i;
+						buttonsSettings[i].defaultColor = WHITE;
+						buttonsSettings[i].selected = true;
+					}
+					else
+					{
+						buttonsSettings[i].defaultColor = RED;
+						buttonsSettings[i].selected = false;
+					}
+				}
+			
 		}
 
 		void DrawSettings()
 		{
 			DrawBackground();
 			AsteroidDraw();
+
+			DrawLineEx(musicLine.PosStart, musicLine.PosEnd, musicLine.Thick, musicLine.Color);
+			DrawLineEx(effectsLine.PosStart, effectsLine.PosEnd, effectsLine.Thick, effectsLine.Color);
+			DrawRectangleRec(volumeSliders[Music].shape, volumeSliders[Music].color);
+			DrawRectangleRec(volumeSliders[Effects].shape, volumeSliders[Effects].color);
 
 			// template for multiple buttons, in this instance only 1 button is used.
 			for (int i = 0; i < maxButtons; i++)
@@ -252,7 +393,7 @@ namespace Juego
 				}
 			}
 
-			DrawText(FormatText("Placeholder for Settings Screen"), (float)screenWidth / 2.5f, screenHeight / 3.3, defaultFontSize / 1.5, WHITE);
+			//DrawText(FormatText("Placeholder for Settings Screen"), (float)screenWidth / 2.5f, screenHeight / 3.3, defaultFontSize / 1.5, WHITE);
 
 
 			DrawText(FormatText("1920x1080"), buttonsSettings[0].position.x + 10, buttonsSettings[0].position.y + 5, defaultFontSize, buttonsSettings[0].defaultColor);
@@ -263,7 +404,22 @@ namespace Juego
 			DrawText(FormatText("1024x768"), buttonsSettings[5].position.x + 10, buttonsSettings[5].position.y + 5, defaultFontSize, buttonsSettings[5].defaultColor);
 			DrawText(FormatText("800x600"), buttonsSettings[6].position.x + 10, buttonsSettings[6].position.y + 5, defaultFontSize, buttonsSettings[6].defaultColor);
 
+			//musicLineEditColor
 			DrawText(FormatText("MENU"), buttonsSettings[7].position.x + 25, buttonsSettings[7].position.y + 5, defaultFontSize, buttonsSettings[7].defaultColor);
+
+			DrawText(FormatText("Music Volume"), musicLine.PosStart.x + 50, musicLine.PosStart.y - 100, defaultFontSize, volumeSliders[Music].color);
+			DrawText(FormatText("%f",songVolume), musicLine.PosStart.x + 100, musicLine.PosStart.y + 50, defaultFontSize, volumeSliders[Music].color);
+
+			DrawText(FormatText("Sound Volume"), effectsLine.PosStart.x + 50, effectsLine.PosStart.y - 100, defaultFontSize, volumeSliders[Effects].color);
+			DrawText(FormatText("%f", soundVolume), effectsLine.PosStart.x + 100, effectsLine.PosStart.y + 50, defaultFontSize, volumeSliders[Effects].color);
+		}
+
+		void DeInitSettingsResources()
+		{
+			#ifdef AUDIO
+						StopMusicStream(ship_rocket01);
+						UnloadMusicStream(ship_rocket01);
+			#endif
 		}
 
 		bool FinishSettingsScreen()

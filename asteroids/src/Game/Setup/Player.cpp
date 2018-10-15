@@ -72,10 +72,6 @@ namespace Juego
 		{
 			ShootInput();
 
-			#ifdef AUDIO
-			StopMusicStream(ship_rocket01);
-			#endif
-
 			//Player logic: acceleration
 			if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
 			{
@@ -91,6 +87,14 @@ namespace Juego
 				player.acceleration.x += normalizedDirection.x * 250 * GetFrameTime();
 				player.acceleration.y += normalizedDirection.y * 250 * GetFrameTime();
 			}
+			else
+			{
+				#ifdef AUDIO
+								StopMusicStream(ship_rocket01);
+				#endif
+			}
+
+
 		}
 
 		void playerUpdate()

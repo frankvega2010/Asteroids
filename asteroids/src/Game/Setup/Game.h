@@ -28,6 +28,8 @@ namespace Juego
 
 	extern Image explosionImage;
 
+	
+
 	//gameplay
 	//extern Texture2D ship;
 	//extern Texture2D shipMoving;

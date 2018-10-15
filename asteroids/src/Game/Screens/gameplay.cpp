@@ -422,16 +422,16 @@ namespace Juego
 
 #ifdef AUDIO
 			ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
-			SetSoundVolume(ship_shoot01, 0.35f);
+			SetSoundVolume(ship_shoot01, soundVolume);
 
 			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
-			SetMusicVolume(ship_rocket01, 0.40);
+			SetMusicVolume(ship_rocket01, soundVolume);
 
 			asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
-			SetSoundVolume(asteroid_explode01, 0.3);
+			SetSoundVolume(asteroid_explode01, soundVolume);
 
 			powerup01 = LoadSound("res/sounds/powerup01.wav");
-			SetSoundVolume(powerup01, 0.4);
+			SetSoundVolume(powerup01, soundVolume);
 
 #endif
 			isScreenFinished = false;

@@ -30,6 +30,8 @@ namespace Juego
 
 	bool isScreenFinished;
 
+	
+
 	Rectangle backgroundGameSource;
 	Rectangle backgroundGameDestination;
 	Vector2 backgroundGameOrigin;
@@ -154,7 +156,7 @@ namespace Juego
 		#ifdef AUDIO
 		InitAudioDevice();
 		song_alert = LoadMusicStream("res/music/alert.ogg");
-		SetMusicVolume(song_alert, 0.80);
+		SetMusicVolume(song_alert, songVolume);
 		#endif
 
 		InitMenuScreen();
@@ -271,6 +273,7 @@ namespace Juego
 
 			if (FinishSettingsScreen())
 			{
+				DeInitSettingsResources();
 				gameScreen = Menu;
 				InitMenuScreen();
 			}

@@ -80,7 +80,7 @@ namespace Juego
 
 			#ifdef AUDIO
 			ship_explode01 = LoadSound("res/sounds/ship_explode01fix.wav");
-			SetSoundVolume(ship_explode01, 0.3);
+			SetSoundVolume(ship_explode01, soundVolume);
 			PlaySound(ship_explode01);
 			#endif
 
