@@ -1,28 +1,29 @@
 #include "controls.h"
 
 #include "raylib.h"
+
 #include "Setup/Game.h"
-#include "Screens\gameplay.h"
+#include "Screens/gameplay.h"
 #include "Setup/Asteroid.h"
-#include "Screens\settings.h"
+#include "Screens/settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
 
 namespace Juego
 {
-	static const int maxButtonsControls = 2;
+	static Image controlSchemeImage;
+	static Texture2D controlScheme;
 
+	static const int maxButtonsControls = 2;
 	static Buttons buttonsControls[maxButtonsControls];
 	static int buttonSelect = 0;
 	static int buttonDistance_Controls = 0;
+
 	static bool moreControls = false;
 
 	static bool isButtonSoundPlaying = false;
 	static int buttonSelectSaveNumber = 0;
-
-	Image controlSchemeImage;
-	Texture2D controlScheme;
 
 	namespace Controls_Section
 	{
@@ -107,7 +108,8 @@ namespace Juego
 			#ifdef AUDIO
 			UpdateMusicStream(song_alert);
 			#endif
-			AsteroidUpdate();
+
+			asteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 
 			ControlsInput();
@@ -142,11 +144,10 @@ namespace Juego
 			}
 		}
 		
-
 		void DrawControls()
 		{
 			DrawBackground();
-			AsteroidDraw();
+			asteroidDraw();
 
 			for (int i = 0; i < maxButtonsControls; i++)
 			{
@@ -187,7 +188,7 @@ namespace Juego
 			DrawText(FormatText("MORE"), buttonsControls[0].position.x + 50, buttonsControls[0].position.y + 5, defaultFontSize, buttonsControls[0].defaultColor);
 			DrawText(FormatText("MENU"), buttonsControls[1].position.x + 50, buttonsControls[1].position.y + 5, defaultFontSize, buttonsControls[1].defaultColor);
 
-			// Testing Images
+			// Background Properties
 			backgroundGameSource = { 0.0f,0.0f, (float)screenWidth,(float)screenHeight };
 			backgroundGameDestination = { 0,0, (float)screenWidth,(float)screenHeight };
 			backgroundGameOrigin = { 0,0 };

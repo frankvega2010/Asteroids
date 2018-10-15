@@ -12,12 +12,20 @@ using namespace Gameplay_Section;
 
 namespace Juego
 {
-	static enum SlidersNames
+	bool resolutionSmall = false;
+	bool resolutionNormal = true;
+	bool resolutionBig = false;
+
+	float songVolume = 0.80;
+	float soundVolume = 0.60;
+
+	enum SlidersNames
 	{
 		Music,
 		Effects
 	};
-	static struct volumeLine 
+
+	struct volumeLine 
 	{
 		Vector2 PosStart;
 		Vector2 PosEnd;
@@ -25,24 +33,21 @@ namespace Juego
 		Color Color;
 	};
 
-	static struct Slider
+	struct Slider
 	{
 		Rectangle shape;
 		Color color;
 		bool Selected;
 	};
 
-	//static const int maxButtons = 1;
 	static const int maxButtons = 8;
 	static const int maxButtonsRight = 4;
 	static const int maxSliders = 2;
 
-	//static Buttons buttons[maxButtons];
 	static Buttons buttonsSettings[maxButtons];
-	static Buttons buttonsSettingsRight[maxButtonsRight];
+
 	static int buttonSelect = 0;
-	//static int buttonSelectLeft = 0;
-	static int buttonDistanceSettingsLeft = 0;
+	static int buttonDistanceSettings = 0;
 
 	static int musicLineCounter = 0;
 	static float musicLineCounterVolume = 0.8;
@@ -50,25 +55,13 @@ namespace Juego
 	static int effectsLineCounter = 0;
 	static float effectsLineCounterVolume = 0.6;
 
-	Slider volumeSliders[maxSliders];
+	static Slider volumeSliders[maxSliders];
+	static int maxVolumeValues = 101;
+	static int sliderDistance = 5;
+	static float sliderVolumeAmount = 0.01;
 
-	float songVolume = 0.80;
-	float soundVolume = 0.60;
-
-	volumeLine musicLine;
-	volumeLine effectsLine;
-
-	/*static Rectangle musicLineSlider;
-	static Rectangle effectsLineSlider;
-
-	static Color musicLineSliderColor = WHITE;
-	static bool musicLineSliderSelected = false;
-	static Color effectsLineSliderColor = WHITE;
-	static bool effectsLineSliderSelected = false;*/
-
-	bool resolutionSmall = false;
-	bool resolutionNormal = true;
-	bool resolutionBig = false;
+	static volumeLine musicLine;
+	static volumeLine effectsLine;
 
 	static bool isButtonSoundPlaying = false;
 	static int buttonSelectSaveNumber = 0;
@@ -102,7 +95,7 @@ namespace Juego
 			for (int i = 0; i < maxButtons; i++)
 			{
 				buttonsSettings[i].position.x = (float)screenWidth / 90.0f;
-				buttonsSettings[i].position.y = (float)screenHeight / 10.0f + buttonDistanceSettingsLeft;
+				buttonsSettings[i].position.y = (float)screenHeight / 10.0f + buttonDistanceSettings;
 				if (resolutionNormal)
 				{
 					buttonsSettings[i].width = (float)screenWidth / 4.0f;
@@ -126,19 +119,35 @@ namespace Juego
 				
 				if (resolutionNormal && !(resolutionBig))
 				{
-					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 85;
+					buttonDistanceSettings = buttonDistanceSettings + 85;
 				}
 				else if (resolutionSmall)
 				{
-					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 60;
+					buttonDistanceSettings = buttonDistanceSettings + 60;
 				}
 				else if (resolutionBig && resolutionNormal)
 				{
-					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 100;
+					buttonDistanceSettings = buttonDistanceSettings + 100;
 				}
 				
 				
 			}
+		}
+
+		void InitSettingsScreen()
+		{
+			#ifdef AUDIO
+			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
+			SetMusicVolume(ship_rocket01, soundVolume);
+
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
+			#endif
+
+			checkAsteroidSprite();
+			createSettingsButtons();
+
+			isScreenFinished = false;
 		}
 
 		static void ChangeResolutionSmall(int screenW,int screenH)
@@ -146,9 +155,6 @@ namespace Juego
 			resolutionSmall = true;
 			resolutionNormal = false;
 			resolutionBig = false;
-			/*#ifdef AUDIO
-						PlaySound(pong_select_option1);
-			#endif*/
 			screenWidth = screenW;
 			screenHeight = screenH;
 			resolutionBackground();
@@ -164,9 +170,6 @@ namespace Juego
 			resolutionSmall = false;
 			resolutionNormal = true;
 			resolutionBig = false;
-			/*#ifdef AUDIO
-			PlaySound(pong_select_option1);
-			#endif*/
 			screenWidth = screenW;
 			screenHeight = screenH;
 			resolutionBackground();
@@ -182,9 +185,6 @@ namespace Juego
 			resolutionSmall = false;
 			resolutionNormal = true;
 			resolutionBig = true;
-			/*#ifdef AUDIO
-			PlaySound(pong_select_option1);
-			#endif*/
 			screenWidth = screenW;
 			screenHeight = screenH;
 			resolutionBackground();
@@ -193,21 +193,6 @@ namespace Juego
 			createSettingsButtons();
 			checkAsteroidSprite();
 			createAsteroid();
-		}
-
-		void InitSettingsScreen()
-		{
-
-			#ifdef AUDIO
-			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
-			SetMusicVolume(ship_rocket01, soundVolume);
-
-			SetSoundVolume(button_select01, soundVolume);
-			SetSoundVolume(button_navigate01, soundVolume);
-			#endif
-			checkAsteroidSprite();
-			createSettingsButtons();
-			isScreenFinished = false;
 		}
 
 		static void SettingsInput()
@@ -240,11 +225,11 @@ namespace Juego
 				volumeSliders[Music].shape.x = mouse.position.x;
 
 				SetMusicVolume(song_alert, songVolume);
-				for (int i = 0; i < 101; i++)
+				for (int i = 0; i < maxVolumeValues; i++)
 				{
 					if (volumeSliders[Music].shape.x >= musicLine.PosStart.x + musicLineCounter) songVolume = musicLineCounterVolume;
-					musicLineCounter = musicLineCounter + 5;
-					musicLineCounterVolume = musicLineCounterVolume + 0.01;
+					musicLineCounter = musicLineCounter + sliderDistance;
+					musicLineCounterVolume = musicLineCounterVolume + sliderVolumeAmount;
 				}
 				musicLineCounter = 0;
 				musicLineCounterVolume = 0.0;
@@ -260,11 +245,11 @@ namespace Juego
 			{
 				volumeSliders[Effects].shape.x = mouse.position.x;
 				
-				for (int i = 0; i < 101; i++)
+				for (int i = 0; i < maxVolumeValues; i++)
 				{
 					if (volumeSliders[Effects].shape.x >= effectsLine.PosStart.x + effectsLineCounter) soundVolume = effectsLineCounterVolume;
-					effectsLineCounter = effectsLineCounter + 5;
-					effectsLineCounterVolume = effectsLineCounterVolume + 0.01;
+					effectsLineCounter = effectsLineCounter + sliderDistance;
+					effectsLineCounterVolume = effectsLineCounterVolume + sliderVolumeAmount;
 					PlayMusicStream(ship_rocket01);
 					SetMusicVolume(ship_rocket01, soundVolume);
 				}
@@ -331,7 +316,7 @@ namespace Juego
 			volumeSliders[Music].shape.x = musicLine.PosStart.x + ((songVolume*100)*5);
 			volumeSliders[Effects].shape.x = effectsLine.PosStart.x + ((soundVolume * 100) * 5);
 
-			AsteroidUpdate();
+			asteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 
 			SettingsInput();
@@ -386,14 +371,13 @@ namespace Juego
 		void DrawSettings()
 		{
 			DrawBackground();
-			AsteroidDraw();
+			asteroidDraw();
 
 			DrawLineEx(musicLine.PosStart, musicLine.PosEnd, musicLine.Thick, musicLine.Color);
 			DrawLineEx(effectsLine.PosStart, effectsLine.PosEnd, effectsLine.Thick, effectsLine.Color);
 			DrawRectangleRec(volumeSliders[Music].shape, volumeSliders[Music].color);
 			DrawRectangleRec(volumeSliders[Effects].shape, volumeSliders[Effects].color);
 
-			// template for multiple buttons, in this instance only 1 button is used.
 			for (int i = 0; i < maxButtons; i++)
 			{
 				DrawRectangleLines(buttonsSettings[i].position.x, buttonsSettings[i].position.y, buttonsSettings[i].width, buttonsSettings[i].height, buttonsSettings[i].defaultColor);
@@ -416,9 +400,6 @@ namespace Juego
 				}
 			}
 
-			//DrawText(FormatText("Placeholder for Settings Screen"), (float)screenWidth / 2.5f, screenHeight / 3.3, defaultFontSize / 1.5, WHITE);
-
-
 			DrawText(FormatText("1920x1080"), buttonsSettings[0].position.x + 10, buttonsSettings[0].position.y + 5, defaultFontSize, buttonsSettings[0].defaultColor);
 			DrawText(FormatText("1680x1050"), buttonsSettings[1].position.x + 10, buttonsSettings[1].position.y + 5, defaultFontSize, buttonsSettings[1].defaultColor);
 			DrawText(FormatText("1600x900"), buttonsSettings[2].position.x + 10, buttonsSettings[2].position.y + 5, defaultFontSize, buttonsSettings[2].defaultColor);
@@ -427,7 +408,6 @@ namespace Juego
 			DrawText(FormatText("1024x768"), buttonsSettings[5].position.x + 10, buttonsSettings[5].position.y + 5, defaultFontSize, buttonsSettings[5].defaultColor);
 			DrawText(FormatText("800x600"), buttonsSettings[6].position.x + 10, buttonsSettings[6].position.y + 5, defaultFontSize, buttonsSettings[6].defaultColor);
 
-			//musicLineEditColor
 			DrawText(FormatText("MENU"), buttonsSettings[7].position.x + 25, buttonsSettings[7].position.y + 5, defaultFontSize, buttonsSettings[7].defaultColor);
 
 			DrawText(FormatText("Music Volume"), musicLine.PosStart.x + 50, musicLine.PosStart.y - 100, defaultFontSize, volumeSliders[Music].color);
@@ -437,19 +417,18 @@ namespace Juego
 			DrawText(FormatText("%f", soundVolume), effectsLine.PosStart.x + 100, effectsLine.PosStart.y + 50, defaultFontSize, volumeSliders[Effects].color);
 		}
 
-		void DeInitSettingsResources()
-		{
-			#ifdef AUDIO
-						StopMusicStream(ship_rocket01);
-						UnloadMusicStream(ship_rocket01);
-			#endif
-		}
-
 		bool FinishSettingsScreen()
 		{
-			buttonDistanceSettingsLeft = 0;
+			buttonDistanceSettings = 0;
 			return isScreenFinished;
 		}
 
+		void DeInitSettingsResources()
+		{
+			#ifdef AUDIO
+			StopMusicStream(ship_rocket01);
+			UnloadMusicStream(ship_rocket01);
+			#endif
+		}
 	}
 }

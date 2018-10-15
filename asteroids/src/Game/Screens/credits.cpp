@@ -1,11 +1,12 @@
 #include "credits.h"
 
 #include "raylib.h"
+
 #include "Setup/Game.h"
-#include "Screens\gameplay.h"
 #include "Setup/Asteroid.h"
-#include "Screens\controls.h"
-#include "Screens\settings.h"
+#include "Screens/gameplay.h"
+#include "Screens/controls.h"
+#include "Screens/settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -27,7 +28,7 @@ namespace Juego
 			for (int i = 0; i < maxButtons; i++)
 			{
 				buttons[i].position.x = (float)screenWidth / 90.0f;
-				buttons[i].position.y = (float)screenHeight / 1.1f; //+ buttonDistance_Controls;
+				buttons[i].position.y = (float)screenHeight / 1.1f;
 				buttons[i].width = (float)screenWidth / 5.0f;
 				buttons[i].height = (float)screenHeight / 12.0f;
 				buttons[i].selected = false;
@@ -42,6 +43,7 @@ namespace Juego
 			SetSoundVolume(button_select01, soundVolume);
 			SetSoundVolume(button_navigate01, soundVolume);
 			#endif
+
 			createCreditsButtons();
 			isScreenFinished = false;
 		}
@@ -85,13 +87,6 @@ namespace Juego
 					isScreenFinished = true;
 				}
 			}
-
-			/*if (IsKeyPressed(KEY_ONE)) // Input Code
-			{
-				#ifdef AUDIO
-								// Audio Code
-				#endif
-			}*/
 		}
 
 		void UpdateCreditsScreen()
@@ -101,7 +96,7 @@ namespace Juego
 			#endif
 			
 			
-			AsteroidUpdate();
+			asteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 
 			CreditosInput();
@@ -139,7 +134,7 @@ namespace Juego
 		void DrawCredits()
 		{
 			DrawBackground();
-			AsteroidDraw();
+			asteroidDraw();
 
 			for (int i = 0; i < maxButtons; i++)
 			{
@@ -162,6 +157,7 @@ namespace Juego
 					buttons[i].messageColor = BLANK;
 				}
 			}
+
 			DrawText(FormatText("Simple! Asteroids"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 10, defaultFontSize + 20, WHITE);
 			DrawText(FormatText("Version 0.7"), (float)screenWidth / 2.5f * 0.63f, screenHeight / 5, defaultFontSize / 2, WHITE);
 
@@ -182,6 +178,5 @@ namespace Juego
 		{
 			return isScreenFinished;
 		}
-
 	}
 }

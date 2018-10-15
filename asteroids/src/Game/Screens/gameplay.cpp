@@ -1,26 +1,38 @@
 #include "gameplay.h"
 
-#include "Setup\Game.h"
-#include "Setup\Player.h"
-#include "Setup\Asteroid.h"
-#include "Setup\PlayerShoot.h"
-#include "Setup\Powerups.h"
-#include "Screens\settings.h"
+#include "Setup/Game.h"
+#include "Setup/Player.h"
+#include "Setup/Asteroid.h"
+#include "Setup/PlayerShoot.h"
+#include "Setup/Powerups.h"
+#include "Screens/settings.h"
 
 namespace Juego
 {
-	static const int maxButtons = 3;
+	Image explosionImage;
 
+	Texture2D asteroidExplosion;
+	Texture2D ship;
+	Texture2D shipMoving;
+	Texture2D powerupMaxRapidFire;
+	Texture2D powerupInvincibility;
+
+	bool gameON = true;
+
+	int scoreMultiplier = 5;
+	bool isExplosionActive = false;
+
+	static const int maxButtons = 3;
 	static Buttons buttons[maxButtons];
 	static Buttons pauseButton;
 	static int buttonDistance = 0;
 	static int buttonSelect = 0;
 	static Color optionColor = RED;
 
-	bool gameON = true;
 	static bool gamePaused = false;
 	
 	static bool timerON = true;
+
 	static float matchTimer = 0.0f;
 	static int matchHours = 0;
 	static int matchMinutes = 0;
@@ -32,25 +44,14 @@ namespace Juego
 	static bool isButtonSoundPlaying = false;
 	static int buttonSelectSaveNumber = 0;
 
-	bool isExplosionActive = false;
-	int scoreMultiplier = 5;
-
 	//Resources
-	Image shipImage; // make static?
-	Image shipMovingImage;
-	Image crosshairImage;
-	Image explosionImage;
-	Image powerupMaxRapidFireImage;
-	Image powerupInvincibilityImage;
+	static Image shipImage;
+	static Image shipMovingImage;
+	static Image crosshairImage;
+	static Image powerupMaxRapidFireImage;
+	static Image powerupInvincibilityImage;
 
-	Texture2D ship;
-	Texture2D shipMoving;
-
-	Texture2D crosshair;
-	Texture2D asteroidExplosion;
-
-	Texture2D powerupMaxRapidFire;
-	Texture2D powerupInvincibility;
+	static Texture2D crosshair;
 
 	namespace Gameplay_Section
 	{
@@ -59,13 +60,12 @@ namespace Juego
 
 			for (int i = 0; i < maxButtons; i++)
 			{
-				buttons[i].position.x = (float)screenWidth / 2.5f;//2.4f
-				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance; //3.0f
+				buttons[i].position.x = (float)screenWidth / 2.5f;
+				buttons[i].position.y = (float)screenHeight / 3.0f + buttonDistance;
 				buttons[i].width = (float)screenWidth / 5.0f;
 
 				if (resolutionNormal) buttons[i].height = (float)screenHeight / 12.0f;
 				else if (resolutionSmall) buttons[i].height = (float)screenHeight / 14.0f;
-				//buttons[i].height = (float)screenHeight / 12.0f;
 
 				buttons[i].selected = false;
 				buttons[i].defaultColor = GOLD;
@@ -91,10 +91,102 @@ namespace Juego
 				pauseButton.height = (float)screenHeight / 14.0f;
 			}
 
-			//pauseButton.height = (float)screenHeight / 12.0f;
 			pauseButton.selected = false;
 			pauseButton.defaultColor = GOLD;
 			pauseButton.messageColor = BLANK;
+		}
+
+		void InitGameplayVariables()
+		{
+			timerON = true;
+
+			HideCursor();
+			createPauseButtons();
+			createAsteroid();
+			createPlayer();
+			createShoot();
+			createCollisionCircle();
+			createPowerups();
+		}
+
+		void InitGameplayScreen()
+		{
+			//Textures Load
+			crosshairImage = LoadImage("res/textures/crosshair01.png");
+			ImageResize(&crosshairImage, 30, 30);
+			crosshair = LoadTextureFromImage(crosshairImage);
+
+			if (resolutionNormal)
+			{
+				shipImage = LoadImage("res/textures/nave01.png");
+				ImageResize(&shipImage, 50, 50);
+				ship = LoadTextureFromImage(shipImage);
+
+				shipMovingImage = LoadImage("res/textures/nave01_moving.png");
+				ImageResize(&shipMovingImage, 50, 58);//58
+				shipMoving = LoadTextureFromImage(shipMovingImage);
+
+				explosionImage = LoadImage("res/textures/explosion01.png");
+				ImageResize(&explosionImage, 50, 50);
+
+				asteroidExplosion = LoadTextureFromImage(explosionImage);
+
+				powerupMaxRapidFireImage = LoadImage("res/textures/powerup02.png");
+				ImageResize(&powerupMaxRapidFireImage, 30, 30);
+				powerupMaxRapidFire = LoadTextureFromImage(powerupMaxRapidFireImage);
+
+				powerupInvincibilityImage = LoadImage("res/textures/powerup01.png");
+				ImageResize(&powerupInvincibilityImage, 30, 30);
+				powerupInvincibility = LoadTextureFromImage(powerupInvincibilityImage);
+			}
+			else if (resolutionSmall)
+			{
+				shipImage = LoadImage("res/textures/nave01.png");
+				ImageResize(&shipImage, 50/2, 50/2);
+				ship = LoadTextureFromImage(shipImage);
+
+				shipMovingImage = LoadImage("res/textures/nave01_moving.png");
+				ImageResize(&shipMovingImage, 50/2, 58/2);
+				shipMoving = LoadTextureFromImage(shipMovingImage);
+
+				explosionImage = LoadImage("res/textures/explosion01.png");
+				ImageResize(&explosionImage, 50/2, 50/2);
+
+				asteroidExplosion = LoadTextureFromImage(explosionImage);
+
+				powerupMaxRapidFireImage = LoadImage("res/textures/powerup02.png");
+				ImageResize(&powerupMaxRapidFireImage, 30/2, 30/2);
+				powerupMaxRapidFire = LoadTextureFromImage(powerupMaxRapidFireImage);
+
+				powerupInvincibilityImage = LoadImage("res/textures/powerup01.png");
+				ImageResize(&powerupInvincibilityImage, 30/2, 30/2);
+				powerupInvincibility = LoadTextureFromImage(powerupInvincibilityImage);
+			}
+
+			UnloadImage(crosshairImage);
+			UnloadImage(shipImage);
+			UnloadImage(explosionImage);
+			UnloadImage(shipMovingImage);
+			UnloadImage(powerupMaxRapidFireImage);
+			UnloadImage(powerupInvincibilityImage);
+
+			#ifdef AUDIO
+			ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
+			SetSoundVolume(ship_shoot01, soundVolume);
+
+			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
+			SetMusicVolume(ship_rocket01, soundVolume);
+
+			asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
+			SetSoundVolume(asteroid_explode01, soundVolume);
+
+			powerup01 = LoadSound("res/sounds/powerup01.wav");
+			SetSoundVolume(powerup01, soundVolume);
+
+			SetSoundVolume(button_select01, soundVolume);
+			SetSoundVolume(button_navigate01, soundVolume);
+			#endif
+			isScreenFinished = false;
 		}
 
 		static void GameplayInput()
@@ -106,20 +198,17 @@ namespace Juego
 				gamePaused = true;
 				gameON = false;
 			}
-			// Gameplay Input
-			if (!(gameON))
-			{
-				ShowCursor();
-			}
+
 			// Player Input
 			if (gameON)
 			{
 				timerON = true;
 				crosshairColor = WHITE;
 				HideCursor();
-				playerInput();			
+				playerInput();
 			}
-			
+			else ShowCursor();
+
 			if (!gamePaused)
 			{
 				if (IsKeyPressed(KEY_ESCAPE))
@@ -188,28 +277,10 @@ namespace Juego
 			}
 		}
 
-		void InitGameplayVariables()
-		{
-
-			//Execute Functions & Extern variables 
-			timerON = true;
-			
-			createPauseButtons();
-			HideCursor();
-			createAsteroid();
-			createPlayer();
-			createShoot();
-			createCollisionCircle();
-			createPowerups();
-
-
-			//collisionCircle.active = true;
-		}
-
 		void UpdateGameplayScreen()
 		{
 			UpdateMusicStream(ship_rocket01);
-			
+
 			player.inputActive = false;
 
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
@@ -230,13 +301,13 @@ namespace Juego
 			{
 				if (timerON)
 				{
-					matchTimer += 1 * GetFrameTime(); //FINISH THIS
+					matchTimer += 1 * GetFrameTime();
 				}
 
 				if (matchTimer > 1)
 				{
 					matchTimer = 0;
-					if (matchSeconds < 58) // 58
+					if (matchSeconds < 58)
 					{
 						if (matchSeconds == 29)
 						{
@@ -247,14 +318,14 @@ namespace Juego
 							else
 							{
 								scoreMultiplier = 1;
-							}	
+							}
 						}
 						matchSeconds++;
 					}
 					else
 					{
 						matchSeconds = 0;
-						if (matchMinutes < 58) // 58
+						if (matchMinutes < 58)
 						{
 							matchMinutes++;
 						}
@@ -265,12 +336,12 @@ namespace Juego
 						}
 					}
 				}
+
 				playerUpdate();
 				collisionCircleUpdate();
-				PowerupsUpdate();
-				ShootUpdate();
-				AsteroidUpdate();
-				
+				powerupsUpdate();
+				shootUpdate();
+				asteroidUpdate();
 
 				// Collision logic: player vs walls
 				if (player.position.x > screenWidth + shipHeight) player.position.x = -(shipHeight);
@@ -282,9 +353,6 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsBig[i].position, asteroidsBig[i].radius) && asteroidsBig[i].active && !powerups[Invincibility].activated)
 					{
-					#ifdef AUDIO
-						//PlaySound(ship_explode01);
-					#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
@@ -299,9 +367,6 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsMedium[i].position, asteroidsMedium[i].radius) && asteroidsMedium[i].active && !powerups[Invincibility].activated)
 					{
-						#ifdef AUDIO
-						//PlaySound(ship_explode01);
-						#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
@@ -316,9 +381,6 @@ namespace Juego
 				{
 					if (CheckCollisionCircles(collisionCircle.position, collisionCircle.radius, asteroidsSmall[i].position, asteroidsSmall[i].radius) && asteroidsSmall[i].active && !powerups[Invincibility].activated)
 					{
-						#ifdef AUDIO
-						//PlaySound(ship_explode01);
-						#endif
 						gameON = false;
 						buttonOption = buttonGameOver;
 						isScreenFinished = true;
@@ -373,136 +435,50 @@ namespace Juego
 				matchTimer = 0;
 				buttonOption = buttonGameOver;
 				isScreenFinished = true;
-
-				//buttons[i].selected = false;
-				//isScreenFinished = true;
 			}
 		}
 
-		void InitGameplayScreen()
+		void DrawGameplay()
 		{
-			//Textures Load
-			crosshairImage = LoadImage("res/textures/crosshair01.png");
-			ImageResize(&crosshairImage, 30, 30);
-			crosshair = LoadTextureFromImage(crosshairImage);
+			DrawBackground();
+			collisionCircleDraw();
+			asteroidDraw();
+			shootDraw();
+			playerDraw();
+			powerupsDraw();
 
-			if (resolutionNormal)
+			DrawText(FormatText("Eliminations:%i", destroyedAsteroidsCount), screenWidth / 80, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
+			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
+			DrawTimer(2.5f, 2.2f,14.0f);
+
+			DrawTexturePro(crosshair, { 0,0,30,30 }, { mouse.position.x,mouse.position.y,30,30 }, {15,15}, 0, crosshairColor);
+			DrawRectangleLines(pauseButton.position.x, pauseButton.position.y, pauseButton.width, pauseButton.height, pauseButton.defaultColor);
+
+			if (resolutionNormal && !(resolutionBig)) DrawText(FormatText(" ||"), pauseButton.position.x, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
+			else if (resolutionSmall) DrawText(FormatText(" ||"), pauseButton.position.x + 2, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
+			else if (resolutionBig && resolutionNormal) DrawText(FormatText(" ||"), pauseButton.position.x + 12, pauseButton.position.y + 15, defaultFontSize, pauseButton.defaultColor);
+			
+
+			if (!(gameON))
 			{
-				shipImage = LoadImage("res/textures/nave01.png");
-				ImageResize(&shipImage, 50, 50);
-				ship = LoadTextureFromImage(shipImage);
-
-				shipMovingImage = LoadImage("res/textures/nave01_moving.png");
-				ImageResize(&shipMovingImage, 50, 58);//58
-				shipMoving = LoadTextureFromImage(shipMovingImage);
-
-				explosionImage = LoadImage("res/textures/explosion01.png");
-				ImageResize(&explosionImage, 50, 50);
-
-				asteroidExplosion = LoadTextureFromImage(explosionImage);
-
-				powerupMaxRapidFireImage = LoadImage("res/textures/powerup02.png");
-				ImageResize(&powerupMaxRapidFireImage, 30, 30);
-				powerupMaxRapidFire = LoadTextureFromImage(powerupMaxRapidFireImage);
-
-				powerupInvincibilityImage = LoadImage("res/textures/powerup01.png");
-				ImageResize(&powerupInvincibilityImage, 30, 30);
-				powerupInvincibility = LoadTextureFromImage(powerupInvincibilityImage);
+				if (gamePaused)
+				{
+					DrawRectangleRec(pauseBoxRec, DARKPURPLE);
+					for (int i = 0; i < maxButtons; i++)
+					{
+						DrawRectangleLines(buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height, buttons[i].defaultColor);
+					}
+					DrawText("PAUSED", buttons[0].position.x + (screenWidth * 0.02), buttons[0].position.y - (screenHeight * 0.1), defaultFontSize / 1.2, GOLD);
+					DrawText(FormatText("CONTINUE"), buttons[0].position.x + 10, buttons[0].position.y + 5, defaultFontSize / 1.3, buttons[0].defaultColor);
+					DrawText(FormatText("RESTART"), buttons[1].position.x + 8, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
+					DrawText(FormatText("MENU"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);
+				}
 			}
-			else if (resolutionSmall)
-			{
-				shipImage = LoadImage("res/textures/nave01.png");
-				ImageResize(&shipImage, 50/2, 50/2);
-				ship = LoadTextureFromImage(shipImage);
-
-				shipMovingImage = LoadImage("res/textures/nave01_moving.png");
-				ImageResize(&shipMovingImage, 50/2, 58/2);//58
-				shipMoving = LoadTextureFromImage(shipMovingImage);
-
-				explosionImage = LoadImage("res/textures/explosion01.png");
-				ImageResize(&explosionImage, 50/2, 50/2);
-
-				asteroidExplosion = LoadTextureFromImage(explosionImage);
-
-				powerupMaxRapidFireImage = LoadImage("res/textures/powerup02.png");
-				ImageResize(&powerupMaxRapidFireImage, 30/2, 30/2);
-				powerupMaxRapidFire = LoadTextureFromImage(powerupMaxRapidFireImage);
-
-				powerupInvincibilityImage = LoadImage("res/textures/powerup01.png");
-				ImageResize(&powerupInvincibilityImage, 30/2, 30/2);
-				powerupInvincibility = LoadTextureFromImage(powerupInvincibilityImage);
-			}
-
-			UnloadImage(crosshairImage);
-			UnloadImage(shipImage);
-			UnloadImage(explosionImage);
-			UnloadImage(shipMovingImage);
-			UnloadImage(powerupMaxRapidFireImage);
-			UnloadImage(powerupInvincibilityImage);
-
-#ifdef AUDIO
-			ship_shoot01 = LoadSound("res/sounds/ship_shoot01.wav");
-			SetSoundVolume(ship_shoot01, soundVolume);
-
-			ship_rocket01 = LoadMusicStream("res/sounds/ship_rocket01.ogg");
-			SetMusicVolume(ship_rocket01, soundVolume);
-
-			asteroid_explode01 = LoadSound("res/sounds/asteroid_explode01.wav");
-			SetSoundVolume(asteroid_explode01, soundVolume);
-
-			powerup01 = LoadSound("res/sounds/powerup01.wav");
-			SetSoundVolume(powerup01, soundVolume);
-
-			SetSoundVolume(button_select01, soundVolume);
-			SetSoundVolume(button_navigate01, soundVolume);
-#endif
-			isScreenFinished = false;
 		}
 
-		bool FinishGameplayScreen()// check this?
+		void DrawTimer(float widthvalue1, float widthvalue2, float heightvalue1)
 		{
-			buttonDistance = 0;
-			return isScreenFinished;
-		}
-
-		void DeInitGameplayResources()
-		{
-			UnloadTexture(ship);
-			UnloadTexture(shipMoving);
-			UnloadTexture(crosshair);
-			UnloadTexture(asteroidExplosion);
-			UnloadTexture(powerupMaxRapidFire);
-
-			#ifdef AUDIO
-			StopSound(asteroid_explode01);
-			StopSound(ship_shoot01);
-			StopSound(powerup01);
-			StopMusicStream(ship_rocket01);
-			UnloadSound(asteroid_explode01);
-			UnloadSound(ship_shoot01);
-			UnloadSound(powerup01);
-			UnloadMusicStream(ship_rocket01);
-			#endif
-		}
-
-		void RestartPhase()
-		{
-			maxShoots = 10;
-			rapidFireRate = 0.15;
-			InitGameplayVariables();
-			createPowerups();
-			buttonDistance = 0;
-			gameON = true;
-			timerON = true;
-			matchSeconds = 0;
-			matchMinutes = 0;
-			matchHours = 0;
-			scoreMultiplier = 5;
-		}
-
-		void DrawTimer(float widthvalue1,float widthvalue2,float heightvalue1)
-		{
-			if (matchHours > 0) // DrawTimer?
+			if (matchHours > 0)
 			{
 				DrawText(FormatText("%i:", matchHours), screenWidth / (widthvalue1 + 0.25), screenHeight / heightvalue1, defaultFontSize / 1.2, YELLOW);
 			}
@@ -542,42 +518,45 @@ namespace Juego
 			}
 		}
 
-		void DrawGameplay()
+		void RestartPhase()
 		{
+			maxShoots = 10;
+			rapidFireRate = 0.15f;
+			InitGameplayVariables();
+			createPowerups();
+			buttonDistance = 0;
+			gameON = true;
+			timerON = true;
+			matchSeconds = 0;
+			matchMinutes = 0;
+			matchHours = 0;
+			scoreMultiplier = 5;
+		}
 
-			DrawBackground();
-			collisionCircleDraw();
-			
-			AsteroidDraw();
-			PowerupsDraw();
-			ShootDraw();
-			playerDraw();
-			DrawText(FormatText("Eliminations:%i", destroyedAsteroidsCount), screenWidth / 80, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
-			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
-			DrawTimer(2.5f, 2.2f,14.0f);
-			DrawTexturePro(crosshair, { 0,0,30,30 }, { mouse.position.x,mouse.position.y,30,30 }, {15,15}, 0, crosshairColor);
-			DrawRectangleLines(pauseButton.position.x, pauseButton.position.y, pauseButton.width, pauseButton.height, pauseButton.defaultColor);
+		bool FinishGameplayScreen()
+		{
+			buttonDistance = 0;
+			return isScreenFinished;
+		}
 
-			if (resolutionNormal && !(resolutionBig)) DrawText(FormatText(" ||"), pauseButton.position.x, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
-			else if (resolutionSmall) DrawText(FormatText(" ||"), pauseButton.position.x + 2, pauseButton.position.y + 5, defaultFontSize, pauseButton.defaultColor);
-			else if (resolutionBig && resolutionNormal) DrawText(FormatText(" ||"), pauseButton.position.x + 12, pauseButton.position.y + 15, defaultFontSize, pauseButton.defaultColor);
-			
+		void DeInitGameplayResources()
+		{
+			UnloadTexture(ship);
+			UnloadTexture(shipMoving);
+			UnloadTexture(crosshair);
+			UnloadTexture(asteroidExplosion);
+			UnloadTexture(powerupMaxRapidFire);
 
-			if (!(gameON))
-			{
-				if (gamePaused)
-				{
-					DrawRectangleRec(pauseBoxRec, DARKPURPLE);
-					for (int i = 0; i < maxButtons; i++)
-					{
-						DrawRectangleLines(buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height, buttons[i].defaultColor);
-					}
-					DrawText("PAUSED", buttons[0].position.x + (screenWidth * 0.02), buttons[0].position.y - (screenHeight * 0.1), defaultFontSize / 1.2, GOLD);
-					DrawText(FormatText("CONTINUE"), buttons[0].position.x + 10, buttons[0].position.y + 5, defaultFontSize / 1.3, buttons[0].defaultColor);
-					DrawText(FormatText("RESTART"), buttons[1].position.x + 8, buttons[1].position.y + 5, defaultFontSize / 1.3, buttons[1].defaultColor);
-					DrawText(FormatText("MENU"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);
-				}
-			}
+			#ifdef AUDIO
+			StopSound(asteroid_explode01);
+			StopSound(ship_shoot01);
+			StopSound(powerup01);
+			StopMusicStream(ship_rocket01);
+			UnloadSound(asteroid_explode01);
+			UnloadSound(ship_shoot01);
+			UnloadSound(powerup01);
+			UnloadMusicStream(ship_rocket01);
+			#endif
 		}
 	}
 }

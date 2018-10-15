@@ -1,12 +1,9 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
+
 namespace Juego
 {
-	enum controlsOptions { // pasar a const?
-		buttonGoMenu = 12
-	};
-
-	//extern Texture2D controlScheme; // CHECK IF ITS USED
+	const int buttonGoMenu = 12;
 
 	namespace Controls_Section
 	{

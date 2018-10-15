@@ -2,7 +2,6 @@
 #define GAMEOVER_H
 namespace Juego
 {
-
 	namespace GameOver_Section
 	{
 		void InitGameOverScreen();

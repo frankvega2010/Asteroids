@@ -1,12 +1,15 @@
 #include "Asteroid.h"
+
 #include <cmath>
-#include "Game.h"
-#include "Player.h"
-#include "Screens\gameplay.h"
-#include "Screens\settings.h"
+
+#include "Setup/Game.h"
+#include "Setup/Player.h"
+#include "Screens/gameplay.h"
+#include "Screens/settings.h"
 
 namespace Juego
 {
+	int asteroidsSpeed = 0;
 	static float posX = 0;
 	static float posY = 0;
 	static float speedX = 0;
@@ -15,43 +18,47 @@ namespace Juego
 	static float rotationTimerBigAsteroids = 0;
 	static float rotationTimerMediumAsteroids = 0;
 	static float rotationTimerSmallAsteroids = 0;
+
 	static const int maxTimer = 1000;
-
-	int asteroidsSpeed = 0;
-
 	static float explosionTimer = 0;
 	static bool timerExplosionON = true;
 	
 	static Rectangle bigAsteroidSource = { 0.0f,0.0f, 90,90 };
-	static Rectangle bigAsteroidSourceSmall = { 0.0f,0.0f, 90/2,90/2 };
-
 	static Rectangle mediumAsteroidSource = { 0.0f,0.0f, 45,45 };
-	static Rectangle mediumAsteroidSourceSmall = { 0.0f,0.0f, 45/2,45/2 };
-
 	static Rectangle smallAsteroidSource = { 0.0f,0.0f, 22.5f,22.5f };
+
+	static Rectangle bigAsteroidSourceSmall = { 0.0f,0.0f, 90/2,90/2 };
+	static Rectangle mediumAsteroidSourceSmall = { 0.0f,0.0f, 45/2,45/2 };
 	static Rectangle smallAsteroidSourceSmall = { 0.0f,0.0f, 22.5f/2,22.5f/2 };
 
 	static Rectangle bigAsteroidDestination;
-	static Rectangle bigAsteroidDestinationSmall;
-
 	static Rectangle mediumAsteroidDestination;
-	static Rectangle mediumAsteroidDestinationSmall;
-
 	static Rectangle smallAsteroidDestination;
+
+	static Rectangle bigAsteroidDestinationSmall;
+	static Rectangle mediumAsteroidDestinationSmall;
 	static Rectangle smallAsteroidDestinationSmall;
 
 	static Vector2 bigAsteroidOrigin = { 45,45 };
-	static Vector2 bigAsteroidOriginSmall = { 45/2,45/2 };
-
 	static Vector2 mediumAsteroidOrigin = { 22.5f,22.5f };
-	static Vector2 mediumAsteroidOriginSmall = { 22.5f/2,22.5f/2 };
-
 	static Vector2 smallAsteroidOrigin = { 11.25f,11.25f };
+
+	static Vector2 bigAsteroidOriginSmall = { 45/2,45/2 };
+	static Vector2 mediumAsteroidOriginSmall = { 22.5f/2,22.5f/2 };
 	static Vector2 smallAsteroidOriginSmall = { 11.25f/2,11.25f/2 };
 
 	static Rectangle explosionSpriteNormal = { 0.0f,0.0f, 50,50 };
 	static Rectangle explosionSpriteSmall = { 0.0f,0.0f, 50/2,50/2 };
 	static Rectangle explosionSprite;
+
+	static const float ExplosionFadeAmount = 0.005;
+	static const int asteroidMaxExplosionSize = 100;
+	static const int asteroidBigMaxExplosionSize = 150;
+	
+	static const int defaultAsteroidBigRotationSpeed = 40;
+	static const int defaultAsteroidMediumRotationSpeed = 60;
+	static const int defaultAsteroidSmallRotationSpeed = 80;
+
 
 	Asteroid asteroidsSmall[asteroidsSmallLimit];
 	Asteroid asteroidsMedium[asteroidsMediumLimit];
@@ -118,9 +125,10 @@ namespace Juego
 				}
 
 				asteroidsBig[i].speed = { speedX, speedY};
+
 				if (resolutionNormal) asteroidsBig[i].radius = 40;
 				else if (resolutionSmall) asteroidsBig[i].radius = 20;
-				//asteroidsBig[i].radius = 40;
+
 				asteroidsBig[i].active = true;
 				asteroidsBig[i].isExplosionActive = false;
 				asteroidsBig[i].increasingExplosionSize = 0;
@@ -136,7 +144,6 @@ namespace Juego
 				if (resolutionNormal) asteroidsMedium[i].radius = 20;
 				else if (resolutionSmall) asteroidsMedium[i].radius = 10;
 
-				//asteroidsMedium[i].radius = 20;
 				asteroidsMedium[i].active = false;
 				asteroidsMedium[i].isExplosionActive = false;
 				asteroidsMedium[i].increasingExplosionSize = 0;
@@ -151,7 +158,6 @@ namespace Juego
 				if (resolutionNormal) asteroidsSmall[i].radius = 10;
 				else if (resolutionSmall) asteroidsSmall[i].radius = 5;
 
-				//asteroidsSmall[i].radius = 10;
 				asteroidsSmall[i].active = false;
 				asteroidsSmall[i].isExplosionActive = false;
 				asteroidsSmall[i].increasingExplosionSize = 0;
@@ -160,7 +166,7 @@ namespace Juego
 
 		}
 
-		void AsteroidUpdate()
+		void asteroidUpdate()
 		{
 			if (timerExplosionON)
 			{
@@ -175,10 +181,10 @@ namespace Juego
 					if (asteroidsBig[i].isExplosionActive)
 					{
 						asteroidsBig[i].increasingExplosionSize++;
-						asteroidsBig[i].increasingExplosionFade = asteroidsBig[i].increasingExplosionFade - 0.005;
+						asteroidsBig[i].increasingExplosionFade = asteroidsBig[i].increasingExplosionFade - ExplosionFadeAmount;
 					}
 
-					if (asteroidsBig[i].increasingExplosionSize >= 150)
+					if (asteroidsBig[i].increasingExplosionSize >= asteroidBigMaxExplosionSize)
 					{
 						asteroidsBig[i].isExplosionActive = false;
 					}
@@ -189,10 +195,10 @@ namespace Juego
 					if (asteroidsMedium[i].isExplosionActive)
 					{
 						asteroidsMedium[i].increasingExplosionSize++;
-						asteroidsMedium[i].increasingExplosionFade = asteroidsMedium[i].increasingExplosionFade - 0.005;
+						asteroidsMedium[i].increasingExplosionFade = asteroidsMedium[i].increasingExplosionFade - ExplosionFadeAmount;
 					}
 
-					if (asteroidsMedium[i].increasingExplosionSize >= 100)
+					if (asteroidsMedium[i].increasingExplosionSize >= asteroidMaxExplosionSize)
 					{
 						asteroidsMedium[i].isExplosionActive = false;
 					}
@@ -203,32 +209,28 @@ namespace Juego
 					if (asteroidsSmall[i].isExplosionActive)
 					{
 						asteroidsSmall[i].increasingExplosionSize++;
-						asteroidsSmall[i].increasingExplosionFade = asteroidsSmall[i].increasingExplosionFade - 0.005;
+						asteroidsSmall[i].increasingExplosionFade = asteroidsSmall[i].increasingExplosionFade - ExplosionFadeAmount;
 					}
 
-					if (asteroidsSmall[i].increasingExplosionSize >= 100)
+					if (asteroidsSmall[i].increasingExplosionSize >= asteroidMaxExplosionSize)
 					{
 						asteroidsSmall[i].isExplosionActive = false;
 					}
 				}
 			}
 
-			
-
-			if (rotationTimerBigAsteroids < maxTimer) rotationTimerBigAsteroids += 40 * GetFrameTime();
+			if (rotationTimerBigAsteroids < maxTimer) rotationTimerBigAsteroids += defaultAsteroidBigRotationSpeed * GetFrameTime();
 			else rotationTimerBigAsteroids = 0;
 
-			if (rotationTimerMediumAsteroids < maxTimer) rotationTimerMediumAsteroids += 60 * GetFrameTime();
+			if (rotationTimerMediumAsteroids < maxTimer) rotationTimerMediumAsteroids += defaultAsteroidMediumRotationSpeed * GetFrameTime();
 			else rotationTimerMediumAsteroids = 0;
 
-			if (rotationTimerSmallAsteroids < maxTimer) rotationTimerSmallAsteroids += 80 * GetFrameTime();
+			if (rotationTimerSmallAsteroids < maxTimer) rotationTimerSmallAsteroids += defaultAsteroidSmallRotationSpeed * GetFrameTime();
 			else rotationTimerSmallAsteroids = 0;
 			
 			// Meteors logic: big meteors
 			for (int i = 0; i < asteroidsBigLimit; i++)
 			{
-				
-
 				if (asteroidsBig[i].active)
 				{
 					// Movement
@@ -246,7 +248,6 @@ namespace Juego
 			// Meteors logic: medium meteors
 			for (int i = 0; i < asteroidsMediumLimit; i++)
 			{
-
 				if (asteroidsMedium[i].active)
 				{
 					// Movement
@@ -264,7 +265,6 @@ namespace Juego
 			// Meteors logic: small meteors
 			for (int i = 0; i < asteroidsSmallLimit; i++)
 			{
-
 				if (asteroidsSmall[i].active)
 				{
 					// Movement
@@ -280,7 +280,7 @@ namespace Juego
 			}
 		}
 
-		void AsteroidDraw()
+		void asteroidDraw()
 		{
 			// Draw meteors
 			for (int i = 0; i < asteroidsBigLimit; i++)
@@ -294,7 +294,6 @@ namespace Juego
 
 					if (resolutionNormal) DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, rotationTimerBigAsteroids, BLUE);
 					else if (resolutionSmall) DrawTexturePro(asteroid, bigAsteroidSourceSmall, bigAsteroidDestinationSmall, bigAsteroidOriginSmall, rotationTimerBigAsteroids, BLUE);
-					
 				}
 				else 
 				{
@@ -302,7 +301,6 @@ namespace Juego
 
 					if (resolutionNormal) DrawTexturePro(asteroid, bigAsteroidSource, bigAsteroidDestination, bigAsteroidOrigin, 0, DARKGRAY);
 					else if (resolutionSmall) DrawTexturePro(asteroid, bigAsteroidSourceSmall, bigAsteroidDestinationSmall, bigAsteroidOriginSmall, 0, DARKGRAY);
-					
 				} 
 			}
 

@@ -1,7 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
+
 #include <string>
+
 #include "raylib.h"
+
 using namespace std;
 
 namespace Juego
@@ -17,7 +20,7 @@ namespace Juego
 		Settings
 	};
 
-	struct Buttons { //array de botones
+	struct Buttons {
 		Vector2 position;
 		float width;
 		float height;
@@ -27,27 +30,11 @@ namespace Juego
 	};
 
 	extern Image explosionImage;
-
-	
-
-	//gameplay
-	//extern Texture2D ship;
-	//extern Texture2D shipMoving;
-	//extern Texture2D crosshair;
-	//extern Texture2D asteroidExplosion;
-
-	//game
 	extern Image asteroidImage;
 	extern Texture2D asteroid;
 	extern Texture2D asteroidMedium;
 	extern Texture2D asteroidSmall;
 	extern Texture2D backgroundGame;
-
-	//gameover
-	//extern Texture2D shipExplosion;
-
-	
-	
 
 	#ifdef AUDIO
 
@@ -78,8 +65,8 @@ namespace Juego
 
 	extern bool isScreenFinished;
 
-	void checkAsteroidSprite();
 	void resolutionBackground();
+	void checkAsteroidSprite();
 	void DrawBackground();
 	void Execute();
 }

@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include <cmath>
+
 #include "Setup\Game.h"
 #include "Setup\Asteroid.h"
 #include "Setup\PlayerShoot.h"
@@ -9,42 +10,46 @@
 
 namespace Juego
 {
+	rocketShip player;
+	Circle collisionCircle;
+
+	float shipHeight = (playerBaseSize / 2) / tanf(20 * DEG2RAD);
+	float shipHeightCircle = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
+
+	static float shipHeightCircleSmall = (playerBaseSize / 2) / tanf(62 * DEG2RAD);
+
 	static int defaultRotationSpeed = 280;
 	static int defaultAcceleration = 1.0f;
 	static int defaultDeacceleration = 0.01f;
 	static int defaultBreakSpeed = 2.0f;
-	rocketShip player;
-	Circle collisionCircle;
-	
-	float shipHeight = (playerBaseSize / 2) / tanf(20 * DEG2RAD);
-	float shipHeightv2 = (playerBaseSize / 2) / tanf(38 * DEG2RAD);
-	float shipHeightv2Small = (playerBaseSize / 2) / tanf(62 * DEG2RAD);
 
 	static Rectangle shipSource = { 0.0f,0.0f, 50,50 };
-	static Rectangle shipSourceSmall = { 0.0f,0.0f, 50/2,50/2 };
-
 	static Rectangle shipMovingSource = { 0.0f,0.0f, 50,58 };
+
+	static Rectangle shipSourceSmall = { 0.0f,0.0f, 50/2,50/2 };
 	static Rectangle shipMovingSourceSmall = { 0.0f,0.0f, 50/2,58/2 };
 
 	static Rectangle shipDestination;
-	static Rectangle shipDestinationSmall;
-
 	static Rectangle shipMovingDestination;
+
+	static Rectangle shipDestinationSmall;
 	static Rectangle shipMovingDestinationSmall;
 
-	static Vector2 shipOrigin = { 25,48 };//48 sweet spot
-	static Vector2 shipOriginSmall = { 25/2,48/2 };//48 sweet spot
+	static Vector2 shipOrigin = { 25,48 };
+	static Vector2 shipOriginSmall = { 25/2,48/2 };
 	
+	//Player movement with mouse
 	static Vector2 rotationDirection;
 	static float rotationAngle = 0.0f;
 	static Vector2 normalizedDirection = {0,0};
 	static Vector2 playerNewPosition = { 0,0 };
+	static const float angleFix = 1.57f;
+	static const int accelerationDefaultSpeed = 250;
 
 	namespace Gameplay_Section
 	{
 		void createPlayer()
 		{
-			//player.position = { (float)screenWidth / 2, (float)screenHeight / 2 - shipHeight / 2 };
 			player.position = { (float)screenWidth / 2, (float)screenHeight / 2 };
 			player.score = 0;
 			player.acceleration = {10,10};
@@ -53,7 +58,6 @@ namespace Juego
 			player.isAlive = true;
 			player.inputActive = false;
 			player.textureTint = WHITE;
-
 		}
 
 		void createCollisionCircle()
@@ -70,7 +74,7 @@ namespace Juego
 		
 		void playerInput()
 		{
-			ShootInput();
+			shootInput();
 
 			//Player logic: acceleration
 			if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
@@ -84,34 +88,29 @@ namespace Juego
 				normalizedDirection.x = rotationDirection.x / sqrt(pow(rotationDirection.x,2.0) + pow(rotationDirection.y, 2.0));
 				normalizedDirection.y = rotationDirection.y / sqrt(pow(rotationDirection.x, 2.0) + pow(rotationDirection.y, 2.0));
 
-				player.acceleration.x += normalizedDirection.x * 250 * GetFrameTime();
-				player.acceleration.y += normalizedDirection.y * 250 * GetFrameTime();
+				player.acceleration.x += normalizedDirection.x * accelerationDefaultSpeed * GetFrameTime();
+				player.acceleration.y += normalizedDirection.y * accelerationDefaultSpeed * GetFrameTime();
 			}
 			else
 			{
 				#ifdef AUDIO
-								StopMusicStream(ship_rocket01);
+				StopMusicStream(ship_rocket01);
 				#endif
 			}
-
-
 		}
 
 		void playerUpdate()
 		{
-
 			rotationDirection.x = (float)mouse.position.x - (float)player.position.x;
 			rotationDirection.y = (float)mouse.position.y - (float)player.position.y;
 
-			rotationAngle = atan2(rotationDirection.y, rotationDirection.x) + 1.57f;
+			rotationAngle = atan2(rotationDirection.y, rotationDirection.x) + angleFix;
 
 			player.rotation = rotationAngle;
 
 			// Player logic: movement
-
 			player.position.x = player.position.x + player.acceleration.x * GetFrameTime();
 			player.position.y = player.position.y + player.acceleration.y * GetFrameTime();
-
 		}
 
 		void collisionCircleUpdate()
@@ -119,15 +118,14 @@ namespace Juego
 			// Players Collision Circle logic: movement
 			if (resolutionNormal)
 			{
-				collisionCircle.position.x = player.position.x + sinf(player.rotation)*(shipHeightv2);
-				collisionCircle.position.y = player.position.y - cosf(player.rotation)*(shipHeightv2);
+				collisionCircle.position.x = player.position.x + sinf(player.rotation)*(shipHeightCircle);
+				collisionCircle.position.y = player.position.y - cosf(player.rotation)*(shipHeightCircle);
 			}
 			else if (resolutionSmall)
 			{
-				collisionCircle.position.x = player.position.x + sinf(player.rotation)*(shipHeightv2Small);
-				collisionCircle.position.y = player.position.y - cosf(player.rotation)*(shipHeightv2Small);
+				collisionCircle.position.x = player.position.x + sinf(player.rotation)*(shipHeightCircleSmall);
+				collisionCircle.position.y = player.position.y - cosf(player.rotation)*(shipHeightCircleSmall);
 			}
-			
 		}
 
 		void playerDraw()
@@ -155,8 +153,6 @@ namespace Juego
 				DrawTriangle(v1, v2, v3, MAROON);
 			}
 
-			
-
 			if (player.inputActive)
 			{
 				if (resolutionSmall)
@@ -167,7 +163,6 @@ namespace Juego
 				{
 					DrawTexturePro(shipMoving, shipMovingSource, shipMovingDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
 				}
-				
 			}
 			else
 			{
@@ -179,39 +174,33 @@ namespace Juego
 				{
 					DrawTexturePro(ship, shipSource, shipDestination, shipOrigin, rotationAngle*RAD2DEG, player.textureTint);
 				}
-				
 			}
-			
-			
 		}
 
 		#ifdef TESTING
 				void collisionCircleDraw() // only in DEBUG mode
 				{
-					if (resolutionNormal)//shipHeightv2Small
+					if (resolutionNormal)
 					{
-						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 100, 0, 0, 200 });
-						
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightCircle), player.position.y - cosf(player.rotation)*(shipHeightCircle) }, collisionCircle.radius, { 100, 0, 0, 200 });
 					}
 					else if (resolutionSmall)
 					{
-						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2Small), player.position.y - cosf(player.rotation)*(shipHeightv2Small) }, collisionCircle.radius, { 100, 0, 0, 200 });
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightCircleSmall), player.position.y - cosf(player.rotation)*(shipHeightCircleSmall) }, collisionCircle.radius, { 100, 0, 0, 200 });
 					}
 					DrawLineEx(player.position, mouse.position, 1, YELLOW);
-					
 				}
 		#endif
 		#ifdef RELEASE
 				void collisionCircleDraw() // only in RELEASE mode
 				{
-					if (resolutionNormal)//shipHeightv2Small
+					if (resolutionNormal)
 					{
-						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2), player.position.y - cosf(player.rotation)*(shipHeightv2) }, collisionCircle.radius, { 0, 0, 0,0 });
-
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightCircle), player.position.y - cosf(player.rotation)*(shipHeightCircle) }, collisionCircle.radius, { 0, 0, 0,0 });
 					}
 					else if (resolutionSmall)
 					{
-						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightv2Small), player.position.y - cosf(player.rotation)*(shipHeightv2Small) }, collisionCircle.radius, { 0, 0, 0, 0 });
+						DrawCircleV({ player.position.x + sinf(player.rotation)*(shipHeightCircleSmall), player.position.y - cosf(player.rotation)*(shipHeightCircleSmall) }, collisionCircle.radius, { 0, 0, 0, 0 });
 					}
 				}
 		#endif

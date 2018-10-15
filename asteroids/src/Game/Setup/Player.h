@@ -25,12 +25,12 @@ namespace Juego
 	};
 
 	const int playerBaseSize = 25;
+
 	extern rocketShip player;
 	extern Circle collisionCircle;
+
 	extern float shipHeight;
-	extern float shipHeightv2;
-
-
+	extern float shipHeightCircle;
 
 	namespace Gameplay_Section
 	{

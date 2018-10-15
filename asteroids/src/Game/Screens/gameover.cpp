@@ -2,30 +2,34 @@
 
 #include "Setup/Game.h"
 #include "Screens/gameplay.h"
-#include "Setup\Player.h"
-#include "Setup\Asteroid.h"
-#include "Setup\PlayerShoot.h"
-#include "Screens\settings.h"
+#include "Setup/Player.h"
+#include "Setup/Asteroid.h"
+#include "Setup/PlayerShoot.h"
+#include "Screens/settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
 
 namespace Juego
 {
+	Texture2D shipExplosion;
+
 	static const int maxButtons = 2;
 
 	static Buttons buttons[maxButtons];
 	static int buttonDistance = 0;
 	static int buttonSelect = 0;
-
 	static Color optionColor = RED;
+
+	static bool timerON = true;
+
 	static int finalScore;
 	static float finalScoreTimer = 0;
+	static int increasingFinalScore = 0;
+
 	static float explosionTimer = 0;
 	static float increasingExplosionSize = 0;
 	static float increasingExplosionFade = 1;
-	static int increasingFinalScore = 0;
-	static bool timerON = true;
 	static bool timerExplosionON = true;
 
 	static Rectangle shipExplosionSource = { 0.0f,0.0f, 60,60 };
@@ -37,7 +41,9 @@ namespace Juego
 	static bool isButtonSoundPlaying = false;
 	static int buttonSelectSaveNumber = 0;
 
-	Texture2D shipExplosion;
+	static const float shipExplosionFadeAmount = 0.005;
+	static const int finalScoreIncreaseAmount = 100;
+	static const int shipMaxExplosionSize = 200;
 
 	namespace GameOver_Section
 	{
@@ -52,7 +58,6 @@ namespace Juego
 				if (resolutionNormal) buttons[i].height = (float)screenHeight / 12.0f;
 				else if (resolutionSmall) buttons[i].height = (float)screenHeight / 14.0f;
 
-				//buttons[i].height = (float)screenHeight / 12.0f;
 				buttons[i].selected = false;
 				buttons[i].defaultColor = RED;
 				buttons[i].messageColor = BLANK;
@@ -95,10 +100,13 @@ namespace Juego
 			finalScore = (gameScore * scoreMultiplier);
 			increasingFinalScore = 0;
 			finalScoreTimer = 0;
+
 			increasingExplosionSize = 0;
 			increasingExplosionFade = 1;
+
 			timerON = true;
 			timerExplosionON = true;
+
 			ShowCursor();
 			createGameOverButtons();
 			isScreenFinished = false;
@@ -152,7 +160,7 @@ namespace Juego
 		void UpdateGameOverScreen()
 		{
 			GameOverInput(); 
-			AsteroidUpdate();
+			asteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 			
 
@@ -200,13 +208,13 @@ namespace Juego
 			{
 				explosionTimer = 0;
 				increasingExplosionSize++;
-				increasingExplosionFade = increasingExplosionFade - 0.005;
+				increasingExplosionFade = increasingExplosionFade - shipExplosionFadeAmount;
 			}
 
 			if (finalScoreTimer > 0.08)
 			{
 				finalScoreTimer = 0;
-				increasingFinalScore = increasingFinalScore + 100;
+				increasingFinalScore = increasingFinalScore + finalScoreIncreaseAmount;
 				#ifdef AUDIO
 				PlaySound(points01);
 				#endif			
@@ -219,7 +227,7 @@ namespace Juego
 				increasingFinalScore = finalScore;
 			}
 
-			if (increasingExplosionSize >= 200)
+			if (increasingExplosionSize >= shipMaxExplosionSize)
 			{
 				timerExplosionON = false;
 				explosionTimer = 0;
@@ -229,7 +237,7 @@ namespace Juego
 		void DrawGameOver()
 		{
 			DrawBackground();
-			AsteroidDraw();
+			asteroidDraw();
 
 			for (int i = 0; i < maxButtons; i++)
 			{
@@ -259,25 +267,18 @@ namespace Juego
 
 				if(resolutionNormal) DrawTexturePro(shipExplosion, shipExplosionSource, shipExplosionDestination, shipExplosionOrigin, 0, Fade(WHITE, increasingExplosionFade));
 				else if(resolutionSmall ) DrawTexturePro(shipExplosion, shipExplosionSourceSmall, shipExplosionDestination, shipExplosionOrigin, 0, Fade(WHITE, increasingExplosionFade));
-		
-				//DrawTexturePro(shipExplosion, { 0.0f,0.0f, 60,60 }, { player.position.x,player.position.y, increasingExplosionSize,increasingExplosionSize }, { 0,0 }, 0, Fade(WHITE, increasingExplosionFade));
 			}
 			
 		}
 
 		bool FinishGameOverScreen()
 		{
-			//timerON = false;
-			//timerExplosionON = false;
 			buttonDistance = 0;
-			#ifdef AUDIO
-			#endif
 			return isScreenFinished;
 		}
 
 		void DeInitGameOverResources()
 		{
-			//UnloadImage(explosionImage);
 			#ifdef AUDIO
 			StopSound(points01);
 			StopSound(ship_explode01);

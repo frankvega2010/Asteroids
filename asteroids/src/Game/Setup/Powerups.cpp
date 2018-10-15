@@ -1,13 +1,26 @@
 #include "Powerups.h"
+
 #include "Setup\Game.h"
 #include "Setup\Player.h"
+#include "Setup\PlayerShoot.h"
 #include "Screens\gameplay.h"
 #include "Screens\settings.h"
-#include "Setup\PlayerShoot.h"
 
 namespace Juego
 {
 	Powerup powerups[maxPowerups];
+
+	static Rectangle powerupSource = { 0.0f,0.0f, 30,30 };
+	static Rectangle powerupSourceSmall = { 0.0f,0.0f, 15,15 };
+
+	static Rectangle powerupInvincibilityDestination;
+	static Rectangle powerupInvincibilityDestinationSmall;
+
+	static Rectangle powerupMaxRapidFireDestination;
+	static Rectangle powerupMaxRapidFireDestinationSmall;
+
+	static Vector2 powerupOrigin = { 15,15 };
+	static Vector2 powerupOriginSmall = { 15/2,15/2 };
 
 	namespace Gameplay_Section
 	{
@@ -22,7 +35,6 @@ namespace Juego
 				if (resolutionNormal) powerups[i].radius = 10;
 				else if (resolutionSmall) powerups[i].radius = 5;
 
-				//powerups[i].radius = 10;
 				powerups[i].speed = { 0,0 };
 				powerups[i].useTimer = 0;
 				powerups[i].useCountdown = 5;
@@ -31,7 +43,7 @@ namespace Juego
 			}
 		}
 
-		void PowerupsUpdate()
+		void powerupsUpdate()
 		{
 			for (int i = 0; i < maxPowerups; i++)
 			{
@@ -72,7 +84,7 @@ namespace Juego
 
 					if (i == MaxRapidFire)
 					{
-						rapidfiretimer = 0;
+						rapidFireTimer = 0;
 						maxShoots = 10;
 						rapidFireRate = 0.15;
 					}
@@ -97,7 +109,7 @@ namespace Juego
 
 					if (i == MaxRapidFire)
 					{
-						rapidfiretimer = 0;
+						rapidFireTimer = 0;
 						maxShoots = 30;
 						rapidFireRate = 0.05;	
 					}
@@ -105,7 +117,7 @@ namespace Juego
 			}
 		}
 
-		void PowerupsDraw()
+		void powerupsDraw()
 		{
 			if (powerups[Invincibility].activated)
 			{
@@ -114,10 +126,15 @@ namespace Juego
 
 			if (!powerups[Invincibility].activated && powerups[Invincibility].onScreen)
 			{
+				powerupInvincibilityDestination = { powerups[Invincibility].position.x,powerups[Invincibility].position.y, 30,30 };
+				powerupInvincibilityDestinationSmall = { powerups[Invincibility].position.x,powerups[Invincibility].position.y, 15,15 };
+
 				DrawCircleV(powerups[Invincibility].position, powerups[Invincibility].radius, RED);
-				if (resolutionNormal) DrawTexturePro(powerupInvincibility, { 0.0f,0.0f, 30,30 }, { powerups[Invincibility].position.x,powerups[Invincibility].position.y, 30,30 }, { 15,15 }, 0, WHITE);
-				else if (resolutionSmall) DrawTexturePro(powerupInvincibility, { 0.0f,0.0f, 15,15 }, { powerups[Invincibility].position.x,powerups[Invincibility].position.y, 15,15 }, { 15 / 2,15 / 2 }, 0, WHITE);
+
+				if (resolutionNormal) DrawTexturePro(powerupInvincibility, powerupSource, powerupInvincibilityDestination, powerupOrigin, 0, WHITE);
+				else if (resolutionSmall) DrawTexturePro(powerupInvincibility, powerupSourceSmall, powerupInvincibilityDestinationSmall, powerupOriginSmall, 0, WHITE);
 			}
+
 
 			if (powerups[MaxRapidFire].activated)
 			{
@@ -126,9 +143,13 @@ namespace Juego
 
 			if (!powerups[MaxRapidFire].activated && powerups[MaxRapidFire].onScreen)
 			{
+				powerupMaxRapidFireDestination = { powerups[MaxRapidFire].position.x,powerups[MaxRapidFire].position.y, 30,30 };
+				powerupMaxRapidFireDestinationSmall = { powerups[MaxRapidFire].position.x,powerups[MaxRapidFire].position.y, 15,15 };
+
 				DrawCircleV(powerups[MaxRapidFire].position, powerups[MaxRapidFire].radius, GOLD);
-				if (resolutionNormal) DrawTexturePro(powerupMaxRapidFire, { 0.0f,0.0f, 30,30 } , { powerups[MaxRapidFire].position.x,powerups[MaxRapidFire].position.y, 30,30 }, { 15,15 }, 0, WHITE);
-				else if(resolutionSmall) DrawTexturePro(powerupMaxRapidFire, { 0.0f,0.0f, 15,15 }, { powerups[MaxRapidFire].position.x,powerups[MaxRapidFire].position.y, 15,15 }, { 15/2,15/2 }, 0, WHITE);
+
+				if (resolutionNormal) DrawTexturePro(powerupMaxRapidFire, powerupSource, powerupMaxRapidFireDestination, powerupOrigin, 0, WHITE);
+				else if(resolutionSmall) DrawTexturePro(powerupMaxRapidFire, powerupSourceSmall, powerupMaxRapidFireDestinationSmall, powerupOriginSmall, 0, WHITE);
 			}
 		}
 	}

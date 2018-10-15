@@ -1,5 +1,6 @@
 #ifndef POWERUPS_H
 #define POWERUPS_H
+
 #include "raylib.h"
 
 namespace Juego
@@ -25,14 +26,11 @@ namespace Juego
 	const int maxPowerups = 2;
 	extern Powerup powerups[maxPowerups];
 
-	//extern Powerup powerupInvincibility;
-	//extern Powerup powerupmaxRapidFire;
-
 	namespace Gameplay_Section
 	{
 		void createPowerups();
-		void PowerupsUpdate();
-		void PowerupsDraw();
+		void powerupsUpdate();
+		void powerupsDraw();
 	}
 }
 

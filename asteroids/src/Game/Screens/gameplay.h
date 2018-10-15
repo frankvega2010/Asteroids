@@ -12,26 +12,26 @@ namespace Juego
 		buttonQuitToMenu
 	};
 
-	extern bool gameON;
-
-	extern int scoreMultiplier;
-	extern bool isExplosionActive;
-
 	extern Texture2D asteroidExplosion;
 	extern Texture2D ship;
 	extern Texture2D shipMoving;
 	extern Texture2D powerupMaxRapidFire;
 	extern Texture2D powerupInvincibility;
 
+	extern bool gameON;
+
+	extern int scoreMultiplier;
+	extern bool isExplosionActive;
+
 	namespace Gameplay_Section
 	{
-		void UpdateGameplayScreen();
-		void InitGameplayScreen();
 		void InitGameplayVariables();
-		void RestartPhase();
-		bool FinishGameplayScreen();
+		void InitGameplayScreen();
+		void UpdateGameplayScreen();
 		void DrawGameplay();
 		void DrawTimer(float widthvalue1, float widthvalue2, float heightvalue1);
+		void RestartPhase();
+		bool FinishGameplayScreen();
 		void DeInitGameplayResources();
 	}
 }

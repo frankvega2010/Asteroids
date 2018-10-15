@@ -2,9 +2,9 @@
 
 #include "raylib.h"
 #include "Setup/Game.h"
-#include "Setup\Player.h"
-#include "Setup\Asteroid.h"
-#include "Screens\settings.h"
+#include "Setup/Player.h"
+#include "Setup/Asteroid.h"
+#include "Screens/settings.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
@@ -54,9 +54,6 @@ namespace Juego
 			#endif
 
 			createMenuButtons();
-			//EnableCursor();
-			//ShowCursor();
-			//ShowCursor();
 			isScreenFinished = false;
 		}
 
@@ -118,7 +115,7 @@ namespace Juego
 			#ifdef AUDIO
 			UpdateMusicStream(song_alert);
 			#endif
-			AsteroidUpdate();
+			asteroidUpdate();
 			mouse.position = { (float)GetMouseX(),(float)GetMouseY() };
 
 			MenuInput();
@@ -160,7 +157,7 @@ namespace Juego
 		void DrawMenu()
 		{
 			DrawBackground();
-			AsteroidDraw();
+			asteroidDraw();
 
 			for (int i = 0; i < maxButtons; i++)
 			{
@@ -209,12 +206,10 @@ namespace Juego
 			DrawText(FormatText("SETTINGS"), buttons[2].position.x + 10, buttons[2].position.y + 5, defaultFontSize / 1.3, buttons[2].defaultColor);
 			DrawText(FormatText("CREDITS"), buttons[3].position.x + 10, buttons[3].position.y + 5, defaultFontSize / 1.1, buttons[3].defaultColor);
 			DrawText(FormatText("QUIT"), buttons[4].position.x + 10, buttons[4].position.y + 5, defaultFontSize, buttons[4].defaultColor);
-			//DrawRectangle(mouse.position.x + 50, mouse.position.y, mouse.width, mouse.height, mouse.defaultColor); // placeholder if you want to use a custom Mouse Icon instead of the windows default one. If you use this remember to put Enbale and Disable Cursor.?
 		}
 
 		bool FinishMenuScreen()
 		{
-			//DisableCursor();
 			buttonDistance = 0;
 			return isScreenFinished;
 		}

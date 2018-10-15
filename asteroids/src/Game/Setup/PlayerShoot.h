@@ -1,10 +1,7 @@
 #ifndef PLAYERSHOOT_H
 #define PLAYERSHOOT_H
-#include <cmath>
+
 #include "raylib.h"
-#include "Player.h"
-#include "Game.h"
-#include "Asteroid.h"
 
 namespace Juego
 {
@@ -13,26 +10,27 @@ namespace Juego
 		Vector2 speed;
 		float rotation;
 		int radius;
-		int lifespan;
 		bool active;
 		Color color;
 	};
 
 	extern int maxShoots;
 	const int maxShootsSpecial = 30;
-	extern float rapidfiretimer;
-	extern float rapidFireRate;
 
 	extern Shoot shoots[maxShootsSpecial];
+
+	extern float rapidFireTimer;
+	extern float rapidFireRate;
+
 	extern int gameScore;
 	extern int destroyedAsteroidsCount;
 
 	namespace Gameplay_Section
 	{
 		void createShoot();
-		void ShootInput();
-		void ShootUpdate();
-		void ShootDraw();
+		void shootInput();
+		void shootUpdate();
+		void shootDraw();
 	}
 }
 

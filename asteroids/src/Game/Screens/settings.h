@@ -11,10 +11,10 @@ namespace Juego
 
 	namespace Settings_Section
 	{
-		void UpdateSettingsScreen();
 		void InitSettingsScreen();
-		bool FinishSettingsScreen();
+		void UpdateSettingsScreen();
 		void DrawSettings();
+		bool FinishSettingsScreen();
 		void DeInitSettingsResources();
 	}
 }

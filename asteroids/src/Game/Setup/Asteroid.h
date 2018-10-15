@@ -27,8 +27,8 @@ namespace Juego
 	namespace Gameplay_Section
 	{
 		void createAsteroid();
-		void AsteroidUpdate();
-		void AsteroidDraw();
+		void asteroidUpdate();
+		void asteroidDraw();
 	}
 }
 #endif // ASTEROID_H

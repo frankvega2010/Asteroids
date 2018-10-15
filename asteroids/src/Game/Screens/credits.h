@@ -4,10 +4,10 @@ namespace Juego
 {
 	namespace Credits_Section
 	{
-		void UpdateCreditsScreen();
 		void InitCreditsScreen();
-		bool FinishCreditsScreen();
+		void UpdateCreditsScreen();
 		void DrawCredits();
+		bool FinishCreditsScreen();
 	}
 }
 #endif // CREDITS_H

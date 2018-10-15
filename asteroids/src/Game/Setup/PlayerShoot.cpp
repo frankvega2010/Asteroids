@@ -1,22 +1,29 @@
 #include "PlayerShoot.h"
-#include "Screens\gameplay.h"
-#include "Setup\Powerups.h"
-#include "Screens\settings.h"
+
+#include "Setup/Powerups.h"
+#include "Setup/Player.h"
+#include "Setup/Game.h"
+#include "Screens/gameplay.h"
+#include "Screens/settings.h"
+#include "Setup/Asteroid.h"
 
 using namespace Juego;
 using namespace Gameplay_Section;
 
 namespace Juego
 {
-	Shoot shoots[maxShootsSpecial];
-
 	int maxShoots = 10;
+
+	Shoot shoots[maxShootsSpecial];
+	
+	float rapidFireTimer = 0;
+	float rapidFireRate = 0.15;
+
+	int gameScore = 0;
+	int destroyedAsteroidsCount = 0;
+
 	static int midAsteroidsCount = 0;
 	static int smallAsteroidsCount = 0;
-	int destroyedAsteroidsCount = 0;
-	float rapidfiretimer = 0;
-	float rapidFireRate = 0.15;
-	int gameScore = 0; // llevar a gameplay?
 
 	namespace Gameplay_Section
 	{
@@ -35,7 +42,6 @@ namespace Juego
 				if (resolutionNormal) shoots[i].radius = 2;
 				else if (resolutionSmall) shoots[i].radius = 1;
 				
-				shoots[i].lifespan = 0;
 				shoots[i].color = WHITE;
 				shoots[i].active = false;
 			}
@@ -44,15 +50,17 @@ namespace Juego
 			smallAsteroidsCount = 0;
 			destroyedAsteroidsCount = 0;
 		}
-		void ShootInput()
+
+		void shootInput()
 		{
 			// Player shoot logic
 			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
 			{
-				rapidfiretimer += 1 * GetFrameTime();
+				rapidFireTimer += 1 * GetFrameTime();
+
 				for (int i = 0; i < maxShoots; i++)
 				{
-					if (rapidfiretimer > rapidFireRate)
+					if (rapidFireTimer > rapidFireRate)
 					{
 						if (!shoots[i].active)
 						{
@@ -78,7 +86,7 @@ namespace Juego
 							}
 							
 							shoots[i].rotation = player.rotation;
-							rapidfiretimer = 0;
+							rapidFireTimer = 0;
 							shoots[i].active = true;
 							break;
 						}
@@ -86,18 +94,9 @@ namespace Juego
 				}
 			}
 		}
-		void ShootUpdate()
+
+		void shootUpdate()
 		{
-			/*if (powerups[MaxRapidFire].activated)
-			{
-				maxShoots = 30;
-				rapidFireRate = 0.05;
-			}
-			else
-			{
-				maxShoots = 10;
-				rapidFireRate = 0.15;
-			}*/
 			// Shot logic
 			for (int i = 0; i < maxShoots; i++)
 			{
@@ -111,27 +110,24 @@ namespace Juego
 					if (shoots[i].position.x > screenWidth + shoots[i].radius)
 					{
 						shoots[i].active = false;
-						shoots[i].lifespan = 0;//check lifespan if that variable is needed
 					}
 					else if (shoots[i].position.x < 0 - shoots[i].radius)
 					{
 						shoots[i].active = false;
-						shoots[i].lifespan = 0;
 					}
+
 					if (shoots[i].position.y > screenHeight + shoots[i].radius)
 					{
 						shoots[i].active = false;
-						shoots[i].lifespan = 0;
 					}
 					else if (shoots[i].position.y < 0 - shoots[i].radius)
 					{
 						shoots[i].active = false;
-						shoots[i].lifespan = 0;
 					}
 				}
 			}
 
-			// Collision logic: player-shootss vs meteors
+			// Collision logic: player-shoots vs meteors
 			for (int i = 0; i < maxShoots; i++)
 			{
 				if ((shoots[i].active))
@@ -143,9 +139,9 @@ namespace Juego
 							#ifdef AUDIO
 							PlaySound(asteroid_explode01);
 							#endif
+
 							asteroidsBig[a].isExplosionActive = true;
 							shoots[i].active = false;
-							shoots[i].lifespan = 0;
 							asteroidsBig[a].active = false;
 							destroyedAsteroidsCount++;
 							gameScore = gameScore + 25;
@@ -177,9 +173,9 @@ namespace Juego
 							#ifdef AUDIO
 							PlaySound(asteroid_explode01);
 							#endif
+
 							asteroidsMedium[b].isExplosionActive = true;
 							shoots[i].active = false;
-							shoots[i].lifespan = 0;
 							asteroidsMedium[b].active = false;
 							destroyedAsteroidsCount++;
 							gameScore = gameScore + 50;
@@ -211,9 +207,9 @@ namespace Juego
 							#ifdef AUDIO
 							PlaySound(asteroid_explode01);
 							#endif
+
 							asteroidsSmall[c].isExplosionActive = true;
 							shoots[i].active = false;
-							shoots[i].lifespan = 0;
 							asteroidsSmall[c].active = false;
 							destroyedAsteroidsCount++;
 							gameScore = gameScore + 100;
@@ -223,7 +219,8 @@ namespace Juego
 				}
 			}
 		}
-		void ShootDraw()
+
+		void shootDraw()
 		{
 			// Draw shoot
 			for (int i = 0; i < maxShoots; i++)
