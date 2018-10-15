@@ -126,7 +126,7 @@ namespace Juego
 				
 				if (resolutionNormal && !(resolutionBig))
 				{
-					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 75;
+					buttonDistanceSettingsLeft = buttonDistanceSettingsLeft + 85;
 				}
 				else if (resolutionSmall)
 				{
