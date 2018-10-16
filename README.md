@@ -10,14 +10,16 @@ This sequel,as you may have guessed, is a remake of the classic game "Asteroids"
 
 ## Ok,but what exactly is Simple! Asteroids?
 
-Its a classic game of Asteroids, but it includes some changes and new features that are standard on these days. I plan to release these features:
+Its a classic game of Asteroids, but it includes some changes and new features that are standard on these days. The game has these features:
 
-- Interactive Menu with animated background.
-- Different settings such as resolutions and volume modification.  [WIP]
+- Interactive Screens with animated background.
+- Different settings such as resolutions and volume modification.
 - Instead of moving the player with traditional arrows keys, the controls scheme is now 90% based on the mouse.
-- Improved visuals.
-- New sounds and songs! [WIP]
-- Different Levels.  [WIP]
+- New visuals.
+- New sounds and songs!
+- TWO new Powerups!
+  1. Invincibility Powerup: Makes you invincible to any asteroids for 5 seconds.
+  2. Max Rapid Fire Powerup: You will be able to shoot way faster for 5 seconds.
 
 
 ## Release
