@@ -1,3 +1,5 @@
+![alt text](https://github.com/frankvega2010/Asteroids/blob/master/asteroids/logo/ASTEROIDSLOGO.jpg)
+
 # Simple! Asteroids [WIP]
 ## Student Proyect by Franco Vega
 
