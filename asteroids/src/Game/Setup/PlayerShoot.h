@@ -24,6 +24,7 @@ namespace Juego
 
 	extern int gameScore;
 	extern int destroyedAsteroidsCount;
+	extern int asteroidsLeft;
 
 	namespace Gameplay_Section
 	{

@@ -21,6 +21,7 @@ namespace Juego
 
 	int gameScore = 0;
 	int destroyedAsteroidsCount = 0;
+	int asteroidsLeft = 28;
 
 	static int midAsteroidsCount = 0;
 	static int smallAsteroidsCount = 0;
@@ -49,6 +50,7 @@ namespace Juego
 			midAsteroidsCount = 0;
 			smallAsteroidsCount = 0;
 			destroyedAsteroidsCount = 0;
+			asteroidsLeft = 28;
 		}
 
 		void shootInput()
@@ -144,6 +146,7 @@ namespace Juego
 							shoots[i].active = false;
 							asteroidsBig[a].active = false;
 							destroyedAsteroidsCount++;
+							asteroidsLeft--;
 							gameScore = gameScore + 25;
 
 							for (int j = 0; j < 2; j++)
@@ -178,6 +181,7 @@ namespace Juego
 							shoots[i].active = false;
 							asteroidsMedium[b].active = false;
 							destroyedAsteroidsCount++;
+							asteroidsLeft--;
 							gameScore = gameScore + 50;
 
 							for (int j = 0; j < 2; j++)
@@ -212,6 +216,7 @@ namespace Juego
 							shoots[i].active = false;
 							asteroidsSmall[c].active = false;
 							destroyedAsteroidsCount++;
+							asteroidsLeft--;
 							gameScore = gameScore + 100;
 							c = asteroidsSmallLimit;
 						}

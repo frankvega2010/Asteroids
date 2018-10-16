@@ -428,7 +428,7 @@ namespace Juego
 			}
 
 
-			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit))
+			if (destroyedAsteroidsCount >= (asteroidsSmallLimit + asteroidsMediumLimit + asteroidsBigLimit) && asteroidsLeft == 0)
 			{
 				gameON = false;
 				timerON = false;
@@ -447,7 +447,7 @@ namespace Juego
 			playerDraw();
 			powerupsDraw();
 
-			DrawText(FormatText("Eliminations:%i", destroyedAsteroidsCount), screenWidth / 80, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
+			DrawText(FormatText("Asteroids:%i",asteroidsLeft), screenWidth / 80, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
 			DrawText(FormatText("Time: "), screenWidth / 3.40, screenHeight / 14, defaultFontSize / 1.2, YELLOW);
 			DrawTimer(2.5f, 2.2f,14.0f);
 
