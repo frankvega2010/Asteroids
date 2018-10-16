@@ -26,9 +26,9 @@ Its a classic game of Asteroids, but it includes some changes and new features t
 
 ## Release
 
-Link for v1.0: https://github.com/frankvega2010/Asteroids/releases/tag/v1.0
+itch.io Link : https://frankvega.itch.io/simple-asteroids
 
-Once the game is finished, it will be available for everyone on both https://frankvega.itch.io/ and https://gamejolt.com/@frankvega/games.
+Link for v1.0: https://github.com/frankvega2010/Asteroids/releases/tag/v1.0
 
 I will try to patch any bugs after the release to try to keep the game nice and clean.
 
