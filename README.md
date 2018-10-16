@@ -26,14 +26,22 @@ Its a classic game of Asteroids, but it includes some changes and new features t
 
 ## Release
 
+Link for v1.0: https://github.com/frankvega2010/Asteroids/releases/tag/v1.0
+
 Once the game is finished, it will be available for everyone on both https://frankvega.itch.io/ and https://gamejolt.com/@frankvega/games.
 
 I will try to patch any bugs after the release to try to keep the game nice and clean.
 
+## Bio
+
+My name's Franco and I'm a game dev enthusiast who is currently studying Programming (and Game Design) so one day I can put all my effort and time in the videogames industry, which is constantly rising. I'm a beginner in Programming but I'm trying my best to make the best experiences possible as well as keeping the code nice and clean.
+
 ## Contact
+
+Email: franco_vega@msn.com
 
 Steam: https://steamcommunity.com/id/frankvega/
 
 Twitter: https://twitter.com/Frankvega1
 
-Thats all for now! the readme file will be updated once enough progress has been made.
+Thats all for now! Hope you enjoy the game.
